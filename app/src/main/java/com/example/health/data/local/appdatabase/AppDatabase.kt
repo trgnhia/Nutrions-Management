@@ -8,8 +8,8 @@ import com.example.health.data.local.daos.*
 import com.example.health.data.local.entities.*
 
 @Database(
-    entities = [Account::class, BaseInfo::class, HealMetric::class, PendingAction::class],
-    version = 1,
+    entities = [Account::class, BaseInfo::class, HealthMetric::class, PendingAction::class],
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
@@ -31,6 +31,7 @@ abstract class AppDatabase: RoomDatabase() {
                 )
                     .fallbackToDestructiveMigration() // Reset database nếu có thay đổi version
                     .build()
+
                 INSTANCE = instance
                 instance
             }

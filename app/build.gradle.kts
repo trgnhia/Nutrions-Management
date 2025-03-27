@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-kapt")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -56,6 +57,8 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,5 +77,7 @@ dependencies {
     implementation ("androidx.room:room-ktx:2.6.1")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("com.chargemap.compose:numberpicker:1.0.3")
+
 
 }

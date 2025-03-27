@@ -11,39 +11,48 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
+import com.example.health.data.local.appdatabase.AppDatabase
+import com.example.health.data.local.repostories.AccountRepository
+import com.example.health.data.local.repostories.BaseInfoRepository
+import com.example.health.data.local.repostories.HealthMetricRepository
+import com.example.health.data.local.viewmodel.AccountViewModel
+import com.example.health.data.local.viewmodel.AuthViewModel
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.sync.PendingSyncScheduler
+import com.example.health.navigation.AppNavigation
 import com.example.health.ui.theme.HealthTheme
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PendingSyncScheduler.schedule(this)
         enableEdgeToEdge()
+        val db = AppDatabase.getDatabase(applicationContext)
+        val firestore = FirebaseFirestore.getInstance()
+
+        val accountRepository = AccountRepository(db.accountDao(), db.pendingActionDao(), firestore)
+        val baseInfoRepository = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
+        val healthMetricRepository = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
+
+        val authViewModel = AuthViewModel(application, accountRepository)
+        val accountViewModel = AccountViewModel(application, accountRepository)
+        val baseInfoViewModel = BaseInfoViewModel(application, baseInfoRepository)
+        val healthMetricViewModel = HealthMetricViewModel(application, healthMetricRepository)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             HealthTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AppNavigation(
+                    authViewModel = authViewModel,
+                    accountViewModel = accountViewModel,
+                    baseInfoViewModel = baseInfoViewModel,
+                    healthMetricViewModel = healthMetricViewModel
+                )
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HealthTheme {
-        Greeting("Android")
-    }
-}

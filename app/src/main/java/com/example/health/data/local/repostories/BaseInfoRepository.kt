@@ -1,5 +1,6 @@
 package com.example.health.data.local.repostories
 
+import android.util.Log
 import com.example.health.data.local.daos.BaseInfoDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.BaseInfo
@@ -71,7 +72,9 @@ class BaseInfoRepository(
             }
             return remote
         }
-        catch (_: Exception) {
+        catch (e: Exception) {
+            // Log chi tiết lỗi
+            e.printStackTrace() // In thông tin lỗi đầy đủ vào log
             return null
         }
     }

@@ -4,7 +4,8 @@ import android.content.Context
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.entities.Account
 import com.example.health.data.local.entities.BaseInfo
-import com.example.health.data.local.entities.HealMetric
+import com.example.health.data.local.entities.HealthMetric
+
 import com.example.health.data.local.entities.PendingAction
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -56,7 +57,7 @@ object PendingSyncManager {
                     }catch (_: Exception) {}
                 }
                 PendingActionTypes.INSERT_HEALTH_METRIC->{
-                    val healthMetric = gson.fromJson(action.payload, HealMetric::class.java)
+                    val healthMetric = gson.fromJson(action.payload, HealthMetric::class.java)
                     try{
                         firestore.collection("accounts")
                             .document(healthMetric.Uid)
@@ -67,7 +68,7 @@ object PendingSyncManager {
                     }catch (_: Exception) {}
                 }
                 PendingActionTypes.UPDATE_HEALTH_METRIC->{
-                    val healthMetric = gson.fromJson(action.payload, HealMetric::class.java)
+                    val healthMetric = gson.fromJson(action.payload, HealthMetric::class.java)
                     try{
                         firestore.collection("accounts")
                             .document(healthMetric.Uid)

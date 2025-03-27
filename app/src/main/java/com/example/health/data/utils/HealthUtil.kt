@@ -7,12 +7,8 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 object HealthMetricUtil {
-    @RequiresApi(Build.VERSION_CODES.O)
     fun generateMetricId(): String {
-        val now = LocalDateTime.now()
-        val timePart = now.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
-        val randomPart = UUID.randomUUID().toString().take(8) // rút ngắn cho dễ nhìn
-        return "${timePart}_$randomPart"
+        return "metric_${System.currentTimeMillis()}"
     }
     fun calculateBMI(weight: Float, height: Float): Float {
         return weight / ((height / 100) * (height / 100)) // height cm → m
@@ -31,15 +27,18 @@ object HealthMetricUtil {
         }
     }
 
-    fun calculateTDEE(bmr: Float, activityLevel: String): Float {
-        val multiplier = when (activityLevel.lowercase()) {
-            "sedentary" -> 1.2f
-            "light" -> 1.375f
-            "moderate" -> 1.55f
-            "active" -> 1.725f
-            "very active" -> 1.9f
-            else -> 1.0f
+    fun calculateTDEE(bmr: Float, activityLevel: Int): Float {
+        val multiplier = when (activityLevel) {
+            1 -> 1.2f      // Sedentary (ít vận động)
+            2 -> 1.375f    // Light activity (tập nhẹ 1-3 ngày/tuần)
+            3 -> 1.55f     // Moderate activity (tập vừa 3-5 ngày/tuần)
+            4 -> 1.725f    // Active (tập nặng 6-7 ngày/tuần)
+            5 -> 1.9f      // Very Active (tập rất nặng, vận động viên)
+            else -> 1.0f   // Mặc định
         }
         return bmr * multiplier
+    }
+    fun calculateWeightTarget() : Float{
+        return 0f
     }
 }

@@ -1,5 +1,6 @@
 package com.example.health.data.local.repostories
 
+import android.util.Log
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.daos.AccountDao
 import com.example.health.data.local.daos.PendingActionDao
@@ -53,13 +54,14 @@ class AccountRepository(
         }
     }
     suspend fun fetchFromRemote(uid: String): Account? {
-        try{
+        try {
             val snapshot = firestore.collection("accounts").document(uid).get().await()
             val remote = snapshot.toObject(Account::class.java)
             remote?.let { accountDao.insertAccount(it) }
             return remote
-        }
-        catch (_: Exception) {
+        } catch (e: Exception) {
+            // Log chi tiết lỗi
+            e.printStackTrace() // In thông tin lỗi đầy đủ vào log
             return null
         }
     }

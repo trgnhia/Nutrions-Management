@@ -5,12 +5,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.health.data.local.viewmodel.*
-import com.example.health.screens.*
+import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.screens.login.BaseInfoScreen
 import com.example.health.screens.login.CalculatingScreen
 import com.example.health.screens.login.HealthMetricScreen
 import com.example.health.screens.login.LoginScreen
 import com.example.health.screens.login.SplashScreen
+import com.example.health.screens.main.HomeScreen
 
 @Composable
 fun AppNavigation(

@@ -1,4 +1,4 @@
-package com.example.health.data.sync
+package com.example.health.data.remote.sync
 
 object PendingActionTypes {
     const val INSERT_ACCOUNT = "insert_account"

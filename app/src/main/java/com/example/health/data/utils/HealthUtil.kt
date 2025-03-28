@@ -1,10 +1,6 @@
 package com.example.health.data.utils
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.UUID
+import kotlin.math.abs
 
 object HealthMetricUtil {
     fun generateMetricId(): String {
@@ -21,12 +17,11 @@ object HealthMetricUtil {
         gender: String
     ): Float {
         return when (gender.lowercase()) {
-            "male" -> 66 + (13.7f * weight) + (5f * height) - (6.8f * age)
-            "female" -> 655 + (9.6f * weight) + (1.8f * height) - (4.7f * age)
+            "male" -> (10 * weight) + (6.25f * height) - (5 * age) + 5
+            "female" -> (10 * weight) + (6.25f * height) - (5 * age) - 161
             else -> 0f
         }
     }
-
     fun calculateTDEE(bmr: Float, activityLevel: Int): Float {
         val multiplier = when (activityLevel) {
             1 -> 1.2f      // Sedentary (ít vận động)
@@ -38,7 +33,57 @@ object HealthMetricUtil {
         }
         return bmr * multiplier
     }
-    fun calculateWeightTarget() : Float{
-        return 0f
+    fun calculateWeightTarget(currentHeight: Float, targetBMI: Float = 22.5f): Float {
+        val heightM = currentHeight / 100f
+        return targetBMI * heightM * heightM
+    }
+
+    fun diffWeight(currentWeight: Float, targetWeight: Float) : Float{
+        return targetWeight - currentWeight;
+    }
+
+    fun calculateCalorieDeltaPerDay(tdee: Float , diffWeight: Float): Float {
+        val dif = abs(diffWeight)
+        return if(dif <= 0) 0f
+        else if(dif <= 1) tdee * 0.02f
+        else if(dif <=2) tdee * 0.05f
+        else if(dif <= 4) tdee * 0.1f
+        else if(dif <= 6) tdee * 0.15f
+        else if(dif <= 8) tdee * 0.2f
+        else tdee * 0.25f
+    }
+
+    fun restDay(diffWeight: Float, calorieDeltaPerDay: Float): Int {
+        if (calorieDeltaPerDay == 0f) return 0 // tránh chia cho 0
+        val totalCalories = diffWeight * 7700  // mỗi 1kg ≈ 7700 kcal
+        return (totalCalories / calorieDeltaPerDay).toInt()
+    }
+    fun bodyAddition(bmi: Float):String{
+        return when {
+            bmi < 16 -> "Severely underweight"
+            bmi < 17 -> "Underweight"
+            bmi < 18.5 -> "Slightly underweight"
+            bmi < 23 -> "Normal"
+            bmi < 25 -> "Slightly overweight"
+            bmi < 27.5 -> "Overweight"
+            bmi < 30 -> "Obese I"
+            bmi < 35 -> "Obese II"
+            else -> "Obese III"
+        }
+    }
+
+    fun advice(bmi: Float): String {
+        return when {
+            bmi < 16 -> "😟 Severely underweight. Consult a doctor."
+            bmi < 17 -> "🧍 Underweight. Improve your diet."
+            bmi < 18.5 -> "🍽️ Slightly underweight. Eat more nutritious food."
+            bmi < 23 -> "✅ Normal weight. Keep it up!"
+            bmi < 25 -> "👌 Healthy, but watch your weight."
+            bmi < 27.5 -> "🏃 Slightly overweight. Exercise more."
+            bmi < 30 -> "⚠️ Overweight. Consider lifestyle changes."
+            bmi < 35 -> "❗ Obese I. Start losing weight seriously."
+            bmi < 40 -> "🚨 Obese II. Seek medical advice."
+            else -> "🆘 Obese III. Immediate medical help needed."
+        }
     }
 }

@@ -27,9 +27,11 @@ fun CalculatingScreen(
             val bmr = HealthMetricUtil.calculateBMR(it.Weight, it.Height, it.Age, it.Gender)
             val bmi = HealthMetricUtil.calculateBMI(it.Weight, it.Height)
             val tdee = HealthMetricUtil.calculateTDEE(bmr, it.ActivityLevel)
-            val weightTarget = HealthMetricUtil.calculateWeightTarget()
+            val weightTarget = HealthMetricUtil.calculateWeightTarget(it.Height)
             val metricId = HealthMetricUtil.generateMetricId()
-
+            val dif = HealthMetricUtil.diffWeight(it.Weight, weightTarget)
+            val calorDeltaPerDay = HealthMetricUtil.calculateCalorieDeltaPerDay(tdee,dif)
+            val resDay = HealthMetricUtil.restDay(dif,calorDeltaPerDay)
             val metric = HealthMetric(
                 metricId = metricId,
                 Uid = it.Uid,
@@ -39,6 +41,8 @@ fun CalculatingScreen(
                 BMR = bmr,
                 BMI = bmi,
                 TDEE = tdee,
+                CalorPerDay = calorDeltaPerDay,
+                RestDay = resDay,
                 UpdateAt = getCurrentDateTime()
             )
 

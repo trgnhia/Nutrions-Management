@@ -19,15 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.entities.BaseInfo
-import com.example.health.data.local.viewmodel.AuthViewModel
+import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
-import com.example.health.screens.login.baseinfoitems.AchiveGoalItem
-import com.example.health.screens.login.baseinfoitems.ActivityLevelItem
-import com.example.health.screens.login.baseinfoitems.GenderItem
-import com.example.health.screens.login.baseinfoitems.GoalItem
 import com.example.health.screens.login.baseinfoitems.HeightItem
 import com.example.health.screens.login.baseinfoitems.NameItem
-import com.example.health.screens.login.baseinfoitems.WeightItem
 import kotlinx.coroutines.launch
 
 data class BaseInfoInput(
@@ -35,10 +30,8 @@ data class BaseInfoInput(
     val age: Int,
     val height: Float,
     val weight: Float,
-    val goal: Int,
     val gender: String,
     val activityLevel: Int,
-    val goalAchieve: Float
 )
 
 @Composable
@@ -56,12 +49,10 @@ fun BaseInfoScreen(
             age = it.Age,
             height = it.Height,
             weight = it.Weight,
-            goal = it.Goal,
             gender = it.Gender,
             activityLevel = it.ActivityLevel,
-            goalAchieve = it.GoalAchivement
         )
-    } ?: BaseInfoInput("", 0, 0f, 0f, 1 ,"" , 0, 50f)
+    } ?: BaseInfoInput("", 0, 0f, 0f, "" , 0)
 
     OnboardingScreen(
         uid = uid,
@@ -74,10 +65,8 @@ fun BaseInfoScreen(
                 Age = info.age,
                 Height = info.height,
                 Weight = info.weight,
-                Goal = info.goal,
                 Gender = info.gender,
                 ActivityLevel = info.activityLevel,
-                GoalAchivement = info.goalAchieve
             )
             baseInfoViewModel.insertBaseInfo(base)
 
@@ -103,10 +92,8 @@ fun OnboardingScreen(
     var age by remember { mutableStateOf(default.age) }
     var height by remember { mutableStateOf(default.height) }
     var weight by remember { mutableStateOf(default.weight) }
-    var goal by remember { mutableStateOf(default.goal) }
     var gender by remember { mutableStateOf(default.gender) }
     var activityLevel by remember { mutableStateOf(default.activityLevel) }
-    var goalAchieve by remember { mutableStateOf(default.goalAchieve) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -148,7 +135,7 @@ fun OnboardingScreen(
                 when(page){
                     0 -> NameItem(name, onValueChange = { name = it })
                     1 -> AgeItem(age, onValueChange = { age = it })
-    //                2 -> HeightItem(height, onValueChange = { height = it })
+                    2 -> HeightItem(height, onValueChange = { height = it })
     //                3-> WeightItem(weight, onValueChange = { weight = it })
     //                4 -> GoalItem(goal, onValueChange = { goal = it })
     //                5 -> GenderItem(gender, onValueChange = { gender = it })
@@ -179,7 +166,7 @@ fun OnboardingScreen(
                     if (pagerState.currentPage == 6) {
                         onDone(
                             BaseInfoInput(
-                                name, age, height, weight, goal, gender, activityLevel, goalAchieve
+                                name, age, height, weight, gender, activityLevel
                             )
                         )
                     } else {

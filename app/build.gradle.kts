@@ -31,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "18"
     }
     buildFeatures {
         compose = true
@@ -77,7 +77,12 @@ dependencies {
     implementation ("androidx.room:room-ktx:2.6.1")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation ("com.google.code.gson:gson:2.10.1")
+
     implementation ("com.chargemap.compose:numberpicker:1.0.3")
+
+
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
 
 
 }

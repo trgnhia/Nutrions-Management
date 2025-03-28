@@ -1,17 +1,16 @@
 package com.example.health.screens.login
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.health.data.local.viewmodel.AuthViewModel
-import com.example.health.data.local.viewmodel.AuthState
+import com.example.health.data.remote.auth.AuthViewModel
+import com.example.health.data.remote.auth.AuthState
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.screens.loader.ModernLoader
 import kotlinx.coroutines.delay
 
 @Composable
@@ -26,7 +25,7 @@ fun SplashScreen(
     val isProcessing = remember { mutableStateOf(true) } // Để kiểm tra khi dữ liệu đồng bộ xong
 
     LaunchedEffect(authState) {
-        delay(500) // Giả lập splash màn hình
+        delay(3500) // Giả lập splash màn hình
         when (authState) {
             is AuthState.Authenticated -> {
                 val uid = authViewModel.currentUser?.uid
@@ -62,11 +61,9 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
         if (isProcessing.value) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator()
-                Spacer(modifier = Modifier.height(12.dp))
-                Text("Đang kiểm tra tài khoản và tải dữ liệu...")
-            }
+            ModernLoader()
         }
     }
 }
+
+

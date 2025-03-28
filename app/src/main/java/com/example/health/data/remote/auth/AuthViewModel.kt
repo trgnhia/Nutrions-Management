@@ -1,4 +1,4 @@
-package com.example.health.data.local.viewmodel
+package com.example.health.data.remote.auth
 
 import android.app.Application
 import android.content.Intent
@@ -10,6 +10,9 @@ import com.example.health.data.local.entities.Account
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
 import com.example.health.data.local.repostories.HealthMetricRepository
+import com.example.health.data.local.viewmodel.AccountViewModel
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

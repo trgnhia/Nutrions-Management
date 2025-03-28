@@ -5,7 +5,7 @@ import com.example.health.data.local.daos.BaseInfoDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.BaseInfo
 import com.example.health.data.local.entities.PendingAction
-import com.example.health.data.sync.PendingActionTypes
+import com.example.health.data.remote.sync.PendingActionTypes
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow

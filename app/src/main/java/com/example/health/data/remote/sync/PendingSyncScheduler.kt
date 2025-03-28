@@ -1,4 +1,4 @@
-package com.example.health.data.sync
+package com.example.health.data.remote.sync
 
 import android.content.Context
 import androidx.work.*

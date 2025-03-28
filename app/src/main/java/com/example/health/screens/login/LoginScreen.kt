@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
-import com.example.health.data.local.viewmodel.AuthState
-import com.example.health.data.local.viewmodel.AuthViewModel
+import com.example.health.data.remote.auth.AuthState
+import com.example.health.data.remote.auth.AuthViewModel
 
 @Composable
 fun LoginScreen(

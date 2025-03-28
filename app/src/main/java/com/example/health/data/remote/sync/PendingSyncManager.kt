@@ -1,4 +1,4 @@
-package com.example.health.data.sync
+package com.example.health.data.remote.sync
 
 import android.content.Context
 import com.example.health.data.local.appdatabase.AppDatabase
@@ -18,7 +18,7 @@ object PendingSyncManager {
         val actions = dao.getAll()
         for (action in actions) {
             when (action.type) {
-                 PendingActionTypes.INSERT_ACCOUNT-> {
+                 PendingActionTypes.INSERT_ACCOUNT -> {
                     val account = gson.fromJson(action.payload, Account::class.java)
                     try {
                         firestore.collection("accounts").document(account.Uid).set(account)
@@ -33,7 +33,7 @@ object PendingSyncManager {
                         dao.delete(action)
                     } catch (_: Exception) {}
                 }
-                PendingActionTypes.INSERT_BASE_INFO->{
+                PendingActionTypes.INSERT_BASE_INFO ->{
                     val baseInfo = gson.fromJson(action.payload, BaseInfo::class.java)
                     try {
                         firestore.collection("accounts")
@@ -45,7 +45,7 @@ object PendingSyncManager {
                     }
                     catch (_: Exception) {}
                 }
-                PendingActionTypes.UPDATE_BASE_INFO->{
+                PendingActionTypes.UPDATE_BASE_INFO ->{
                     val baseInfo = gson.fromJson(action.payload, BaseInfo::class.java)
                     try{
                         firestore.collection("accounts")
@@ -56,7 +56,7 @@ object PendingSyncManager {
                         dao.delete(action)
                     }catch (_: Exception) {}
                 }
-                PendingActionTypes.INSERT_HEALTH_METRIC->{
+                PendingActionTypes.INSERT_HEALTH_METRIC ->{
                     val healthMetric = gson.fromJson(action.payload, HealthMetric::class.java)
                     try{
                         firestore.collection("accounts")
@@ -67,7 +67,7 @@ object PendingSyncManager {
                         dao.delete(action)
                     }catch (_: Exception) {}
                 }
-                PendingActionTypes.UPDATE_HEALTH_METRIC->{
+                PendingActionTypes.UPDATE_HEALTH_METRIC ->{
                     val healthMetric = gson.fromJson(action.payload, HealthMetric::class.java)
                     try{
                         firestore.collection("accounts")

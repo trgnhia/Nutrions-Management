@@ -22,6 +22,7 @@ import com.example.health.data.local.entities.BaseInfo
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.screens.login.baseinfoitems.ActivityLevelItem
+import com.example.health.screens.login.baseinfoitems.BodyIndexesItem
 import com.example.health.screens.login.baseinfoitems.GenderItem
 import com.example.health.screens.login.baseinfoitems.HeightItem
 import com.example.health.screens.login.baseinfoitems.NameItem
@@ -88,7 +89,7 @@ fun OnboardingScreen(
     default: BaseInfoInput,
     onDone: (BaseInfoInput) -> Unit
 ) {
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = { 7 })
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { 8 })
     val coroutineScope = rememberCoroutineScope()
 
     var name by remember { mutableStateOf(default.name) }
@@ -115,34 +116,17 @@ fun OnboardingScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            StepProgressBar(currentStep = pagerState.currentPage, totalSteps = 7)
+            StepProgressBar(currentStep = pagerState.currentPage, totalSteps = 8)
 
             HorizontalPager(state = pagerState, modifier = Modifier.weight(1f) , key = {it} ) { page ->
-    //            when (page) {
-    //                0 -> Item1(name, onValueChange = { name = it })
-    //                1 -> Item2(age, onValueChange = { age = it })
-    //                2 -> Item3(height, onValueChange = { height = it })
-    //                3 -> Item4(weight, onValueChange = { weight = it })
-    //                4 -> Item5(goal, onValueChange = { goal = it })
-    //                5 -> Item6(gender, onValueChange = { gender = it })
-    //                6 -> Item7(activityLevel, onValueChange = { activityLevel = it })
-    //                7 -> Item8(goalAchieve, onValueChange = { goalAchieve = it })
-    //                8 -> Item9(onConfirm = {
-    //                    onDone(
-    //                        BaseInfoInput(
-    //                            name, age, height, weight, goal, gender, activityLevel, goalAchieve
-    //                        )
-    //                    )
-    //                })
-    //            }
                 when(page){
                     0 -> NameItem(name, onValueChange = { name = it })
                     1 -> AgeItem(age, onValueChange = { age = it })
                     2 -> HeightItem(height, onValueChange = { height = it })
                     3-> WeightItem(weight, onValueChange = { weight = it })
                     4 -> GenderItem(gender, onValueChange = { gender = it })
-    //                5 -> GenderItem(gender, onValueChange = { gender = it })
                     5 -> ActivityLevelItem(activityLevel, onValueChange = { activityLevel = it })
+                    6 -> BodyIndexesItem(age , height , weight , gender , activityLevel)
     //                7 -> AchiveGoalItem(goalAchieve, onValueChange = { goalAchieve = it })
                 }
             }
@@ -166,7 +150,7 @@ fun OnboardingScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Button(onClick = {
-                    if (pagerState.currentPage == 6) {
+                    if (pagerState.currentPage == 7) {
                         onDone(
                             BaseInfoInput(
                                 name, age, height, weight, gender, activityLevel
@@ -178,7 +162,7 @@ fun OnboardingScreen(
                         }
                     }
                 }) {
-                    Text(if (pagerState.currentPage == 6) "Finish" else "Next")
+                    Text(if (pagerState.currentPage == 7) "Finish" else "Next")
                 }
             }
         }

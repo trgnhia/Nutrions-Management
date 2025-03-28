@@ -71,6 +71,19 @@ object HealthMetricUtil {
             else -> "Obese III"
         }
     }
+    fun bmrAssessment(bmr: Float, gender: String): String {
+        val average = when (gender.lowercase()) {
+            "male" -> 1600f
+            "female" -> 1400f
+            else -> 1500f
+        }
+
+        return when {
+            bmr < average - 200 -> "Below average"
+            bmr <= average + 200 -> "Average"
+            else -> "High"
+        }
+    }
 
     fun advice(bmi: Float): String {
         return when {

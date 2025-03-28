@@ -53,7 +53,8 @@ fun NameItem(name: String, onValueChange: (String) -> Unit) {
             Text(
                 text = "Welcome to Health Mate",
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top  = 10.dp)
             )
 
             Spacer(modifier = Modifier.height(12.dp))

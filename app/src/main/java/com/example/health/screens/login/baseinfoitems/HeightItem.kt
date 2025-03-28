@@ -34,7 +34,7 @@ fun HeightItem(height: Float, onValueChange: (Float) -> Unit) {
                 .padding(top = 60.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("How tall are you?", style = MaterialTheme.typography.titleLarge)
+            Text("How tall are you?", style = MaterialTheme.typography.titleLarge , fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 "Your height will help us calculate your body measurements.",
@@ -46,7 +46,10 @@ fun HeightItem(height: Float, onValueChange: (Float) -> Unit) {
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 70.dp)
+
             ) {
                 NumberPicker(
                     value = height.toInt(),

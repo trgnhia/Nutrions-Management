@@ -12,9 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.example.health.R
-
 @Composable
-fun AgeItem(age: Int, onValueChange: (Int) -> Unit) {
+fun AgeItem(age: Int  , onValueChange: (Int) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Ảnh nền
@@ -28,43 +27,55 @@ fun AgeItem(age: Int, onValueChange: (Int) -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 48.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+                .padding(top = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Tiêu đề
             Text(
                 text = "How old are you?",
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                style = MaterialTheme.typography.titleLarge
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Mô tả
             Text(
                 text = "Your age determines how much energy you should consume in a day.",
-                color = Color.Black,
                 style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            // Number Picker dạng bánh xe
-            NumberPicker(
-                value = age,
-                onValueChange = onValueChange,
-                range = 10..100,
-                dividersColor = Color.Black,
-                textStyle = LocalTextStyle.current.copy(color = Color.Black) // màu chữ trong picker
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 70.dp)
+            ) {
+                NumberPicker(
+                    value = age,
+                    onValueChange = onValueChange,
+                    range = 10..100,
+                    dividersColor = Color.Black,
+                    textStyle = LocalTextStyle.current.copy(color = Color.Black),
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .fillMaxWidth(0.2f)
+                )
 
+                Text(
+                    text = "years", // giống như "cm" bên height
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black,
+                )
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

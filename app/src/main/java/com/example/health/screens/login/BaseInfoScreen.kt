@@ -21,8 +21,11 @@ import com.example.health.R
 import com.example.health.data.local.entities.BaseInfo
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.screens.login.baseinfoitems.ActivityLevelItem
+import com.example.health.screens.login.baseinfoitems.GenderItem
 import com.example.health.screens.login.baseinfoitems.HeightItem
 import com.example.health.screens.login.baseinfoitems.NameItem
+import com.example.health.screens.login.baseinfoitems.WeightItem
 import kotlinx.coroutines.launch
 
 data class BaseInfoInput(
@@ -136,10 +139,10 @@ fun OnboardingScreen(
                     0 -> NameItem(name, onValueChange = { name = it })
                     1 -> AgeItem(age, onValueChange = { age = it })
                     2 -> HeightItem(height, onValueChange = { height = it })
-    //                3-> WeightItem(weight, onValueChange = { weight = it })
-    //                4 -> GoalItem(goal, onValueChange = { goal = it })
+                    3-> WeightItem(weight, onValueChange = { weight = it })
+                    4 -> GenderItem(gender, onValueChange = { gender = it })
     //                5 -> GenderItem(gender, onValueChange = { gender = it })
-    //                6 -> ActivityLevelItem(activityLevel, onValueChange = { activityLevel = it })
+                    5 -> ActivityLevelItem(activityLevel, onValueChange = { activityLevel = it })
     //                7 -> AchiveGoalItem(goalAchieve, onValueChange = { goalAchieve = it })
                 }
             }

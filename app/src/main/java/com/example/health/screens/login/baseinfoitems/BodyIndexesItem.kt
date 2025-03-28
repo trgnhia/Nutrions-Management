@@ -202,10 +202,10 @@ fun BmiGauge(bmi: Float) {
                 val triangleSize = 10.dp.toPx()
                 val triangleY = size.height / 2 + barHeight / 2 // đáy thanh
                 drawPath(
-                    path = androidx.compose.ui.graphics.Path().apply {
+                    path = Path().apply {
                         moveTo(triangleX, triangleY - triangleSize) // đỉnh tam giác dưới
-                        lineTo(triangleX - triangleSize, triangleY)
-                        lineTo(triangleX + triangleSize, triangleY)
+                        lineTo(triangleX - 10, triangleY )
+                        lineTo(triangleX + 10, triangleY)
                         close()
                     },
                     color = Color.Black

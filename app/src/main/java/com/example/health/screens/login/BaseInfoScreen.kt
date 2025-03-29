@@ -31,6 +31,7 @@ import com.example.health.screens.login.baseinfoitems.BodyIndexesItem
 import com.example.health.screens.login.baseinfoitems.GenderItem
 import com.example.health.screens.login.baseinfoitems.HeightItem
 import com.example.health.screens.login.baseinfoitems.NameItem
+import com.example.health.screens.login.baseinfoitems.ResultsItem
 import com.example.health.screens.login.baseinfoitems.WeightItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -48,7 +49,7 @@ data class BaseInfoInput(
 data class MetricInput(
     val height : Float,
     val weight: Float,
-    val weightTarget: Float,
+    var weightTarget: Float,
     val bmr: Float,
     val bmi: Float,
     val tdee: Float,
@@ -143,15 +144,28 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var name by remember { mutableStateOf(default.name) }
-    var age by remember { mutableIntStateOf(default.age) }
-    var height by remember { mutableFloatStateOf(default.height) }
-    var weight by remember { mutableFloatStateOf(default.weight) }
+    var age by remember {
+        mutableIntStateOf(if (default.age in 10..100) default.age else 20)
+    }
+    var height by remember {
+        mutableFloatStateOf(if (default.height in 100f..230f) default.height else 160f)
+    }
+    var weight by remember {
+        mutableFloatStateOf(if (default.weight in 40f..150f) default.weight else 60f)
+    }
+
     var gender by remember { mutableStateOf(default.gender) }
     var activityLevel by remember { mutableIntStateOf(default.activityLevel) }
 
-    val TargetWeight by remember(height) {
-        derivedStateOf { HealthMetricUtil.calculateWeightTarget(height) }
+    var TargetWeight by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(defaultMetric.weightTarget, height) {
+        TargetWeight = if (defaultMetric.weightTarget > 0f)
+            defaultMetric.weightTarget
+        else
+            HealthMetricUtil.calculateWeightTarget(height)
     }
+
 
     val BMR by remember(weight, height, age, gender) {
         derivedStateOf { HealthMetricUtil.calculateBMR(weight, height, age, gender) }
@@ -209,7 +223,7 @@ fun OnboardingScreen(
                     4 -> GenderItem(gender, onValueChange = { gender = it })
                     5 -> ActivityLevelItem(activityLevel, onValueChange = { activityLevel = it })
                     6 -> BodyIndexesItem(age , height , weight , gender , activityLevel)
-    //                7 -> AchiveGoalItem(goalAchieve, onValueChange = { goalAchieve = it })
+                    7 -> ResultsItem(weight, TargetWeight, RestDay , onValueChange = {TargetWeight = it})
                 }
             }
 

@@ -42,7 +42,8 @@ fun AppNavigation(
             BaseInfoScreen(
                 authViewModel = authViewModel,
                 baseInfoViewModel = baseInfoViewModel,
-                navController = navController
+                navController = navController,
+                healthMetricViewModel = healthMetricViewModel
             )
         }
 

@@ -43,7 +43,7 @@ fun CalculatingScreen(
                 TDEE = tdee,
                 CalorPerDay = calorDeltaPerDay,
                 RestDay = resDay,
-                UpdateAt = getCurrentDateTime()
+                UpdateAt = HealthMetricUtil.getCurrentDateTime()
             )
 
             navController.currentBackStackEntry?.savedStateHandle?.set("metric", metric)
@@ -63,9 +63,5 @@ fun CalculatingScreen(
     }
 }
 
-fun getCurrentDateTime(): String {
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    return sdf.format(Date())
-}
 
 

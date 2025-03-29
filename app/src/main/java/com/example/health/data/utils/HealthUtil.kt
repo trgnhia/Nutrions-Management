@@ -1,5 +1,8 @@
 package com.example.health.data.utils
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
 
 object HealthMetricUtil {
@@ -98,5 +101,10 @@ object HealthMetricUtil {
             bmi < 40 -> "🚨 Obese II. Seek medical advice."
             else -> "🆘 Obese III. Immediate medical help needed."
         }
+    }
+
+    fun getCurrentDateTime(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return sdf.format(Date())
     }
 }

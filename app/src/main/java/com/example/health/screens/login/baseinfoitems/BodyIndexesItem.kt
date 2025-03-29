@@ -53,7 +53,8 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
                 text = "Overview of body indexes",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp),
+                modifier = Modifier.padding(bottom = 16.dp)
+                    .padding(top = 38.dp),
                 color = Color.Black
             )
 
@@ -193,7 +194,7 @@ fun BmiGauge(bmi: Float) {
                         color = colors[i],
                         topLeft = Offset(start, size.height / 2 - barHeight / 2),
                         size = Size(width, barHeight),
-                        cornerRadius = CornerRadius(4.dp.toPx())
+
                     )
                 }
 

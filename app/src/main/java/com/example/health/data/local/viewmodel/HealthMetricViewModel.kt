@@ -19,7 +19,8 @@ class HealthMetricViewModel(
     val allMetrics: StateFlow<List<HealthMetric>> = repository.getAllHealthMetrics()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    val lastMetric: Flow<HealthMetric?> = repository.getLastHealthMetric()
+    val lastMetric: StateFlow<HealthMetric?> = repository.getLastHealthMetric()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(),null)
 
     fun insertHealthMetric(metric: HealthMetric) = viewModelScope.launch {
         repository.insertHealthMetric(metric)

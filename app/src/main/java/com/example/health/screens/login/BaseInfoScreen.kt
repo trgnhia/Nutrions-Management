@@ -1,6 +1,8 @@
 package com.example.health.screens.login
 
 import AgeItem
+import android.health.connect.datatypes.BoneMassRecord
+import android.telephony.SmsMessage.SubmitPdu
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,8 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.entities.BaseInfo
+import com.example.health.data.local.entities.HealthMetric
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.utils.HealthMetricUtil
 import com.example.health.screens.login.baseinfoitems.ActivityLevelItem
 import com.example.health.screens.login.baseinfoitems.BodyIndexesItem
 import com.example.health.screens.login.baseinfoitems.GenderItem
@@ -28,6 +33,9 @@ import com.example.health.screens.login.baseinfoitems.HeightItem
 import com.example.health.screens.login.baseinfoitems.NameItem
 import com.example.health.screens.login.baseinfoitems.WeightItem
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 data class BaseInfoInput(
     val name: String,
@@ -37,15 +45,28 @@ data class BaseInfoInput(
     val gender: String,
     val activityLevel: Int,
 )
-
+data class MetricInput(
+    val height : Float,
+    val weight: Float,
+    val weightTarget: Float,
+    val bmr: Float,
+    val bmi: Float,
+    val tdee: Float,
+    val calorPerDay: Float,
+    val restDays: Int,
+    val updateAt: String
+)
 @Composable
 fun BaseInfoScreen(
     authViewModel: AuthViewModel,
     baseInfoViewModel: BaseInfoViewModel,
-    navController: NavController
+    navController: NavController,
+    healthMetricViewModel: HealthMetricViewModel
 ) {
     val uid = authViewModel.currentUser?.uid ?: return
     val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
+    val healthMetric by healthMetricViewModel.lastMetric.collectAsState()
+
 
     val defaultInfo = baseInfo?.let {
         BaseInfoInput(
@@ -57,11 +78,25 @@ fun BaseInfoScreen(
             activityLevel = it.ActivityLevel,
         )
     } ?: BaseInfoInput("", 0, 0f, 0f, "" , 0)
+    val defaultMetric = healthMetric?.let {
+        MetricInput(
+            height = it.Height,
+            weight = it.Weight,
+            weightTarget = it.WeightTarget,
+            bmr = it.BMR,
+            bmi = it.BMI,
+            tdee = it.TDEE,
+            calorPerDay = it.CalorPerDay,
+            restDays = it.RestDay,
+            updateAt = it.UpdateAt
+        )
+    }?: MetricInput(0f,0f,0f,0f,0f,0f,0f,0,"")
 
     OnboardingScreen(
         uid = uid,
         default = defaultInfo,
-        onDone = { info ->
+        defaultMetric = defaultMetric,
+        onDone = { info, metric ->
             // Lưu Room
             val base = BaseInfo(
                 Uid = uid,
@@ -72,8 +107,22 @@ fun BaseInfoScreen(
                 Gender = info.gender,
                 ActivityLevel = info.activityLevel,
             )
-            baseInfoViewModel.insertBaseInfo(base)
+            val _metric = HealthMetric(
+                HealthMetricUtil.generateMetricId(),
+                uid,
+                metric.height,
+                metric.weight,
+                metric.weightTarget,
+                metric.bmr,
+                metric.bmi,
+                metric.tdee,
+                metric.calorPerDay,
+                metric.restDays,
+                metric.updateAt
+            )
 
+            baseInfoViewModel.insertBaseInfo(base)
+            healthMetricViewModel.insertHealthMetric(_metric)
             // Cập nhật trạng thái & điều hướng
             authViewModel.updateStatus(uid, "completed")
             navController.navigate("calculating") {
@@ -87,7 +136,8 @@ fun BaseInfoScreen(
 fun OnboardingScreen(
     uid: String,
     default: BaseInfoInput,
-    onDone: (BaseInfoInput) -> Unit
+    defaultMetric: MetricInput,
+    onDone: (BaseInfoInput , MetricInput) -> Unit
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 8 })
     val coroutineScope = rememberCoroutineScope()
@@ -98,6 +148,15 @@ fun OnboardingScreen(
     var weight by remember { mutableStateOf(default.weight) }
     var gender by remember { mutableStateOf(default.gender) }
     var activityLevel by remember { mutableStateOf(default.activityLevel) }
+
+    val TargetWeight by remember { mutableStateOf(HealthMetricUtil.calculateWeightTarget(height)) }
+    val BMR by remember { mutableStateOf(HealthMetricUtil.calculateBMR(weight,height,age,gender)) }
+    val BMI by remember { mutableStateOf(HealthMetricUtil.calculateBMI(weight,height)) }
+    val TDEE by remember { mutableStateOf(HealthMetricUtil.calculateTDEE(BMR,activityLevel)) }
+    val diff by remember { mutableStateOf(HealthMetricUtil.diffWeight(weight,TargetWeight)) }
+    val calorPerDay by remember { mutableStateOf(HealthMetricUtil.calculateCalorieDeltaPerDay(TDEE,diff)) }
+    val RestDay by remember { mutableStateOf(HealthMetricUtil.restDay(diff,calorPerDay)) }
+    val UpdateAt by remember { mutableStateOf(HealthMetricUtil.getCurrentDateTime()) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -154,7 +213,11 @@ fun OnboardingScreen(
                         onDone(
                             BaseInfoInput(
                                 name, age, height, weight, gender, activityLevel
+                            ),
+                            MetricInput(
+                                height,weight, TargetWeight , BMR ,BMI , TDEE ,calorPerDay , RestDay , UpdateAt
                             )
+
                         )
                     } else {
                         coroutineScope.launch {
@@ -197,3 +260,4 @@ fun StepProgressBar(currentStep: Int, totalSteps: Int = 7) {
         }
     }
 }
+

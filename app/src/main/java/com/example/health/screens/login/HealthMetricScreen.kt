@@ -34,7 +34,7 @@ fun HealthMetricScreen(
         Text("Weight target: ${metric.WeightTarget}")
 
         Button(onClick = {
-            healthMetricViewModel.insertHealthMetric(metric)
+            //healthMetricViewModel.insertHealthMetric(metric)
             navController.navigate("home") {
                 popUpTo("health_metric") { inclusive = true }
             }

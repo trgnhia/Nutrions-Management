@@ -17,8 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -33,6 +36,14 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
     val addition = HealthMetricUtil.bodyAddition(bmi)
     val advice = HealthMetricUtil.advice(bmi)
     val bmrAssessment = HealthMetricUtil.bmrAssessment(bmr, gender)
+
+    var showBmiDialog by remember { mutableStateOf(false) }
+    var showBmrDialog by remember { mutableStateOf(false) }
+    var showTdeeDialog by remember { mutableStateOf(false) }
+
+    if (showBmiDialog) BmiDetailDialog { showBmiDialog = false }
+    if (showBmrDialog) BmrDetailDialog { showBmrDialog = false }
+    if (showTdeeDialog) TdeeDetailDialog { showTdeeDialog = false }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -64,7 +75,8 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
                 description = addition,
                 iconRes = R.drawable.icon_bmr,
                 borderColor = Color(0xFFAA00FF),
-                bmi = bmi
+                bmi = bmi,
+                onClick = { showBmiDialog = true }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -74,7 +86,8 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
                 value = String.format("%.2f", bmr),
                 description = bmrAssessment,
                 iconRes = R.drawable.icon_bmr,
-                borderColor = Color(0xFFFF9800)
+                borderColor = Color(0xFFFF9800),
+                onClick = { showBmrDialog = true }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -84,7 +97,9 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
                 value = String.format("%.2f", tdee),
                 description = getTdeeLevelDescription(activityLevel),
                 iconRes = R.drawable.icon_bmr,
-                borderColor = Color(0xFF03A9F4)
+                borderColor = Color(0xFF03A9F4),
+                onClick = { showTdeeDialog = true }
+
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -113,12 +128,14 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
     }
 }
 @Composable
-fun IndexBox(title: String, value: String, description: String, iconRes: Int, borderColor: Color, bmi: Float? = null) {
+fun IndexBox(title: String, value: String, description: String, iconRes: Int, borderColor: Color, bmi: Float? = null , onClick: () -> Unit = {}) {
     Card(
         shape = RoundedCornerShape(16.dp),
         border = CardDefaults.outlinedCardBorder(true),
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        modifier = Modifier.fillMaxWidth()
+            .clickable { onClick() },
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -263,7 +280,117 @@ fun InfoRow(range: String, label: String, color: Color) {
         Text("$range: $label", style = MaterialTheme.typography.bodyMedium)
     }
 }
+@Composable
+fun BmiDetailDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("Got it") }
+        },
+        title = { Text("BMI Index") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("BMI stands for ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("\"Body Mass Index\"")
+                        }
+                        append(", which is referred to as the body mass index.\n\n")
+                        append("Through BMI, we can determine whether an adult’s body is underweight, normal, or overweight, allowing us to find the right \"body transformation\" plan.\n\n")
+                        append("Based on your BMI, you can determine a weight adjustment plan:")
+                        append("\n• Below 18.5 (Underweight): You need to consume more calories than your body requires.")
+                        append("\n• 18.5 - 24.9 (Healthy weight): Maintain your calorie intake at the required level. No need to lose weight. If you still feel your body is not well-proportioned, consider exercising to tone your body and reduce excess fat.")
+                        append("\n• 25 and above (Overweight): Create a calorie deficit to lose weight.")
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.bmi_info), // thêm ảnh vào drawable
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+        containerColor = Color(0xFFE1F5FE) // xanh nhạt
+    )
+}
+@Composable
+fun BmrDetailDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("Got it") }
+        },
+        title = { Text("BMR Index") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "BMR (Basal Metabolic Rate) – Basic Metabolic Rate\n\n" +
+                            "BMR represents the minimum amount of energy your body needs to maintain essential functions.\n" +
+                            "Even when at rest or asleep, vital organs such as the circulatory and respiratory systems continue to function to sustain life.\n" +
+                            "That’s why ensuring a minimum daily calorie intake is crucial.\n\n" +
+                            "Without it, your body may feel fatigued and unable to concentrate.\n\n" +
+                            "Common BMR Calculation Method:\n\n" +
+                            "• For women:\n" +
+                            "BMR = 655 + [9.6 × Weight (kg)] + [1.8 × Height (cm)] − (4.7 × Age)\n\n" +
+                            "• For men:\n" +
+                            "BMR = 66 + [13.7 × Weight (kg)] + [5 × Height (cm)] − (6.8 × Age)\n\n",
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+        containerColor = Color(0xFFD7FFD9) // xanh lá nhạt
+    )
+}
+@Composable
+fun TdeeDetailDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("Got it") }
+        },
+        title = { Text("TDEE Index") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "What is TDEE?\n\n" +
+                            "TDEE (Total Daily Energy Expenditure) refers to the total amount of energy your body consumes in a day.\n\n" +
+                            "In other words, it represents the total calories your body uses in 24 hours, including basal metabolism (BMR) and physical activities.\n\n" +
+                            "TDEE Formula:\n" +
+                            "TDEE = BMR × R\n\n" +
+                            "Where R is a variable factor that depends on a person’s activity level:\n\n" +
+                            "• Sedentary (little to no activity): TDEE = BMR × 1.2\n" +
+                            "• Light activity (1–3 workouts/week or light labor): TDEE = BMR × 1.375\n" +
+                            "• Moderate activity (4–5 workouts/week or moderate labor): TDEE = BMR × 1.55\n" +
+                            "• High activity (6–7 workouts/week or intense labor): TDEE = BMR × 1.725\n" +
+                            "• Very high activity (heavy training or extreme labor): TDEE = BMR × 1.9\n\n"
+                            ,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.tdee_info), // thêm ảnh vào drawable
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+        containerColor = Color(0xFFFFF8E1) // vàng nhạt
+    )
+}
 
 @Preview
 @Composable

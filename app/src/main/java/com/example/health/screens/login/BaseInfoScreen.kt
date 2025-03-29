@@ -107,7 +107,7 @@ fun BaseInfoScreen(
                 Gender = info.gender,
                 ActivityLevel = info.activityLevel,
             )
-            val _metric = HealthMetric(
+            val metricF = HealthMetric(
                 HealthMetricUtil.generateMetricId(),
                 uid,
                 metric.height,
@@ -122,7 +122,7 @@ fun BaseInfoScreen(
             )
 
             baseInfoViewModel.insertBaseInfo(base)
-            healthMetricViewModel.insertHealthMetric(_metric)
+            healthMetricViewModel.insertHealthMetric(metricF)
             // Cập nhật trạng thái & điều hướng
             authViewModel.updateStatus(uid, "completed")
             navController.navigate("calculating") {
@@ -143,20 +143,43 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var name by remember { mutableStateOf(default.name) }
-    var age by remember { mutableStateOf(default.age) }
-    var height by remember { mutableStateOf(default.height) }
-    var weight by remember { mutableStateOf(default.weight) }
+    var age by remember { mutableIntStateOf(default.age) }
+    var height by remember { mutableFloatStateOf(default.height) }
+    var weight by remember { mutableFloatStateOf(default.weight) }
     var gender by remember { mutableStateOf(default.gender) }
-    var activityLevel by remember { mutableStateOf(default.activityLevel) }
+    var activityLevel by remember { mutableIntStateOf(default.activityLevel) }
 
-    val TargetWeight by remember { mutableStateOf(HealthMetricUtil.calculateWeightTarget(height)) }
-    val BMR by remember { mutableStateOf(HealthMetricUtil.calculateBMR(weight,height,age,gender)) }
-    val BMI by remember { mutableStateOf(HealthMetricUtil.calculateBMI(weight,height)) }
-    val TDEE by remember { mutableStateOf(HealthMetricUtil.calculateTDEE(BMR,activityLevel)) }
-    val diff by remember { mutableStateOf(HealthMetricUtil.diffWeight(weight,TargetWeight)) }
-    val calorPerDay by remember { mutableStateOf(HealthMetricUtil.calculateCalorieDeltaPerDay(TDEE,diff)) }
-    val RestDay by remember { mutableStateOf(HealthMetricUtil.restDay(diff,calorPerDay)) }
-    val UpdateAt by remember { mutableStateOf(HealthMetricUtil.getCurrentDateTime()) }
+    val TargetWeight by remember(height) {
+        derivedStateOf { HealthMetricUtil.calculateWeightTarget(height) }
+    }
+
+    val BMR by remember(weight, height, age, gender) {
+        derivedStateOf { HealthMetricUtil.calculateBMR(weight, height, age, gender) }
+    }
+
+    val BMI by remember(weight, height) {
+        derivedStateOf { HealthMetricUtil.calculateBMI(weight, height) }
+    }
+
+    val TDEE by remember(BMR, activityLevel) {
+        derivedStateOf { HealthMetricUtil.calculateTDEE(BMR, activityLevel) }
+    }
+
+    val diff by remember(weight, TargetWeight) {
+        derivedStateOf { HealthMetricUtil.diffWeight(weight, TargetWeight) }
+    }
+
+    val calorPerDay by remember(TDEE, diff) {
+        derivedStateOf { HealthMetricUtil.calculateCalorieDeltaPerDay(TDEE, diff) }
+    }
+
+    val RestDay by remember(diff, calorPerDay) {
+        derivedStateOf { HealthMetricUtil.restDay(diff, calorPerDay) }
+    }
+
+    val UpdateAt by remember {
+        mutableStateOf(HealthMetricUtil.getCurrentDateTime()) // chỉ cần lấy 1 lần
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()

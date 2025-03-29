@@ -72,6 +72,13 @@ class AuthViewModel(
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account)
+                val acc = Account(
+                    Uid = account.id ?: "",
+                    Name = account.displayName ?: "",
+                    Email = account.email ?: "",
+                    Status = "incomplete"
+                )
+                accountRepository.insertAccount(acc)
             } catch (e: Exception) {
                 onError(e)
             } finally {

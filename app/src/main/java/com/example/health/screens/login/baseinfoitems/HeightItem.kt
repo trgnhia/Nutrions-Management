@@ -58,7 +58,7 @@ fun HeightItem(height: Float, onValueChange: (Float) -> Unit) {
                     dividersColor = Color.Black,
                     textStyle = LocalTextStyle.current.copy(color = Color.Black),
                     modifier = Modifier.padding(start = 16.dp)
-                        .fillMaxWidth(0.2f)
+                        .fillMaxWidth(0.25f)
                 )
 
                 Text(

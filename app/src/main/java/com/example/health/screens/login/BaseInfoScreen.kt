@@ -154,8 +154,12 @@ fun OnboardingScreen(
         mutableFloatStateOf(if (default.weight in 40f..150f) default.weight else 60f)
     }
 
-    var gender by remember { mutableStateOf(default.gender) }
-    var activityLevel by remember { mutableIntStateOf(default.activityLevel) }
+    var gender by remember { mutableStateOf(
+        if(default.gender == "") "Male" else default.gender
+    ) }
+    var activityLevel by remember { mutableIntStateOf(
+        if(default.activityLevel in 1..5) default.activityLevel else 3
+    ) }
 
     var TargetWeight by remember { mutableFloatStateOf(0f) }
 

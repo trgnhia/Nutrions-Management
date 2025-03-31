@@ -265,7 +265,9 @@ fun OnboardingScreen(
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
                         }
                     }
-                }) {
+                },
+                modifier = Modifier.navigationBarsPadding()
+                ) {
                     Text(if (pagerState.currentPage == 7) "Finish" else "Next")
                 }
             }

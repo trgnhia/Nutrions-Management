@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.health.R
 import com.example.health.data.utils.HealthMetricUtil
+import com.example.health.data.utils.to1DecimalString
+import com.example.health.data.utils.to2DecimalString
 
 @Composable
 fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, activityLevel: Int) {
@@ -64,14 +66,13 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
                 text = "Overview of body indexes",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
-                    .padding(top = 38.dp),
+                modifier = Modifier.padding(vertical = 16.dp),
                 color = Color.Black
             )
 
             IndexBox(
                 title = "BMI",
-                value = String.format("%.1f", bmi),
+                value = bmi.to1DecimalString(),
                 description = addition,
                 iconRes = R.drawable.icon_bmr,
                 borderColor = Color(0xFFAA00FF),
@@ -83,7 +84,7 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
 
             IndexBox(
                 title = "BMR",
-                value = String.format("%.2f", bmr),
+                value = bmr.to2DecimalString(),
                 description = bmrAssessment,
                 iconRes = R.drawable.icon_bmr,
                 borderColor = Color(0xFFFF9800),
@@ -94,12 +95,11 @@ fun BodyIndexesItem(age: Int, height: Float, weight: Float, gender: String, acti
 
             IndexBox(
                 title = "TDEE",
-                value = String.format("%.2f", tdee),
+                value = tdee.to2DecimalString(),
                 description = getTdeeLevelDescription(activityLevel),
                 iconRes = R.drawable.icon_bmr,
                 borderColor = Color(0xFF03A9F4),
                 onClick = { showTdeeDialog = true }
-
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -367,13 +367,13 @@ fun TdeeDetailDialog(onDismiss: () -> Unit) {
                             "TDEE (Total Daily Energy Expenditure) refers to the total amount of energy your body consumes in a day.\n\n" +
                             "In other words, it represents the total calories your body uses in 24 hours, including basal metabolism (BMR) and physical activities.\n\n" +
                             "TDEE Formula:\n" +
-                            "TDEE = BMR × R\n\n" +
-                            "Where R is a variable factor that depends on a person’s activity level:\n\n" +
-                            "• Sedentary (little to no activity): TDEE = BMR × 1.2\n" +
-                            "• Light activity (1–3 workouts/week or light labor): TDEE = BMR × 1.375\n" +
-                            "• Moderate activity (4–5 workouts/week or moderate labor): TDEE = BMR × 1.55\n" +
-                            "• High activity (6–7 workouts/week or intense labor): TDEE = BMR × 1.725\n" +
-                            "• Very high activity (heavy training or extreme labor): TDEE = BMR × 1.9\n\n"
+                            "TDEE = BMR × R\n\n"
+//                            + "Where R is a variable factor that depends on a person’s activity level:\n\n" +
+//                            "• Sedentary (little to no activity): TDEE = BMR × 1.2\n" +
+//                            "• Light activity (1–3 workouts/week or light labor): TDEE = BMR × 1.375\n" +
+//                            "• Moderate activity (4–5 workouts/week or moderate labor): TDEE = BMR × 1.55\n" +
+//                            "• High activity (6–7 workouts/week or intense labor): TDEE = BMR × 1.725\n" +
+//                            "• Very high activity (heavy training or extreme labor): TDEE = BMR × 1.9\n\n"
                             ,
                     style = MaterialTheme.typography.bodyMedium
                 )

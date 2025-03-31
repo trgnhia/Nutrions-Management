@@ -63,7 +63,7 @@ fun AgeItem(age: Int  , onValueChange: (Int) -> Unit) {
                     textStyle = LocalTextStyle.current.copy(color = Color.Black),
                     modifier = Modifier
                         .padding(start = 16.dp)
-                        .fillMaxWidth(0.2f)
+                        .fillMaxWidth(0.25f)
                 )
 
                 Text(

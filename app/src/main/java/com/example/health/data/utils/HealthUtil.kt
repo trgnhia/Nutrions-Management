@@ -58,7 +58,7 @@ object HealthMetricUtil {
 
     fun restDay(diffWeight: Float, calorieDeltaPerDay: Float): Int {
         if (calorieDeltaPerDay == 0f) return 0 // tránh chia cho 0
-        val totalCalories = diffWeight * 7700  // mỗi 1kg ≈ 7700 kcal
+        val totalCalories = abs(diffWeight) * 7700  // mỗi 1kg ≈ 7700 kcal
         return (totalCalories / calorieDeltaPerDay).toInt()
     }
     fun bodyAddition(bmi: Float):String{

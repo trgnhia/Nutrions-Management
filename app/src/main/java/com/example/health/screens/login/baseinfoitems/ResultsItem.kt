@@ -24,12 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.health.R
 import kotlin.math.ceil
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange: (Float) -> Unit) {
-    // Tính số tháng
-    val months = ceil(restDays / 30.0).toInt()
+    val months = ceil(restDays/ 30.0).toInt()
+
     var showDialog by remember { mutableStateOf(false) }
     var inputTarget by remember { mutableStateOf("") }
 
@@ -39,7 +42,7 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
             .padding(top = 80.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.plan_background), // ảnh nền tổng thể
+            painter = painterResource(id = R.drawable.plan_background),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize()
@@ -52,7 +55,7 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Phần "Your Plan is Ready"
+            // Card: Plan Info
             Card(
                 shape = RoundedCornerShape(16.dp),
                 border = ButtonDefaults.outlinedButtonBorder,
@@ -63,15 +66,15 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                     modifier = Modifier.padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     Text("Your Plan is Ready", style = MaterialTheme.typography.titleMedium)
-
                     Spacer(modifier = Modifier.height(12.dp))
-
                     Text("Your goal", fontWeight = FontWeight.Bold)
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = weight.toInt().toString(), style = MaterialTheme.typography.headlineSmall)
+                        Text(
+                            text = weight.toInt().toString(),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Image(
@@ -84,28 +87,40 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = targetWeight.toInt().toString(), style = MaterialTheme.typography.headlineSmall)
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = targetWeight.toInt().toString(),
+                                style = MaterialTheme.typography.headlineSmall
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit target weight",
+                                tint = Color.Gray,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clickable {
+                                        showDialog = true
+                                        inputTarget = targetWeight.toInt().toString()
+                                    }
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        "Follow our recommendations and you will achieve your desired goal by $months month ",
+                        "Follow our recommendations and you will achieve your desired goal by $months month",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        "Edit your weight goal >",
-                        color = Color.Red,
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.clickable { showDialog = true }
-                    )
                 }
             }
+
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Phần "How to achieve your goals"
+            // Card: Tips
             Card(
                 shape = RoundedCornerShape(16.dp),
                 border = ButtonDefaults.outlinedButtonBorder,
@@ -129,8 +144,8 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                     GoalRow(R.drawable.ic_progress, "Continuous progress tracking")
                 }
             }
-
         }
+
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -152,7 +167,6 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                             fontWeight = FontWeight.Bold
                         )
                     }
-
                 },
                 dismissButton = {
                     TextButton(onClick = { showDialog = false }) {
@@ -163,19 +177,16 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                 text = {
                     OutlinedTextField(
                         value = inputTarget,
-                        onValueChange = {
-                            if (it.matches(Regex("^\\d*\\.?\\d*\$"))) {
-                                inputTarget = it
-                            }
+                        onValueChange = { newValue ->
+                            val digitsOnly = newValue.filter { it.isDigit() }
+                            inputTarget = digitsOnly
                         },
                         label = { Text("Target weight (kg)") },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Number
                         ),
-                        textStyle = LocalTextStyle.current.copy(
-                            textAlign = TextAlign.Center
-                        ),
+                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xFF00BEBE),
@@ -184,11 +195,11 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                         )
                     )
 
+
                 },
                 shape = RoundedCornerShape(16.dp)
             )
         }
-
     }
 }
 
@@ -216,5 +227,3 @@ fun PreviewResultsItem() {
         onValueChange = {} // preview nên để trống
     )
 }
-
-

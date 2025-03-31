@@ -66,7 +66,7 @@ fun WeightItem(weight: Float , onValueChange: (Float) -> Unit) {
                     range = 40..150,
                     dividersColor = Color.Black,
                     textStyle = LocalTextStyle.current.copy(color = Color.Black, fontSize = 20.sp),
-                    modifier = Modifier.fillMaxWidth(0.2f)
+                    modifier = Modifier.fillMaxWidth(0.25f)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
 

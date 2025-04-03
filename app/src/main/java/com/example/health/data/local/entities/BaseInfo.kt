@@ -35,6 +35,10 @@ data class BaseInfo(
     @PropertyName("activityLevel")
     @ColumnInfo(name = "activiy_level") var ActivityLevel: Int,
 
+    @JvmField
+    @PropertyName("isDiet")
+    @ColumnInfo(name = "is_diet", defaultValue = "0") var IsDiet: Int = 0
+
 ){
-    constructor() : this("", "", 0, 0f, 0f, "", 0)
+    constructor() : this("", "", 0, 0f, 0f, "", 0,0)
 }

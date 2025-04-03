@@ -9,7 +9,7 @@ import com.example.health.data.local.entities.*
 
 @Database(
     entities = [Account::class, BaseInfo::class, HealthMetric::class, PendingAction::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {

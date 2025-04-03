@@ -32,6 +32,7 @@ fun CalculatingScreen(
             val dif = HealthMetricUtil.diffWeight(it.Weight, weightTarget)
             val calorDeltaPerDay = HealthMetricUtil.calculateCalorieDeltaPerDay(tdee,dif)
             val resDay = HealthMetricUtil.restDay(dif,calorDeltaPerDay)
+            val now = Date()
             val metric = HealthMetric(
                 metricId = metricId,
                 Uid = it.Uid,
@@ -43,7 +44,7 @@ fun CalculatingScreen(
                 TDEE = tdee,
                 CalorPerDay = calorDeltaPerDay,
                 RestDay = resDay,
-                UpdateAt = HealthMetricUtil.getCurrentDateTime()
+                UpdateAt = now
             )
 
             navController.currentBackStackEntry?.savedStateHandle?.set("metric", metric)

@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
+import java.util.Date
 
 @Entity(
     tableName = "health_metric",
@@ -62,7 +63,8 @@ data class HealthMetric (
 
     @JvmField
     @PropertyName("updateAt")
-    @ColumnInfo(name = "update_at") var UpdateAt: String
+    @ColumnInfo(name = "update_at")
+    var UpdateAt: Date // cập nhật ko dùng string nữa mà dùng dạng date để gửi vào firestore cho nhanh
 ) : Parcelable{
-    constructor() :this("", "", 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0, "")
+    constructor() :this("", "", 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0, Date())
 }

@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.health.data.local.daos.*
 import com.example.health.data.local.entities.*
+import com.example.health.data.local.converters.Converters
 
 @Database(
     entities = [Account::class, BaseInfo::class, HealthMetric::class, PendingAction::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
+@TypeConverters(Converters::class) // đang ky typeconvert
 abstract class AppDatabase: RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun baseInfoDao(): BaseInfoDao

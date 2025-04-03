@@ -55,7 +55,7 @@ data class MetricInput(
     val tdee: Float,
     val calorPerDay: Float,
     val restDays: Int,
-    val updateAt: String
+    val updateAt: Date
 )
 @Composable
 fun BaseInfoScreen(
@@ -91,7 +91,7 @@ fun BaseInfoScreen(
             restDays = it.RestDay,
             updateAt = it.UpdateAt
         )
-    }?: MetricInput(0f,0f,0f,0f,0f,0f,0f,0,"")
+    }?: MetricInput(0f,0f,0f,0f,0f,0f,0f,0,Date())
 
     OnboardingScreen(
         uid = uid,
@@ -194,9 +194,9 @@ fun OnboardingScreen(
     val RestDay by remember(diff, calorPerDay) {
         derivedStateOf { HealthMetricUtil.restDay(diff, calorPerDay) }
     }
-
+    val now = Date()
     val UpdateAt by remember {
-        mutableStateOf(HealthMetricUtil.getCurrentDateTime()) // chỉ cần lấy 1 lần
+        mutableStateOf(now) // chỉ cần lấy 1 lần
     }
 
     Box(

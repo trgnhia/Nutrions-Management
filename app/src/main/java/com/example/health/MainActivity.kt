@@ -15,7 +15,7 @@ import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodelfactory.AccountViewModelFactory
-import com.example.health.data.local.viewmodelfactory.AuthViewModelFactory
+import com.example.health.data.remote.auth.AuthViewModelFactory
 import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
 import com.example.health.data.local.viewmodelfactory.HealthMetricViewModelFactory
 import com.example.health.data.remote.sync.PendingSyncScheduler
@@ -37,22 +37,22 @@ class MainActivity : ComponentActivity() {
 
         val authViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(application, accountRepository)
+            AuthViewModelFactory(applicationContext, accountRepository)
         )[AuthViewModel::class.java]
 
         val accountViewModel = ViewModelProvider(
             this,
-            AccountViewModelFactory(application, accountRepository)
+            AccountViewModelFactory(accountRepository)
         )[AccountViewModel::class.java]
 
         val baseInfoViewModel = ViewModelProvider(
             this,
-            BaseInfoViewModelFactory(application, baseInfoRepository)
+            BaseInfoViewModelFactory(baseInfoRepository)
         )[BaseInfoViewModel::class.java]
 
         val healthMetricViewModel = ViewModelProvider(
             this,
-            HealthMetricViewModelFactory(application, healthMetricRepository)
+            HealthMetricViewModelFactory(healthMetricRepository)
         )[HealthMetricViewModel::class.java]
 
         WindowCompat.setDecorFitsSystemWindows(window, false)

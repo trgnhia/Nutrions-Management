@@ -1,4 +1,4 @@
-package com.example.health.screens.main.plan.vegan
+package com.example.health.screens.main.plan.keto
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,11 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.navigation.routes.PlanRoutes
 
 @Composable
-fun Vegan(navController: NavController){
+fun KetoPlanScreen(navController: NavController)  {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,14 +24,14 @@ fun Vegan(navController: NavController){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is Vegan main screen")
+        Text(text = "This is Keto plan screen")
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            navController.navigate(PlanRoutes.VeganPlan.route)
+            navController.navigate(PlanRoutes.KetoPlanDetail.route)
         }) {
-            Text("Nav to Vegan Plan")
+            Text("Nav to Keto details")
         }
     }
 }

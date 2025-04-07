@@ -1,6 +1,5 @@
-package com.example.health.screens.main.plan.vegan
+package com.example.health.screens.main.diary
 
-import android.telecom.Call.Details
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,10 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.health.navigation.routes.PlanRoutes
+import com.example.health.navigation.routes.DiaryRoutes
 
 @Composable
-fun Details(navController: NavController){
+fun DiaryMainScreen(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,8 +24,22 @@ fun Details(navController: NavController){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is Vegan details screen")
+        Text(text = "This is diary main screen")
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            navController.navigate(DiaryRoutes.Add.route)
+        }) {
+            Text("Nav to Add")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = {
+            navController.navigate(DiaryRoutes.Info.route)
+        }) {
+            Text("Nav to Info")
+        }
     }
 }

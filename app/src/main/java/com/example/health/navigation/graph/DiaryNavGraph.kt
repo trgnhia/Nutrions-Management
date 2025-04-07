@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.navigation.routes.GraphRoute
-import com.example.health.screens.main.diary.Add
-import com.example.health.screens.main.diary.Diary
-import com.example.health.screens.main.diary.Info
+import com.example.health.screens.main.diary.DiaryAdd
+import com.example.health.screens.main.diary.DiaryMainScreen
+import com.example.health.screens.main.diary.DiaryInfo
 
 fun NavGraphBuilder.diaryNavGraph(navController: NavController) {
     navigation(
@@ -16,13 +16,13 @@ fun NavGraphBuilder.diaryNavGraph(navController: NavController) {
         startDestination = DiaryRoutes.Diary.route
     ){
         composable(DiaryRoutes.Diary.route){
-           Diary(navController)
+           DiaryMainScreen(navController)
         }
         composable(DiaryRoutes.Add.route){
-            Add(navController)
+            DiaryAdd(navController)
         }
         composable(DiaryRoutes.Info.route){
-            Info(navController)
+            DiaryInfo(navController)
         }
     }
 }

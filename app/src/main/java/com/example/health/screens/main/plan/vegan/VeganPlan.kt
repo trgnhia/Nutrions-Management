@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.example.health.navigation.routes.PlanRoutes
 
 @Composable
-fun Plan(navController: NavController){
+fun VeganPlanScreen(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()

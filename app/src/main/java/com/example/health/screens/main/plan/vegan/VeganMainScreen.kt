@@ -1,4 +1,4 @@
-package com.example.health.screens.main.plan.highprotein
+package com.example.health.screens.main.plan.vegan
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.example.health.navigation.routes.PlanRoutes
 
 @Composable
-fun HighProtein(navController: NavController) {
+fun VeganMainScreen(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,14 +24,14 @@ fun HighProtein(navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is High Protein main screen")
+        Text(text = "This is Vegan main screen")
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            navController.navigate(PlanRoutes.HighProteinPlan.route)
+            navController.navigate(PlanRoutes.VeganPlan.route)
         }) {
-            Text("Nav to High Protein Plan")
+            Text("Nav to Vegan Plan")
         }
     }
 }

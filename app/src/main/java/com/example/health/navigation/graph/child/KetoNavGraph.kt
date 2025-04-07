@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
-import com.example.health.screens.main.plan.keto.Details
-import com.example.health.screens.main.plan.keto.Keto
-import com.example.health.screens.main.plan.keto.Plan
+import com.example.health.screens.main.plan.keto.KetoDetailsScreen
+import com.example.health.screens.main.plan.keto.KetoMainScreen
+import com.example.health.screens.main.plan.keto.KetoPlanScreen
 
 fun NavGraphBuilder.ketoNavGraph(navController: NavController) {
     navigation(
@@ -16,13 +16,13 @@ fun NavGraphBuilder.ketoNavGraph(navController: NavController) {
         startDestination = PlanRoutes.Keto.route
     ){
         composable(PlanRoutes.Keto.route){
-            Keto(navController)
+            KetoMainScreen(navController)
         }
         composable(PlanRoutes.KetoPlan.route){
-            Plan(navController)
+            KetoPlanScreen(navController)
         }
         composable(PlanRoutes.KetoPlanDetail.route) {
-            Details(navController)
+            KetoDetailsScreen(navController)
         }
 
     }

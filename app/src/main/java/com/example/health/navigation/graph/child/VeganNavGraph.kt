@@ -15,13 +15,13 @@ fun NavGraphBuilder.veganNavGraph(navController: NavController) {
         startDestination = PlanRoutes.Vegan.route
     ){
         composable(PlanRoutes.Vegan.route){
-            Vegan(navController)
+            VeganMainScreen(navController)
         }
         composable(PlanRoutes.VeganPlan.route){
-            Plan(navController)
+            VeganPlanScreen(navController)
         }
         composable(PlanRoutes.VeganPlanDetail.route){
-            Details(navController)
+            VeganDetailsScreen(navController)
         }
     }
 }

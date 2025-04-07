@@ -9,11 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun Info(navController: NavController){
+fun DiaryAdd(navController: NavController){
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
+
     ){
-        Text(text = "This is info screen")
+        Text(text = "This is add screen")
+
     }
 }

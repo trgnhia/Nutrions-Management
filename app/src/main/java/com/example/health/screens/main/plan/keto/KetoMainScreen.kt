@@ -1,4 +1,4 @@
-package com.example.health.screens.main.diary
+package com.example.health.screens.main.plan.keto
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,11 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.health.navigation.routes.DiaryRoutes
-import com.example.health.navigation.routes.GraphRoute
+import com.example.health.navigation.routes.PlanRoutes
 
 @Composable
-fun Diary(navController: NavController){
+fun KetoMainScreen(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,22 +24,14 @@ fun Diary(navController: NavController){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is diary main screen")
+        Text(text = "This is keto main screen")
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            navController.navigate(DiaryRoutes.Add.route)
+            navController.navigate(PlanRoutes.KetoPlan.route)
         }) {
-            Text("Nav to Add")
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = {
-            navController.navigate(DiaryRoutes.Info.route)
-        }) {
-            Text("Nav to Info")
+            Text("Nav to Keto Plan")
         }
     }
 }

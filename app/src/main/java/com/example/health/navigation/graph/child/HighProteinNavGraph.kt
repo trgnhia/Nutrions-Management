@@ -14,13 +14,13 @@ fun NavGraphBuilder.highProteinNavGraph(navController: NavController) {
         startDestination = PlanRoutes.HighProtein.route
     ){
         composable(PlanRoutes.HighProtein.route){
-            HighProtein(navController)
+            HighProteinMainScreen(navController)
         }
         composable(PlanRoutes.HighProteinPlan.route){
-            Plan(navController)
+            HighProteinPlanScreen(navController)
         }
         composable(PlanRoutes.HighProteinPlanDetail.route) {
-            Details(navController)
+            HighProteinDetailsScreen(navController)
         }
 
     }

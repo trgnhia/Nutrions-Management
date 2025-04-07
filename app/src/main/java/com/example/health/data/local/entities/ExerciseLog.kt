@@ -1,0 +1,50 @@
+package com.example.health.data.local.entities
+
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import com.google.firebase.firestore.IgnoreExtraProperties
+import com.google.firebase.firestore.PropertyName
+import kotlinx.android.parcel.Parcelize
+import java.util.Date
+
+
+@Parcelize
+@IgnoreExtraProperties
+@Entity(
+    tableName = "exercise_log",
+    foreignKeys = [
+        ForeignKey(
+            entity = DefaultExercise::class,
+            parentColumns = ["id"],
+            childColumns = ["idExercise"]
+        ),
+        ForeignKey(
+            entity = BurnOutCaloPerDay::class,
+            parentColumns = ["dateTime"],
+            childColumns = ["dateTime"]
+        )
+    ]
+)
+data class ExerciseLog(
+    @JvmField
+    @PropertyName("practiceTime")
+    @ColumnInfo(name = "practiceTime") val PracticeTime: Date,
+
+    @JvmField
+    @PropertyName("idExercise")
+    @PrimaryKey
+    @ColumnInfo(name = "idExercise", index = true) val IdExercise: String,
+
+    @JvmField
+    @PropertyName("caloOut")
+    @ColumnInfo(name = "caloOut") val CaloOut: Int,
+
+    @JvmField
+    @PropertyName("dateTime")
+    @ColumnInfo(name = "dateTime", index = true) val DateTime: Date
+) : Parcelable {
+    constructor() : this(Date(), "", 0, Date())
+}

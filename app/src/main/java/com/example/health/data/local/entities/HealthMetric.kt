@@ -14,8 +14,8 @@ import java.util.Date
     tableName = "health_metric",
     foreignKeys = [ForeignKey(
         entity = Account::class,
-        parentColumns = ["Uid"],
-        childColumns = ["Uid"],
+        parentColumns = ["uid"],
+        childColumns = ["uid"],
     )]
 )
 @Parcelize
@@ -27,7 +27,7 @@ data class HealthMetric (
 
     @JvmField
     @PropertyName("uid")
-    @ColumnInfo(name = "Uid", index = true) val Uid: String,
+    @ColumnInfo(name = "uid", index = true) val Uid: String,
 
     @JvmField
     @PropertyName("height")

@@ -5,21 +5,49 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.health.data.local.converters.Converters
 import com.example.health.data.local.daos.*
 import com.example.health.data.local.entities.*
-import com.example.health.data.local.converters.Converters
 
 @Database(
-    entities = [Account::class, BaseInfo::class, HealthMetric::class, PendingAction::class],
-    version = 6,
+    entities = [
+        Account::class,
+        BaseInfo::class,
+        HealthMetric::class,
+        PendingAction::class,
+        BurnOutCaloPerDay::class,
+        CustomFood::class,
+        DefaultDietMealInPlan::class,
+        DefaultExercise::class,
+        DefaultFood::class,
+        DietDish::class,
+        EatenDish::class,
+        EatenMeal::class,
+        ExerciseLog::class,
+        Notify::class,
+        TotalNutrionsPerDay::class
+    ],
+    version = 7,
     exportSchema = false
 )
-@TypeConverters(Converters::class) // đang ky typeconvert
-abstract class AppDatabase: RoomDatabase() {
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase() {
+
     abstract fun accountDao(): AccountDao
     abstract fun baseInfoDao(): BaseInfoDao
     abstract fun healMetricDao(): HealMetricDao
     abstract fun pendingActionDao(): PendingActionDao
+    abstract fun burnOutCaloPerDayDao(): BurnOutCaloPerDayDao
+    abstract fun customFoodDao(): CustomFoodDao
+    abstract fun defaultDietMealInPlanDao(): DefaultDietMealInPlanDao
+    abstract fun defaultExerciseDao(): DefaultExerciseDao
+    abstract fun defaultFoodDao(): DefaultFoodDao
+    abstract fun dietDishDao(): DietDishDao
+    abstract fun eatenDishDao(): EatenDishDao
+    abstract fun eatenMealDao(): EatenMealDao
+    abstract fun exerciseLogDao(): ExerciseLogDao
+    abstract fun notifyDao(): NotifyDao
+    abstract fun totalNutrionsPerDayDao(): TotalNutrionsPerDayDao
 
     companion object {
         @Volatile
@@ -32,7 +60,7 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     "health_app_database"
                 )
-                    .fallbackToDestructiveMigration() // Reset database nếu có thay đổi version
+                    .fallbackToDestructiveMigration()
                     .build()
 
                 INSTANCE = instance
@@ -40,5 +68,4 @@ abstract class AppDatabase: RoomDatabase() {
             }
         }
     }
-
 }

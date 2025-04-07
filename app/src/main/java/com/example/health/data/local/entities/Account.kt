@@ -9,6 +9,7 @@ import com.google.firebase.firestore.PropertyName
 data class Account(
     @JvmField
     @PropertyName("uid")
+    @ColumnInfo(name = "uid")
     @PrimaryKey() val Uid : String,
 
     @JvmField

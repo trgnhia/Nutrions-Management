@@ -13,9 +13,7 @@ fun Info(navController: NavController){
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-
     ){
         Text(text = "This is info screen")
-
     }
 }

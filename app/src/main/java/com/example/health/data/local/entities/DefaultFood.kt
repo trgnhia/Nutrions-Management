@@ -25,8 +25,8 @@ data class DefaultFood(
     val Name: String,
 
     @JvmField
-    @PropertyName("calo")
-    @ColumnInfo(name = "calo")
+    @PropertyName("calories")
+    @ColumnInfo(name = "calories")
     val Calo: Float,
 
     @JvmField
@@ -50,13 +50,13 @@ data class DefaultFood(
     val Type: Int,
 
     @JvmField
-    @PropertyName("quantity")
-    @ColumnInfo(name = "quantity")
+    @PropertyName("Quantity")
+    @ColumnInfo(name = "Quantity")
     val Quantity: Int,
 
     @JvmField
-    @PropertyName("quantityType")
-    @ColumnInfo(name = "quantityType")
+    @PropertyName("quantity_type")
+    @ColumnInfo(name = "quantity_type")
     val QuantityType: String
 
 ) : Parcelable {

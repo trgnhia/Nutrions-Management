@@ -57,8 +57,13 @@ data class DefaultFood(
     @JvmField
     @PropertyName("quantity_type")
     @ColumnInfo(name = "quantity_type")
-    val QuantityType: String
+    val QuantityType: String,
+
+    @JvmField
+    @PropertyName("urlImage")
+    @ColumnInfo(name = "urlImage")
+    val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", "", 0f, 0f, 0f, 0f, 0, 0, "")
+    constructor() : this("", "", 0f, 0f, 0f, 0f, 0, 0, "","")
 }

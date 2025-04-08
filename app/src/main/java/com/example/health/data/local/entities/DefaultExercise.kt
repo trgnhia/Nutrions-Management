@@ -20,9 +20,19 @@ data class DefaultExercise(
     val Id: String,
 
     @JvmField
-    @PropertyName("caloPerHour")
-    @ColumnInfo(name = "caloPerHour")
-    val CaloPerHour: Int,
+    @PropertyName("caloBurn")
+    @ColumnInfo(name = "caloBurn")
+    val CaloBurn: Int,
+
+    @JvmField
+    @PropertyName("unitType")
+    @ColumnInfo(name = "unitType")
+    val UnitType: String,
+
+    @JvmField
+    @PropertyName("unit")
+    @ColumnInfo(name = "unit")
+    val Unit: Int,
 
     @JvmField
     @PropertyName("name")
@@ -30,5 +40,5 @@ data class DefaultExercise(
     val Name: String
 
 ) : Parcelable {
-    constructor() : this("", 0, "")
+    constructor() : this("", 0, "", 0, "")
 }

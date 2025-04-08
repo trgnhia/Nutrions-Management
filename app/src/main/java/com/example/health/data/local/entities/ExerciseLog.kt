@@ -39,17 +39,28 @@ data class ExerciseLog(
     @ColumnInfo(name = "idExercise", index = true) val IdExercise: String,
 
     @JvmField
-    @PropertyName("caloOut")
-    @ColumnInfo(name = "caloOut") val CaloOut: Int,
+    @PropertyName("caloBurn")
+    @ColumnInfo(name = "caloBurn") val CaloBurn: Int,
+
+    @JvmField
+    @PropertyName("unitType")
+    @ColumnInfo(name = "unitType")
+    val UnitType: String,
+
+    @JvmField
+    @PropertyName("unit")
+    @ColumnInfo(name = "unit")
+    val Unit: Int,
 
     @JvmField
     @PropertyName("name")
     @ColumnInfo(name = "name")
     val Name: String,
 
+
     @JvmField
     @PropertyName("dateTime")
     @ColumnInfo(name = "dateTime", index = true) val DateTime: Date
 ) : Parcelable {
-    constructor() : this(Date(), "",  0,"", Date())
+    constructor() : this(Date(), "",  0,"", 0 , " ", Date())
 }

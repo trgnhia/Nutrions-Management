@@ -58,8 +58,13 @@ data class DefaultDietMealInPlan(
     @JvmField
     @PropertyName("totalProtein")
     @ColumnInfo(name = "totalProtein")
-    val TotalProtein: Float
+    val TotalProtein: Float,
+
+    @JvmField
+    @PropertyName("urlImage")
+    @ColumnInfo(name = "urlImage")
+    val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", Date(), "", 0f, 0f, 0f, 0f)
+    constructor() : this("", Date(), "", 0f, 0f, 0f, 0f,"")
 }

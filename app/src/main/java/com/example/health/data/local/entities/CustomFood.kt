@@ -72,8 +72,13 @@ data class CustomFood(
     @JvmField
     @PropertyName("uid")
     @ColumnInfo(name = "uid", index = true)
-    val Uid: String
+    val Uid: String,
+
+    @JvmField
+    @PropertyName("urlImage")
+    @ColumnInfo(name = "urlImage")
+    val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", "", 0f, 0f, 0f, 0f, 0, 0, "", "")
+    constructor() : this("", "", 0f, 0f, 0f, 0f, 0, 0, "", "","")
 }

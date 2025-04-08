@@ -77,8 +77,13 @@ data class DietDish(
     @JvmField
     @PropertyName("quantityType")
     @ColumnInfo(name = "quantityType")
-    val QuantityType: String
+    val QuantityType: String,
+
+    @JvmField
+    @PropertyName("urlImage")
+    @ColumnInfo(name = "urlImage")
+    val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", "", "", "", 0f, 0f, 0f, 0f, 0, "")
+    constructor() : this("", "", "", "", 0f, 0f, 0f, 0f, 0, "","")
 }

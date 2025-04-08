@@ -37,8 +37,13 @@ data class DefaultExercise(
     @JvmField
     @PropertyName("name")
     @ColumnInfo(name = "name")
-    val Name: String
+    val Name: String,
+
+    @JvmField
+    @PropertyName("urlImage")
+    @ColumnInfo(name = "urlImage")
+    val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", 0, "", 0, "")
+    constructor() : this("", 0, "", 0, "","")
 }

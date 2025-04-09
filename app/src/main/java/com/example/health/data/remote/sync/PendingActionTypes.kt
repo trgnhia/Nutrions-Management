@@ -10,4 +10,8 @@ object PendingActionTypes {
     const val INSERT_HEALTH_METRIC = "insert_metric"
     const val UPDATE_HEALTH_METRIC = "update_metric"
 
+    const val INSERT_MACRO = "insert_macro"
+    const val UPDATE_MACRO = "update_macro"
+
+
 }

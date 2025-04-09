@@ -28,7 +28,7 @@ data class CustomFood(
     @PropertyName("id")
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val Id: String,
+    val id: String,
 
     @JvmField
     @PropertyName("name")

@@ -21,20 +21,16 @@ import java.util.Date
         childColumns = ["uid"]
     )]
 )
-
 data class BurnOutCaloPerDay(
-    @JvmField
-    @PropertyName("dateTime")
     @PrimaryKey
-    @ColumnInfo(name = "dateTime") val DateTime: Date,
+    @ColumnInfo(name = "dateTime")
+    val DateTime: Date, // 🔑 1 ngày duy nhất (chỉ lấy phần ngày thôi, không tính giờ)
 
-    @JvmField
-    @PropertyName("totalCalo")
-    @ColumnInfo(name = "totalCalo") val TotalCalo: Int,
+    @ColumnInfo(name = "totalCalo")
+    val TotalCalo: Int,
 
-    @JvmField
-    @PropertyName("uid")
-    @ColumnInfo(name = "uid", index = true) val Uid: String
+    @ColumnInfo(name = "uid", index = true)
+    val Uid: String
 ) : Parcelable {
     constructor() : this(Date(), 0, "")
 }

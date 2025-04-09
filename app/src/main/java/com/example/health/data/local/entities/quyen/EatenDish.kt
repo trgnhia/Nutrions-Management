@@ -18,7 +18,7 @@ import java.util.Date
     foreignKeys = [
         ForeignKey(
             entity = EatenMeal::class,
-            parentColumns = ["idDay"],
+            parentColumns = ["id"],
             childColumns = ["idEatenMeal"]
         ),
         ForeignKey(
@@ -34,7 +34,7 @@ data class EatenDish(
     @PropertyName("id")
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val Id: String,
+    val id: String,
 
     @JvmField
     @PropertyName("foodId")

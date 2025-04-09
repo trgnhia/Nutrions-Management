@@ -11,7 +11,6 @@ import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
-
 @Parcelize
 @IgnoreExtraProperties
 @Entity(
@@ -23,25 +22,34 @@ import java.util.Date
             childColumns = ["idExercise"]
         ),
         ForeignKey(
-            entity = BurnOutCaloPerDay::class,
-            parentColumns = ["dateTime"],
-            childColumns = ["dateTime"]
+            entity = Account::class,
+            parentColumns = ["uid"],
+            childColumns = ["uid"]
         )
+
     ]
 )
 data class ExerciseLog(
     @JvmField
+    @PropertyName("id")
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    val id: String,
+
+    @JvmField
     @PropertyName("practiceTime")
-    @ColumnInfo(name = "practiceTime") val PracticeTime: Date,
+    @ColumnInfo(name = "practiceTime")
+    val PracticeTime: Date,
 
     @JvmField
     @PropertyName("idExercise")
-    @PrimaryKey
-    @ColumnInfo(name = "idExercise", index = true) val IdExercise: String,
+    @ColumnInfo(name = "idExercise", index = true)
+    val IdExercise: String, // foreign key
 
     @JvmField
     @PropertyName("caloBurn")
-    @ColumnInfo(name = "caloBurn") val CaloBurn: Int,
+    @ColumnInfo(name = "caloBurn")
+    val CaloBurn: Int,
 
     @JvmField
     @PropertyName("unitType")
@@ -58,10 +66,17 @@ data class ExerciseLog(
     @ColumnInfo(name = "name")
     val Name: String,
 
-
     @JvmField
     @PropertyName("dateTime")
-    @ColumnInfo(name = "dateTime", index = true) val DateTime: Date
+    @ColumnInfo(name = "dateTime")
+    val DateTime: Date,
+
+    @JvmField
+    @PropertyName("uid")
+    @ColumnInfo(name = "uid", index = true)
+    val Uid: String
 ) : Parcelable {
-    constructor() : this(Date(), "",  0,"", 0 , " ", Date())
+
+    // ✅ Constructor mặc định mới đúng thứ tự & kiểu dữ liệu
+    constructor() : this("", Date(), "", 0, "", 0, "", Date(),"")
 }

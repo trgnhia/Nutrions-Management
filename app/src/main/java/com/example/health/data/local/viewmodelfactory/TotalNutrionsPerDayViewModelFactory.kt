@@ -8,13 +8,13 @@ import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 
 class TotalNutrionsPerDayViewModelFactory(
     private val repository: TotalNutrionsPerDayRepository,
-    private val uid: String
+
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TotalNutrionsPerDayViewModel::class.java)) {
-            return TotalNutrionsPerDayViewModel(repository, uid) as T
+            return TotalNutrionsPerDayViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

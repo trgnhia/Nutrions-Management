@@ -21,7 +21,18 @@ fun AppNavigation(
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
     defaultFoodViewModel : DefaultFoodViewModel,
-    defaultExerciseViewModel : DefaultExerciseViewModel
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
+    macroViewModel : MacroViewModel,
+    totalNutrionsPerDayViewModel : TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    eatenMealViewModel : EatenMealViewModel,
+    eatenDishViewModel : EatenDishViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customFoodViewModel : CustomFoodViewModel,
+    //notifyViewModel : NotifyViewModel,
+    //dietDishViewModel : DietDishViewModel
+
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -65,6 +76,7 @@ fun AppNavigation(
                 navController = navController,
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
+                macroViewModel = macroViewModel,
                 onLoadData = {
                     fetchAllDefaultData(
                         context = context,

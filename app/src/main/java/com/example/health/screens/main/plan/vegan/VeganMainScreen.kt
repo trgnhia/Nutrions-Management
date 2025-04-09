@@ -11,6 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,15 +27,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.navigation.routes.PlanRoutes
+import com.example.health.screens.main.plan.NoticeDialog
 
 @Composable
 fun VeganMainScreen(navController: NavController) {
 
+    var showDialog by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
             Button(
                 onClick = {
                     // TODO: xử lý khi người dùng nhấn bắt đầu kế hoạch
+                    showDialog = true
                 },
                 modifier = Modifier
                     .padding(16.dp)
@@ -219,9 +226,19 @@ fun VeganMainScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(100.dp)) // Safe space for scroll end
             }
+            if (showDialog) {
+                NoticeDialog(
+                    message = "When you start the diet, you will need to follow only the meals we provide and will not be allowed to eat food from outside. Are you ready?",
+                    onAccept = {
+                        showDialog = false
+                        // TODO: Start diet or navigate
+                    },
+                    onDecline = { showDialog = false },
+                    onDismiss = { showDialog = false }
+                )
+            }
         }
     }
-
 }
 
 //D:\Mobile_Prj\Nutrions-Management\app\src\main\res\drawable

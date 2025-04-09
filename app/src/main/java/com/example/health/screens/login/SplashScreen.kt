@@ -18,7 +18,6 @@ import com.example.health.screens.loader.ModernLoader
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 @Composable
 fun SplashScreen(
     navController: NavController,
@@ -34,7 +33,7 @@ fun SplashScreen(
     val context = LocalContext.current
 
     LaunchedEffect(authState) {
-        delay(4000) // Giả lập hiệu ứng splash ban đầu
+        delay(4000) // Cho hiệu ứng splash mượt
 
         when (authState) {
             is AuthState.Authenticated -> {
@@ -42,19 +41,13 @@ fun SplashScreen(
                 if (uid != null) {
                     try {
                         coroutineScope {
-                            launch { accountViewModel.fetchFromRemote(uid) }
-                            launch { baseInfoViewModel.fetchFromRemote(uid) }
-                            launch { healthMetricViewModel.fetchAllFromRemote(uid) }
-                            launch {
-                                fetchAllDefaultData(
-                                    context = context,
-                                    defaultFoodViewModel = defaultFoodViewModel,
-                                    defaultExerciseViewModel = defaultExerciseViewModel
-                                )
-                            }
+                            launch { accountViewModel.syncIfNeeded(uid) }
+                            launch { baseInfoViewModel.syncIfNeeded(uid) }
+                            launch { healthMetricViewModel.syncIfNeeded(uid) }
+                            launch { defaultFoodViewModel.syncIfNeeded(context) }
+                            launch { defaultExerciseViewModel.syncIfNeeded(context) }
                         }
 
-                        // ✅ Dữ liệu đồng bộ xong, điều hướng
                         isProcessing.value = false
                         navController.navigate("home") {
                             popUpTo("splash") { inclusive = true }
@@ -62,7 +55,7 @@ fun SplashScreen(
 
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        // Optional: Hiển thị thông báo lỗi / retry
+                        // Optional: Hiển thị Dialog hoặc retry
                     }
                 }
             }
@@ -80,6 +73,7 @@ fun SplashScreen(
             }
         }
     }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

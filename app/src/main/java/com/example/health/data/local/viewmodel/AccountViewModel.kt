@@ -31,4 +31,10 @@ class AccountViewModel(
     fun fetchFromRemote(uid: String) = viewModelScope.launch {
         repository.fetchFromRemote(uid)
     }
+    // ✅ Thêm hàm này để kiểm tra rồi mới fetch
+    fun syncIfNeeded(uid: String) = viewModelScope.launch {
+        if (account.value == null) {
+            fetchFromRemote(uid)
+        }
+    }
 }

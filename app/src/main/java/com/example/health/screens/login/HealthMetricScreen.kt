@@ -12,60 +12,89 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.entities.HealthMetric
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.utils.HealthMetricUtil
 import com.example.health.screens.loader.ActLoader
 import kotlinx.coroutines.delay
+import java.util.Date
 
 @Composable
 fun HealthMetricScreen(
     navController: NavController,
+    baseInfoViewModel: BaseInfoViewModel,
+    healthMetricViewModel: HealthMetricViewModel,
     onLoadData: suspend () -> Unit
 ) {
-        // State để điều hướng khi xong
-        var isLoading by remember { mutableStateOf(true) }
+    val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
+    var isLoading by remember { mutableStateOf(true) }
 
-        LaunchedEffect(Unit) {
-            // Gọi suspend lambda load dữ liệu
+    LaunchedEffect(Unit) {
+        baseInfo?.let {
+            // 🔢 Tính toán chỉ số
+            val bmr = HealthMetricUtil.calculateBMR(it.Weight, it.Height, it.Age, it.Gender)
+            val bmi = HealthMetricUtil.calculateBMI(it.Weight, it.Height)
+            val tdee = HealthMetricUtil.calculateTDEE(bmr, it.ActivityLevel)
+            val weightTarget = HealthMetricUtil.calculateWeightTarget(it.Height)
+            val metricId = HealthMetricUtil.generateMetricId()
+            val dif = HealthMetricUtil.diffWeight(it.Weight, weightTarget)
+            val calorDeltaPerDay = HealthMetricUtil.calculateCalorieDeltaPerDay(tdee, dif)
+            val resDay = HealthMetricUtil.restDay(dif, calorDeltaPerDay)
+            val now = Date()
+
+            val metric = HealthMetric(
+                metricId = metricId,
+                Uid = it.Uid,
+                Height = it.Height,
+                Weight = it.Weight,
+                WeightTarget = weightTarget,
+                BMR = bmr,
+                BMI = bmi,
+                TDEE = tdee,
+                CalorPerDay = calorDeltaPerDay,
+                RestDay = resDay,
+                UpdateAt = now
+            )
+
+            // ✅ Lưu vào Room
+            healthMetricViewModel.insertHealthMetric(metric)
+
+            // ✅ Load dữ liệu mặc định nếu cần
             onLoadData()
 
-            // Đợi 1 chút để UI mượt (optional)
-            delay(500L)
+            delay(3000) // Optional: giữ UI mượt
 
             isLoading = false
             navController.navigate("home") {
-                popUpTo("loading") { inclusive = true }
+                popUpTo("health_metric") { inclusive = true }
             }
         }
+    }
 
-        // UI Loading
-        Box(
+    // UI Loading
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.whitebackground),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Background image
-            Image(
-                painter = painterResource(id = R.drawable.whitebackground), // Thay bằng hình bạn có
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.matchParentSize()
+            ActLoader()
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "We are setting up your personalized plan, please wait...",
+                style = MaterialTheme.typography.bodyLarge
             )
-
-            // Nội dung trung tâm
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ActLoader() // Loader đã có sẵn
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                androidx.compose.material3.Text(
-                    text = "We are setting up your personalized plan, please wait...",
-                    style = androidx.compose.material3.MaterialTheme.typography.bodyLarge
-                )
-            }
         }
+    }
 }

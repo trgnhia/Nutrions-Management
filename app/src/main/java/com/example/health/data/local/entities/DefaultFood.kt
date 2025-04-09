@@ -25,7 +25,7 @@ data class DefaultFood(
     val Name: String,
 
     @JvmField
-    @PropertyName("calories")
+    @PropertyName("calo")
     @ColumnInfo(name = "calories")
     val Calo: Float,
 

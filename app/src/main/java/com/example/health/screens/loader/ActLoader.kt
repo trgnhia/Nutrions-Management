@@ -11,16 +11,21 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import kotlinx.coroutines.delay
+
+import com.airbnb.lottie.compose.*
+
 @Composable
 fun ActLoader(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset("loadding_act.json"))
 
-    val progress by animateLottieCompositionAsState(composition)
+    val animationState = animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever // 🔁 Lặp vô hạn
+    )
 
     LottieAnimation(
         composition = composition,
-        progress = { progress },
+        progress = { animationState.progress },
         modifier = modifier.size(200.dp)
     )
 }

@@ -16,18 +16,21 @@ class DefaultExerciseRepository(
 
     suspend fun getById(id: String): DefaultExercise? = dao.getById(id)
 
-    suspend fun insertAll(list: List<DefaultExercise>) {
-        dao.insertAll(list)
+    suspend fun insert(exercise: DefaultExercise) {
+        dao.insert(exercise)
     }
 
-    suspend fun fetchRemoteDefaultExercises(): List<DefaultExercise> {
+    // ✅ Tải từng item và trả về qua callback
+    suspend fun fetchRemoteAndInsertEach(onEach: suspend (DefaultExercise) -> Unit) {
         val snapshot = firestore.collection("default_exercise").get().await()
-        return snapshot.documents.mapNotNull { doc ->
+        for (doc in snapshot.documents) {
             val item = doc.toObject(DefaultExercise::class.java)
-            if (item == null) {
+            if (item != null) {
+                val withId = item.copy(Id = doc.id)
+                onEach(withId)
+            } else {
                 Log.e("FIRESTORE", "❌ Convert thất bại: ${doc.id}")
             }
-            item?.copy(Id = doc.id) // lấy ID từ doc
         }
     }
 }

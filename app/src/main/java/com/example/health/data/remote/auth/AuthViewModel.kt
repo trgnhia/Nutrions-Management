@@ -124,14 +124,22 @@ class AuthViewModel(
             val healthRepo = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
             val defaultFoodRepo = com.example.health.data.local.repostories.DefaultFoodRepository(db.defaultFoodDao(), firestore)
             val defaultExerciseRepo = com.example.health.data.local.repostories.DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
-            baseInfoRepo.fetchFromRemote(uid)
-            healthRepo.fetchAllFromRemote(uid)
-            DefaultDataSyncHelper.syncDefaultFood(context, defaultFoodRepo)
-            DefaultDataSyncHelper.syncDefaultExercise(context, defaultExerciseRepo)
 
-        } catch (_: Exception) {
+            // ⏱️ Đồng bộ song song trong coroutineScope
+            kotlinx.coroutines.coroutineScope {
+                launch { baseInfoRepo.fetchFromRemote(uid) }
+                launch { healthRepo.fetchAllFromRemote(uid) }
+
+                // 🔁 Chạy song song 2 hàm dưới
+                launch { DefaultDataSyncHelper.syncDefaultExercise(context, defaultExerciseRepo) }
+                launch { DefaultDataSyncHelper.syncDefaultFood(context, defaultFoodRepo) }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace() // bạn nên log để debug dễ hơn
         }
     }
+
 
     fun updateStatus(uid: String, status: String) {
         viewModelScope.launch {

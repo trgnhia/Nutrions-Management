@@ -54,16 +54,18 @@ fun AppNavigation(
             )
         }
 
-        composable("calculating") {
-            CalculatingScreen(
-                navController = navController,
-                baseInfoViewModel = baseInfoViewModel
-            )
-        }
+//        composable("calculating") {
+//            CalculatingScreen(
+//                navController = navController,
+//                baseInfoViewModel = baseInfoViewModel
+//            )
+//        }
 
         composable("health_metric") {
             HealthMetricScreen(
                 navController = navController,
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
                 onLoadData = {
                     fetchAllDefaultData(
                         context = context,

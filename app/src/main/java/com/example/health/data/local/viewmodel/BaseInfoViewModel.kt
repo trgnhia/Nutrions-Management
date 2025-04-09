@@ -31,4 +31,10 @@ class BaseInfoViewModel(
     fun fetchFromRemote(uid: String) = viewModelScope.launch {
         repository.fetchFromRemote(uid)
     }
+    // ✅ Thêm hàm này để kiểm tra rồi mới fetch
+    fun syncIfNeeded(uid: String) = viewModelScope.launch {
+        if (baseInfo.value == null) {
+            fetchFromRemote(uid)
+        }
+    }
 }

@@ -126,7 +126,7 @@ fun BaseInfoScreen(
             healthMetricViewModel.insertHealthMetric(metricF)
             // Cập nhật trạng thái & điều hướng
             authViewModel.updateStatus(uid, "completed")
-            navController.navigate("calculating") {
+            navController.navigate("health_metric") {
                 popUpTo("base_info") { inclusive = true }
             }
         }

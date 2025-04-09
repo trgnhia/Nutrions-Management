@@ -25,5 +25,4 @@ interface CustomFoodDao {
     // 🔍 Tìm kiếm món ăn tuỳ chỉnh theo tên (gần đúng, không phân biệt hoa thường)
     @Query("SELECT * FROM custom_food WHERE uid = :uid AND name LIKE '%' || :query || '%' COLLATE NOCASE")
     fun searchByName(uid: String, query: String): Flow<List<CustomFood>>
-
 }

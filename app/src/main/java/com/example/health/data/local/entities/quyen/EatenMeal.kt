@@ -1,4 +1,4 @@
-package com.example.health.data.local.entities
+package com.example.health.data.local.entities.quyen
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

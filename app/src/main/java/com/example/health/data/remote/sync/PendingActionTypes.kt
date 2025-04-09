@@ -13,5 +13,9 @@ object PendingActionTypes {
     const val INSERT_MACRO = "insert_macro"
     const val UPDATE_MACRO = "update_macro"
 
+    const val INSERT_TOTAL_NUTRITION = "insert_total_nutrition"
+    const val UPDATE_TOTAL_NUTRITION = "update_total_nutrition"
+    const val DELETE_TOTAL_NUTRITION = "delete_total_nutrition"
+
 
 }

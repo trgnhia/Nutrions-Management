@@ -25,9 +25,10 @@ import com.example.health.data.local.entities.*
         EatenMeal::class,
         ExerciseLog::class,
         Notify::class,
-        TotalNutrionsPerDay::class
+        TotalNutrionsPerDay::class,
+        Macro::class
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -48,6 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseLogDao(): ExerciseLogDao
     abstract fun notifyDao(): NotifyDao
     abstract fun totalNutrionsPerDayDao(): TotalNutrionsPerDayDao
+    abstract fun macroDao(): MacroDao
 
     companion object {
         @Volatile

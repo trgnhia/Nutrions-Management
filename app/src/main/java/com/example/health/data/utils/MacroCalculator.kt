@@ -49,7 +49,7 @@ object MacroCalculator {
     }
 }
 
-/* CÁCH SỬ DUNG
+/* CÁCH SỬ DUNG hehe
 val result = MacroCalculator.calculateMacros(
     tdee = 2500,
     carbPercent = 40f,

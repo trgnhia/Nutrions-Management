@@ -26,6 +26,7 @@ class BaseInfoRepository(
                 .collection("base_info")
                 .document("data")
                 .set(baseInfo)
+                .await()
         }
         catch (_: Exception) {
             val json = Gson().toJson(baseInfo)
@@ -47,6 +48,7 @@ class BaseInfoRepository(
                 .collection("base_info")
                 .document("data")
                 .set(baseInfo)
+                .await()
         }
         catch (_: Exception) {
             val json = Gson().toJson(baseInfo)

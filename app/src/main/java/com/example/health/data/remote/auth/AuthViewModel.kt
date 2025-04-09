@@ -2,11 +2,13 @@ package com.example.health.data.remote.auth
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.health.R
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.entities.Account
+import com.example.health.data.local.helper.DefaultDataSyncHelper
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
 import com.example.health.data.local.repostories.HealthMetricRepository
@@ -120,9 +122,13 @@ class AuthViewModel(
             val db = AppDatabase.getDatabase(context)
             val baseInfoRepo = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
             val healthRepo = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
-
+            val defaultFoodRepo = com.example.health.data.local.repostories.DefaultFoodRepository(db.defaultFoodDao(), firestore)
+            val defaultExerciseRepo = com.example.health.data.local.repostories.DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
             baseInfoRepo.fetchFromRemote(uid)
             healthRepo.fetchAllFromRemote(uid)
+            DefaultDataSyncHelper.syncDefaultFood(context, defaultFoodRepo)
+            DefaultDataSyncHelper.syncDefaultExercise(context, defaultExerciseRepo)
+
         } catch (_: Exception) {
         }
     }
@@ -146,6 +152,12 @@ class AuthViewModel(
             healthMetricViewModel.deleteAllHealthMetrics()
             accountViewModel.deleteAccount()
             baseInfoViewModel.deleteBaseInfo()
+            val db = AppDatabase.getDatabase(context)
+            try {
+                db.clearAllTables()
+            } catch (e: Exception) {
+                Log.e("SIGN_OUT", "Crash khi clearAllTables: ${e.message}")
+            }
 
             _authState.value = AuthState.Unauthenticated
         }

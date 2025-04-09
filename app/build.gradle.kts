@@ -59,6 +59,12 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.volley)
+    implementation(libs.play.services.fido)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.play.services.fido)
+    implementation(libs.play.services.fido)
+    implementation(libs.play.services.fido)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,6 +88,12 @@ dependencies {
 
 
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+
+    // Coil core (cho Android View và Bitmap)
+    implementation("io.coil-kt:coil:2.4.0")
+
+    // Nếu bạn dùng Compose (có thể bỏ nếu không dùng Compose)
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 
 

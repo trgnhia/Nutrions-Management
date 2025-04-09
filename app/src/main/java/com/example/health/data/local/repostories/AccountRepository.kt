@@ -23,7 +23,7 @@ class AccountRepository(
     suspend fun insertAccount(account: Account) {
         accountDao.insertAccount(account)
         try{
-            firestore.collection("accounts").document(account.Uid).set(account)
+            firestore.collection("accounts").document(account.Uid).set(account).await()
         }
         catch (_: Exception) {
             val json = Gson().toJson(account)
@@ -42,7 +42,7 @@ class AccountRepository(
     suspend fun updateStatus(uid: String, status: String) {
         accountDao.updateStatus(uid, status)
         try{
-            firestore.collection("accounts").document(uid).update("status", status)
+            firestore.collection("accounts").document(uid).update("status", status).await()
         }
         catch (_: Exception) {
             val action = PendingAction(

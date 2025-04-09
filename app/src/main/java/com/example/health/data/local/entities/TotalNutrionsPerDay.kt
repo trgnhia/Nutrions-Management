@@ -64,7 +64,7 @@ data class TotalNutrionsPerDay(
     @ColumnInfo(name = "totalFat")
     val TotalFat: Float,
 
-    // 🥗 Loại chế độ ăn (Keto, Vegan, Bulking,...)
+
     @JvmField
     @PropertyName("dietType")
     @ColumnInfo(name = "dietType")

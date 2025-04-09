@@ -20,4 +20,22 @@ object PendingActionTypes {
     const val INSERT_EXERCISE_LOG = "insert_exercise_log"
     const val UPDATE_EXERCISE_LOG = "update_exercise_log"
     const val DELETE_EXERCISE_LOG = "delete_exercise_log"
+
+    const val INSERT_EATEN_MEAL = "insert_eaten_meal"
+    const val UPDATE_EATEN_MEAL = "update_eaten_meal"
+    const val DELETE_EATEN_MEAL = "delete_eaten_meal"
+
+    const val INSERT_EATEN_DISH = "insert_eaten_dish"
+    const val UPDATE_EATEN_DISH = "update_eaten_dish"
+    const val DELETE_EATEN_DISH = "delete_eaten_dish"
+
+    const val INSERT_CUSTOM_FOOD = "insert_custom_food"
+    const val UPDATE_CUSTOM_FOOD = "update_custom_food"
+    const val DELETE_CUSTOM_FOOD = "delete_custom_food"
+
+    const val INSERT_BURN_OUT = "insert_burn_out"
+    const val UPDATE_BURN_OUT = "update_burn_out"
+    const val DELETE_BURN_OUT = "delete_burn_out"
+
+
 }

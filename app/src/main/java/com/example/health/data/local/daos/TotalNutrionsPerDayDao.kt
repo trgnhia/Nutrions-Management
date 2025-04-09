@@ -1,10 +1,9 @@
 package com.example.health.data.local.daos
 
-import androidx.room.Dao
 import androidx.room.*
 import com.example.health.data.local.entities.TotalNutrionsPerDay
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
+import java.util.*
 
 @Dao
 interface TotalNutrionsPerDayDao {
@@ -28,4 +27,21 @@ interface TotalNutrionsPerDayDao {
     // ✅ Lấy toàn bộ bản ghi theo người dùng (tất cả các ngày)
     @Query("SELECT * FROM total_nutrions_per_day WHERE uid = :uid ORDER BY date DESC")
     fun getAllByUser(uid: String): Flow<List<TotalNutrionsPerDay>>
+
+    // ✅ Truy vấn để tính tổng dinh dưỡng từ bảng `eaten_meal`
+    @Query(
+        """
+        SELECT 
+            IFNULL(SUM(totalCalos), 0) AS totalCalo,
+            IFNULL(SUM(totalPro), 0) AS totalPro,
+            IFNULL(SUM(totalCarbs), 0) AS totalCarb,
+            IFNULL(SUM(totalFats), 0) AS totalFat
+        FROM eaten_meal
+        WHERE uid = :uid AND date = :date
+    """
+    )
+    suspend fun getDailyNutritionAggregate(
+        uid: String,
+        date: Date
+    ): NutritionAggregate?
 }

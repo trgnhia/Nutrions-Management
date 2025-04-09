@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
 class DefaultFoodViewModel(
     private val repository: DefaultFoodRepository
 ) : ViewModel() {
@@ -21,17 +20,24 @@ class DefaultFoodViewModel(
     val defaultFoods: StateFlow<List<DefaultFood>> = repository.getAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+    // ✅ Tải từng món ăn, xử lý ảnh và insert ngay
     fun loadDefaultFoods(context: Context) = viewModelScope.launch {
-        Log.e("Load", "loadDefaultFoods:  Loading ", )
-        val remoteFoods = repository.fetchRemoteDefaultFoods()
-
-        val updatedFoods = remoteFoods.map { food ->
+        repository.fetchRemoteAndInsertEach { food ->
             val safeFileName = "${food.Name.toSafeFileName()}.jpg"
             val file = downloadImageAndSave(context, food.UrlImage, safeFileName)
             val localPath = file?.absolutePath ?: food.UrlImage
-            food.copy(UrlImage = localPath)
+            val updated = food.copy(UrlImage = localPath)
+
+            repository.insert(updated)
         }
-        Log.e("LoadAgain", "loadDefaultFoods:  Loading ", )
-        repository.insertAll(updatedFoods)
+    }
+
+    fun syncIfNeeded(context: Context) = viewModelScope.launch {
+        if (defaultFoods.value.isEmpty()) {
+            Log.d("DefaultFoodViewModel", "Room empty → loading from Firestore...")
+            loadDefaultFoods(context)
+        } else {
+            Log.d("DefaultFoodViewModel", "Room already has data → skip loading.")
+        }
     }
 }

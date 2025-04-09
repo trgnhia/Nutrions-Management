@@ -97,7 +97,7 @@ fun LoginScreen(
                 ) {
                     // Logo
                     Image(
-                        painter = painterResource(id = R.drawable.android_light_rd_na),
+                        painter = painterResource(id = R.drawable.ic_logo),
                         contentDescription = "Logo",
                         modifier = Modifier.size(64.dp)
                     )

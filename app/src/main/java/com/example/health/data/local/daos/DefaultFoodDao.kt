@@ -12,6 +12,9 @@ interface DefaultFoodDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(list: List<DefaultFood>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: DefaultFood) // ✅ thêm dòng này
+
     @Query("SELECT * FROM default_food")
     fun getAll(): Flow<List<DefaultFood>>
 

@@ -1,13 +1,14 @@
 package com.example.health.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.health.data.initializer.fetchAllDefaultData
 import com.example.health.data.local.viewmodel.*
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.screens.login.BaseInfoScreen
-import com.example.health.screens.login.CalculatingScreen
 import com.example.health.screens.login.HealthMetricScreen
 import com.example.health.screens.login.LoginScreen
 import com.example.health.screens.login.SplashScreen
@@ -23,6 +24,7 @@ fun AppNavigation(
     defaultExerciseViewModel : DefaultExerciseViewModel
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
 
     NavHost(navController = navController, startDestination = "splash") {
 
@@ -51,17 +53,25 @@ fun AppNavigation(
             )
         }
 
-        composable("calculating") {
-            CalculatingScreen(
-                navController = navController,
-                baseInfoViewModel = baseInfoViewModel
-            )
-        }
+//        composable("calculating") {
+//            CalculatingScreen(
+//                navController = navController,
+//                baseInfoViewModel = baseInfoViewModel
+//            )
+//        }
 
         composable("health_metric") {
             HealthMetricScreen(
                 navController = navController,
-                healthMetricViewModel = healthMetricViewModel
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                onLoadData = {
+                    fetchAllDefaultData(
+                        context = context,
+                        defaultFoodViewModel = defaultFoodViewModel,
+                        defaultExerciseViewModel = defaultExerciseViewModel
+                    )
+                }
             )
         }
 

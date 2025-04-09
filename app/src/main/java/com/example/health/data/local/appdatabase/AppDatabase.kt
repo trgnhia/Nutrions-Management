@@ -7,7 +7,19 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.health.data.local.converters.Converters
 import com.example.health.data.local.daos.*
+import com.example.health.data.local.daos.quyen.BurnOutCaloPerDayDao
+import com.example.health.data.local.daos.quyen.CustomFoodDao
+import com.example.health.data.local.daos.quyen.EatenDishDao
+import com.example.health.data.local.daos.quyen.EatenMealDao
+import com.example.health.data.local.daos.quyen.MacroDao
+import com.example.health.data.local.daos.quyen.TotalNutrionsPerDayDao
 import com.example.health.data.local.entities.*
+import com.example.health.data.local.entities.quyen.BurnOutCaloPerDay
+import com.example.health.data.local.entities.quyen.CustomFood
+import com.example.health.data.local.entities.quyen.EatenDish
+import com.example.health.data.local.entities.quyen.EatenMeal
+import com.example.health.data.local.entities.quyen.Macro
+import com.example.health.data.local.entities.quyen.TotalNutrionsPerDay
 
 @Database(
     entities = [
@@ -28,7 +40,7 @@ import com.example.health.data.local.entities.*
         TotalNutrionsPerDay::class,
         Macro::class
     ],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

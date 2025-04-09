@@ -26,5 +26,4 @@ fun HomeScreen(
     val lastMetric = healthMetricViewModel.lastMetric.collectAsState(initial = null).value
     val rootNavController = rememberNavController()
     MainNavigation(rootNavController)
-
 }

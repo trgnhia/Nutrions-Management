@@ -12,23 +12,20 @@ import com.example.health.data.local.entities.DefaultExercise
 object DefaultDataSyncHelper {
 
     suspend fun syncDefaultFood(context: Context, repo: DefaultFoodRepository) {
-        val list = repo.fetchRemoteDefaultFoods()
-        val updated = list.map { food ->
+        repo.fetchRemoteAndInsertEach { food ->
             val fileName = "${food.Name.toSafeFileName()}.jpg"
             val file = downloadImageAndSave(context, food.UrlImage, fileName)
-            food.copy(UrlImage = file?.absolutePath ?: food.UrlImage)
+            val updated = food.copy(UrlImage = file?.absolutePath ?: food.UrlImage)
+            repo.insert(updated)
         }
-        repo.insertAll(updated)
     }
 
     suspend fun syncDefaultExercise(context: Context, repo: DefaultExerciseRepository) {
-        Log.e("", "loadDefaultExercises: Loaddefault exercise ", )
-        val list = repo.fetchRemoteDefaultExercises()
-        val updated = list.map { ex ->
+        repo.fetchRemoteAndInsertEach { ex ->
             val fileName = "${ex.Name.toSafeFileName()}.jpg"
             val file = downloadImageAndSave(context, ex.UrlImage, fileName)
-            ex.copy(UrlImage = file?.absolutePath ?: ex.UrlImage)
+            val updated = ex.copy(UrlImage = file?.absolutePath ?: ex.UrlImage)
+            repo.insert(updated)
         }
-        repo.insertAll(updated)
     }
 }

@@ -16,15 +16,25 @@ class DefaultFoodRepository(
     suspend fun getById(id: String): DefaultFood? = dao.getById(id)
 
     suspend fun insertAll(list: List<DefaultFood>) {
-        Log.e("DefaultFoodRepository", "insertAll: load data ", )
         dao.insertAll(list)
     }
 
-    suspend fun fetchRemoteDefaultFoods(): List<DefaultFood> {
+    suspend fun insert(item: DefaultFood) {
+        dao.insert(item)
+    }
+
+    // ✅ Tải từng item và gọi callback để xử lý và insert ngay
+    suspend fun fetchRemoteAndInsertEach(onEach: suspend (DefaultFood) -> Unit) {
         val snapshot = firestore.collection("default_food").get().await()
-        return snapshot.documents.mapNotNull { doc ->
+        for (doc in snapshot.documents) {
             val item = doc.toObject(DefaultFood::class.java)
-            item?.copy(Id = doc.id)
+            if (item != null) {
+                val withId = item.copy(Id = doc.id)
+                onEach(withId)
+            } else {
+                Log.e("FIRESTORE", "❌ Convert thất bại: ${doc.id}")
+            }
         }
     }
 }
+

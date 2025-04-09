@@ -1,54 +1,39 @@
-package com.example.health.data.local.entities
+package com.example.health.data.local.entities.quyen
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.health.data.local.entities.Account
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
-import java.util.Date
 
 @Parcelize
 @IgnoreExtraProperties
 @Entity(
-    tableName = "eaten_dish",
+    tableName = "custom_food",
     foreignKeys = [
         ForeignKey(
-            entity = EatenMeal::class,
-            parentColumns = ["idDay"],
-            childColumns = ["idEatenMeal"]
-        ),
-        ForeignKey(
-            entity = DefaultFood::class,
-            parentColumns = ["id"],
-            childColumns = ["foodId"]
+            entity = Account::class,
+            parentColumns = ["uid"],
+            childColumns = ["uid"]
         )
     ]
 )
-data class EatenDish(
+data class CustomFood(
 
     @JvmField
     @PropertyName("id")
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val Id: String,
+    val id: String,
 
     @JvmField
-    @PropertyName("foodId")
-    @ColumnInfo(name = "foodId", index = true)
-    val FoodId: String,
-
-    @JvmField
-    @PropertyName("idEatenMeal")
-    @ColumnInfo(name = "idEatenMeal", index = true)
-    val IdEatenMeal: Date,
-
-    @JvmField
-    @PropertyName("dishName")
-    @ColumnInfo(name = "dish_name")
-    val DishName: String,
+    @PropertyName("name")
+    @ColumnInfo(name = "name")
+    val Name: String,
 
     @JvmField
     @PropertyName("calo")
@@ -71,14 +56,24 @@ data class EatenDish(
     val Protein: Float,
 
     @JvmField
-    @PropertyName("quantityType")
-    @ColumnInfo(name = "quantity_type")
-    val QuantityType: String,
+    @PropertyName("type")
+    @ColumnInfo(name = "type")
+    val Type: Int,
 
     @JvmField
     @PropertyName("quantity")
     @ColumnInfo(name = "quantity")
-    val Quantity: Float,
+    val Quantity: Int,
+
+    @JvmField
+    @PropertyName("quantity_type")
+    @ColumnInfo(name = "quantity_type")
+    val QuantityType: String,
+
+    @JvmField
+    @PropertyName("uid")
+    @ColumnInfo(name = "uid", index = true)
+    val Uid: String,
 
     @JvmField
     @PropertyName("urlImage")
@@ -86,5 +81,5 @@ data class EatenDish(
     val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", "", Date(), "", 0f, 0f, 0f, 0f, "", 0f,"")
+    constructor() : this("", "", 0f, 0f, 0f, 0f, 0, 0, "", "","")
 }

@@ -1,9 +1,10 @@
-package com.example.health.data.local.entities
+package com.example.health.data.local.entities.quyen
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.health.data.local.entities.Account
 import com.google.firebase.firestore.PropertyName
 
 @Entity(

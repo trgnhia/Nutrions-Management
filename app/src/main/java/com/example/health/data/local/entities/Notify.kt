@@ -22,9 +22,10 @@ import java.util.Date
 )
 data class Notify(
     @JvmField
-    @PropertyName("id") // Firebase sử dụng tên trường "id" trong Firestore
-    @ColumnInfo(name = "id") //Room đặt tên cột là "id" trong SQLite DB
-    @PrimaryKey val Id: String,
+    @PropertyName("id")
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    val id: String,
 
     @JvmField
     @PropertyName("uid")

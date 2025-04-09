@@ -38,4 +38,10 @@ class HealthMetricViewModel(
     fun fetchAllFromRemote(uid: String) = viewModelScope.launch {
         repository.fetchAllFromRemote(uid)
     }
+    fun syncIfNeeded(uid: String) = viewModelScope.launch {
+        if (allMetrics.value.isEmpty()) {
+            fetchAllFromRemote(uid)
+        }
+    }
+
 }

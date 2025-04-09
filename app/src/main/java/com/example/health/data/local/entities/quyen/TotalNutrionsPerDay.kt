@@ -1,10 +1,11 @@
-package com.example.health.data.local.entities
+package com.example.health.data.local.entities.quyen
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.health.data.local.entities.Account
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
@@ -28,8 +29,21 @@ data class TotalNutrionsPerDay(
     @PropertyName("id")
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val Id: Date,
+    val id: String,
 
+    // 📅 Ngày áp dụng (lưu riêng biệt)
+    @JvmField
+    @PropertyName("date")
+    @ColumnInfo(name = "date")
+    val Date: Date,
+
+    // 🔗 Liên kết người dùng
+    @JvmField
+    @PropertyName("uid")
+    @ColumnInfo(name = "uid", index = true)
+    val Uid: String,
+
+    // 🍱 Thông tin dinh dưỡng tổng hợp
     @JvmField
     @PropertyName("totalCalo")
     @ColumnInfo(name = "totalCalo")
@@ -50,16 +64,12 @@ data class TotalNutrionsPerDay(
     @ColumnInfo(name = "totalFat")
     val TotalFat: Float,
 
-    @JvmField
-    @PropertyName("uid")
-    @ColumnInfo(name = "uid", index = true)
-    val Uid: String,
-
+    // 🥗 Loại chế độ ăn (Keto, Vegan, Bulking,...)
     @JvmField
     @PropertyName("dietType")
     @ColumnInfo(name = "dietType")
     val DietType: Int
 
 ) : Parcelable {
-    constructor() : this(Date(), 0f, 0f, 0f, 0f, "", 0)
+    constructor() : this("", Date(), "", 0f, 0f, 0f, 0f, 0)
 }

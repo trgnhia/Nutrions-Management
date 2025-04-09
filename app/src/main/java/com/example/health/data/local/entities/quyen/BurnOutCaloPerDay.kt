@@ -1,10 +1,11 @@
-package com.example.health.data.local.entities
+package com.example.health.data.local.entities.quyen
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.health.data.local.entities.Account
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
@@ -20,20 +21,16 @@ import java.util.Date
         childColumns = ["uid"]
     )]
 )
-
 data class BurnOutCaloPerDay(
-    @JvmField
-    @PropertyName("dateTime")
     @PrimaryKey
-    @ColumnInfo(name = "dateTime") val DateTime: Date,
+    @ColumnInfo(name = "dateTime")
+    val DateTime: Date, // 🔑 1 ngày duy nhất (chỉ lấy phần ngày thôi, không tính giờ)
 
-    @JvmField
-    @PropertyName("totalCalo")
-    @ColumnInfo(name = "totalCalo") val TotalCalo: Int,
+    @ColumnInfo(name = "totalCalo")
+    val TotalCalo: Int,
 
-    @JvmField
-    @PropertyName("uid")
-    @ColumnInfo(name = "uid", index = true) val Uid: String
+    @ColumnInfo(name = "uid", index = true)
+    val Uid: String
 ) : Parcelable {
     constructor() : this(Date(), 0, "")
 }

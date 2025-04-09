@@ -188,7 +188,7 @@ fun DietTypeCard(
             Text(
                 text = description,
                 color = Color.White,
-                fontSize = 10.sp, // 👉 nhỏ hơn
+                fontSize = 12.sp, // 👉 nhỏ hơn
                 lineHeight = 13.sp,
             )
         }

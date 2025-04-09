@@ -1,7 +1,8 @@
-package com.example.health.data.local.daos.quyen
+package com.example.health.data.local.daos
 
 import androidx.room.*
-import com.example.health.data.local.entities.quyen.CustomFood
+import com.example.health.data.local.entities.CustomFood
+
 import kotlinx.coroutines.flow.Flow
 
 @Dao

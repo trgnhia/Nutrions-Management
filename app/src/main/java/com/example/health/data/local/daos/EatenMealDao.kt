@@ -1,4 +1,4 @@
-package com.example.health.data.local.daos.quyen
+package com.example.health.data.local.daos
 
 import androidx.room.Dao
 import androidx.room.Delete

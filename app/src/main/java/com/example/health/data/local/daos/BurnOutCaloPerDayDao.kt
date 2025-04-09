@@ -3,7 +3,8 @@ package com.example.health.data.local.daos
 import androidx.room.Dao
 
 import androidx.room.*
-import com.example.health.data.local.entities.quyen.BurnOutCaloPerDay
+import com.example.health.data.local.entities.BurnOutCaloPerDay
+
 import java.util.Date
 
 @Dao

@@ -1,4 +1,4 @@
-package com.example.health.data.local.repostories.quyen
+package com.example.health.data.local.repostories
 
 
 import com.example.health.data.local.daos.ExerciseLogDao

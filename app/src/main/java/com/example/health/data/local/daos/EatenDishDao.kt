@@ -3,7 +3,7 @@ package com.example.health.data.local.daos
 import androidx.room.Dao
 
 import androidx.room.*
-import com.example.health.data.local.entities.quyen.EatenDish
+import com.example.health.data.local.entities.EatenDish
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 

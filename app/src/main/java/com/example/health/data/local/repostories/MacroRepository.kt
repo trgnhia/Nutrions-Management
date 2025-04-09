@@ -1,10 +1,10 @@
-package com.example.health.data.local.repostories.quyen
+package com.example.health.data.local.repostories
 
 
+import com.example.health.data.local.daos.MacroDao
 import com.example.health.data.local.daos.PendingActionDao
-import com.example.health.data.local.daos.quyen.MacroDao
+import com.example.health.data.local.entities.Macro
 import com.example.health.data.local.entities.PendingAction
-import com.example.health.data.local.entities.quyen.Macro
 import com.example.health.data.remote.sync.PendingActionTypes
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson

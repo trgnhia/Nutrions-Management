@@ -1,10 +1,10 @@
-package com.example.health.data.local.viewmodel.quyen
+package com.example.health.data.local.viewmodel
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.health.data.local.entities.quyen.TotalNutrionsPerDay
-import com.example.health.data.local.repostories.quyen.TotalNutrionsPerDayRepository
+import com.example.health.data.local.entities.TotalNutrionsPerDay
+import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

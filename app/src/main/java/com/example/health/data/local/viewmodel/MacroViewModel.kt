@@ -1,9 +1,9 @@
-package com.example.health.data.local.viewmodel.quyen
+package com.example.health.data.local.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.health.data.local.entities.quyen.Macro
-import com.example.health.data.local.repostories.quyen.MacroRepository
+import com.example.health.data.local.entities.Macro
+import com.example.health.data.local.repostories.MacroRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn

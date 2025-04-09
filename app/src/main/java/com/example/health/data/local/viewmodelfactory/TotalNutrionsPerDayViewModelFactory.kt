@@ -1,10 +1,10 @@
-package com.example.health.data.local.viewmodelfactory.quyen
+package com.example.health.data.local.viewmodelfactory
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.health.data.local.repostories.quyen.TotalNutrionsPerDayRepository
-import com.example.health.data.local.viewmodel.quyen.TotalNutrionsPerDayViewModel
+import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
+import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 
 class TotalNutrionsPerDayViewModelFactory(
     private val repository: TotalNutrionsPerDayRepository,

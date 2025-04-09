@@ -2,7 +2,7 @@ package com.example.health.data.local.daos
 
 import androidx.room.Dao
 import androidx.room.*
-import com.example.health.data.local.entities.quyen.TotalNutrionsPerDay
+import com.example.health.data.local.entities.TotalNutrionsPerDay
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 

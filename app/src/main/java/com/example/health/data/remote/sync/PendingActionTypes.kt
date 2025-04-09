@@ -20,6 +20,4 @@ object PendingActionTypes {
     const val INSERT_EXERCISE_LOG = "insert_exercise_log"
     const val UPDATE_EXERCISE_LOG = "update_exercise_log"
     const val DELETE_EXERCISE_LOG = "delete_exercise_log"
-
-
 }

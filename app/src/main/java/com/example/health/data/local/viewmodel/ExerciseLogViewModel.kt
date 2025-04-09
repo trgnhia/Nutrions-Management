@@ -1,10 +1,10 @@
-package com.example.health.data.local.viewmodel.quyen
+package com.example.health.data.local.viewmodel
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.health.data.local.entities.ExerciseLog
-import com.example.health.data.local.repostories.quyen.ExerciseLogRepository
+import com.example.health.data.local.repostories.ExerciseLogRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.Date

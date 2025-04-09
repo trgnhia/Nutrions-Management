@@ -1,10 +1,10 @@
-package com.example.health.data.local.viewmodelfactory.quyen
+package com.example.health.data.local.viewmodelfactory
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.health.data.local.repostories.quyen.ExerciseLogRepository
-import com.example.health.data.local.viewmodel.quyen.ExerciseLogViewModel
+import com.example.health.data.local.repostories.ExerciseLogRepository
+import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 
 
 class ExerciseLogViewModelFactory(

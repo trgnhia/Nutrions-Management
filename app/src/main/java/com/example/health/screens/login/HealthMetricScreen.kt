@@ -76,7 +76,7 @@ fun HealthMetricScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.whitebackground),
+            painter = painterResource(id = R.drawable.loadding_bg),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()

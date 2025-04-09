@@ -6,17 +6,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.health.navigation.routes.ProfileRoutes
 
 @Composable
-fun Profile(navController: NavController){
+fun Reminder(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,31 +22,8 @@ fun Profile(navController: NavController){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is Profile screen")
+        Text(text = "This is Reminder screen")
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            navController.navigate(ProfileRoutes.MacroSetting.route)
-        }) {
-            Text(text = "Macro Setting")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Button(onClick = {
-            navController.navigate(ProfileRoutes.UpdateBodyIndex.route)
-        }) {
-            Text(text = "Update Body Index")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Button(onClick = {
-            navController.navigate(ProfileRoutes.Reminder.route)
-        }) {
-            Text(text = "Reminder")
-        }
     }
-
 }

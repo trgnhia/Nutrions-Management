@@ -1,11 +1,15 @@
 package com.example.health.screens.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import com.example.health.R
 import com.example.health.data.initializer.fetchAllDefaultData
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.remote.auth.AuthState
@@ -78,8 +82,18 @@ fun SplashScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        // ✅ Hình nền toàn màn
+        Image(
+            painter = painterResource(id = R.drawable.main_app_bg), // 🔁 Thay bằng tên ảnh bạn có trong drawable
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+
+
         if (isProcessing.value) {
             ModernLoader()
         }
     }
+
 }

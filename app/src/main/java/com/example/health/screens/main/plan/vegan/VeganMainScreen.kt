@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,8 +29,10 @@ fun VeganMainScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
+        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,17 +104,98 @@ fun VeganMainScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Blog-style content
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("About Vegan diet", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            // Intro
+            Text("About Raw Vegan Diet", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "Following the raw vegan diet requires proper preparation to ensure you are still getting the vitamins and minerals your body requires. " +
+                        "Adding supplements can help you avoid vitamin B12, vitamin D, or calcium deficiency.\n\n" +
+                        "Though the raw vegan diet isn’t new, it has been regaining popularity recently. It combines the principles of veganism with those of raw foodism. " +
+                        "While some people may choose to follow it for ethical or environmental reasons, most do it for its purported health benefits.",
+                fontSize = 14.sp,
+                lineHeight = 20.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // First image between sections
+            Image(
+                painter = painterResource(id = R.drawable.vegan_infor),
+                contentDescription = "Vegan info",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Section 1
+            Text("What Is a Raw Vegan Diet?", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                "The vegan diet is a diet that completely eliminates all animal-derived products, " +
-                        "including meat, fish, eggs, dairy, honey, and any food containing animal-based ingredients. " +
-                        "Vegans consume only plant-based foods such as vegetables, fruits, grains, nuts, and " +
-                        "plant-based products like almond milk, soy milk, tofu, etc.",
+                text = "Raw veganism is a subset of veganism. Like veganism, it excludes all foods of animal origin. " +
+                        "Then it adds the concept of raw foodism, which dictates that foods should be eaten completely raw or heated at temperatures below 104–118°F (40–48°C).\n\n" +
+                        "The idea of eating only raw foods has existed since the 19th century when Presbyterian minister and dietary reformer Sylvester Graham promoted it as a way to avoid illness.",
                 fontSize = 14.sp,
-                color = Color.Black
+                lineHeight = 20.sp
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Second image
+            Image(
+                painter = painterResource(id = R.drawable.vegan_infor_2),
+                contentDescription = "Vegan raw plate",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Section 2
+            Text("Health Benefits", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "The raw vegan diet is plentiful in nutrient-rich plant foods. It’s also linked to several health benefits.\n\n" +
+                        "• May Improve Heart Health: Due to its focus on fruits, vegetables, nuts, and seeds.\n" +
+                        "• May Reduce Diabetes Risk: Thanks to high fiber and low glycemic foods.\n" +
+                        "• May Aid Weight Loss: Many studies link raw vegan diets with significant fat loss and healthier BMI.",
+                fontSize = 14.sp,
+                lineHeight = 20.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Third image (optional)
+            Image(
+                painter = painterResource(id = R.drawable.vegan_infor_1),
+                contentDescription = "Vegan benefits",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Summary
+            Text("Summary", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "A raw vegan diet consists of mostly unprocessed, plant-based foods that are either completely raw or heated at very low temperatures. " +
+                        "While it offers many health benefits, careful planning is needed to avoid deficiencies and ensure long-term sustainability.",
+                fontSize = 14.sp,
+                lineHeight = 20.sp
+            )
+
+            Spacer(modifier = Modifier.height(100.dp)) // Safe space for scroll end
         }
     }
 }
+
+//D:\Mobile_Prj\Nutrions-Management\app\src\main\res\drawable

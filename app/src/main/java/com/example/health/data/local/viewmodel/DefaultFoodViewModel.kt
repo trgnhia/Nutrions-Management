@@ -2,6 +2,7 @@ package com.example.health.data.local.viewmodel
 
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.health.data.local.entities.DefaultFood
@@ -21,6 +22,7 @@ class DefaultFoodViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     fun loadDefaultFoods(context: Context) = viewModelScope.launch {
+        Log.e("Load", "loadDefaultFoods:  Loading ", )
         val remoteFoods = repository.fetchRemoteDefaultFoods()
 
         val updatedFoods = remoteFoods.map { food ->
@@ -29,7 +31,7 @@ class DefaultFoodViewModel(
             val localPath = file?.absolutePath ?: food.UrlImage
             food.copy(UrlImage = localPath)
         }
-
+        Log.e("LoadAgain", "loadDefaultFoods:  Loading ", )
         repository.insertAll(updatedFoods)
     }
 }

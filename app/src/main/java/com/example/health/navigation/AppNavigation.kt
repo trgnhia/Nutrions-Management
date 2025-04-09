@@ -18,7 +18,9 @@ fun AppNavigation(
     authViewModel: AuthViewModel,
     accountViewModel: AccountViewModel,
     baseInfoViewModel: BaseInfoViewModel,
-    healthMetricViewModel: HealthMetricViewModel
+    healthMetricViewModel: HealthMetricViewModel,
+    defaultFoodViewModel : DefaultFoodViewModel,
+    defaultExerciseViewModel : DefaultExerciseViewModel
 ) {
     val navController = rememberNavController()
 
@@ -30,7 +32,9 @@ fun AppNavigation(
                 authViewModel = authViewModel,
                 accountViewModel = accountViewModel,
                 baseInfoViewModel = baseInfoViewModel,
-                healthMetricViewModel = healthMetricViewModel
+                healthMetricViewModel = healthMetricViewModel,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel
             )
         }
 

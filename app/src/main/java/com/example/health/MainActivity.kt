@@ -9,14 +9,20 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
+import com.example.health.data.local.repostories.DefaultExerciseRepository
+import com.example.health.data.local.repostories.DefaultFoodRepository
 import com.example.health.data.local.repostories.HealthMetricRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
+import com.example.health.data.local.viewmodel.DefaultFoodViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodelfactory.AccountViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModelFactory
 import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
+import com.example.health.data.local.viewmodelfactory.DefaultExerciseViewModelFactory
+import com.example.health.data.local.viewmodelfactory.DefaultFoodViewModelFactory
 import com.example.health.data.local.viewmodelfactory.HealthMetricViewModelFactory
 import com.example.health.data.remote.sync.PendingSyncScheduler
 import com.example.health.navigation.AppNavigation
@@ -54,6 +60,20 @@ class MainActivity : ComponentActivity() {
             this,
             HealthMetricViewModelFactory(healthMetricRepository)
         )[HealthMetricViewModel::class.java]
+        val defaultFoodRepository = DefaultFoodRepository(db.defaultFoodDao(), firestore)
+        val defaultExerciseRepository = DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
+
+
+        val defaultFoodViewModel = ViewModelProvider(
+            this,
+            DefaultFoodViewModelFactory(defaultFoodRepository)
+        )[DefaultFoodViewModel::class.java]
+
+        val defaultExerciseViewModel = ViewModelProvider(
+            this,
+            DefaultExerciseViewModelFactory(defaultExerciseRepository)
+        )[DefaultExerciseViewModel::class.java]
+
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
@@ -62,7 +82,9 @@ class MainActivity : ComponentActivity() {
                     authViewModel = authViewModel,
                     accountViewModel = accountViewModel,
                     baseInfoViewModel = baseInfoViewModel,
-                    healthMetricViewModel = healthMetricViewModel
+                    healthMetricViewModel = healthMetricViewModel,
+                    defaultFoodViewModel = defaultFoodViewModel,
+                    defaultExerciseViewModel = defaultExerciseViewModel
                 )
             }
         }

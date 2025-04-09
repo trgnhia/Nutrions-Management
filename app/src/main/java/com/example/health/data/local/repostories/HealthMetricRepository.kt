@@ -28,6 +28,7 @@ class HealthMetricRepository(
                 .collection("health_metrics")
                 .document(healthMetric.metricId)
                 .set(healthMetric)
+                .await()
         }
         catch (_: Exception) {
             val json = Gson().toJson(healthMetric)
@@ -48,6 +49,7 @@ class HealthMetricRepository(
                 .collection("health_metrics")
                 .document(healthMetric.metricId)
                 .set(healthMetric)
+                .await()
         }
         catch (_: Exception) {
             val json = Gson().toJson(healthMetric)

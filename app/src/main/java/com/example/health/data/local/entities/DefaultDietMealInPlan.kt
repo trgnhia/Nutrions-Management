@@ -14,13 +14,13 @@ import java.util.Date
 @IgnoreExtraProperties
 @Entity(
     tableName = "default_diet_meal_in_plan",
-    foreignKeys = [
-        ForeignKey(
-            entity = TotalNutrionsPerDay::class,
-            parentColumns = ["id"],
-            childColumns = ["idDay"]
-        )
-    ]
+//    foreignKeys = [
+//        ForeignKey(
+//            entity = TotalNutrionsPerDay::class,
+//            parentColumns = ["id"],
+//            childColumns = ["idDay"]
+//        )
+//    ]
 )
 data class DefaultDietMealInPlan(
 
@@ -30,10 +30,10 @@ data class DefaultDietMealInPlan(
     @ColumnInfo(name = "id")
     val Id: String,
 
-    @JvmField
-    @PropertyName("idDay")
-    @ColumnInfo(name = "idDay", index = true)
-    val IdDay: Date,
+//    @JvmField
+//    @PropertyName("idDay")
+//    @ColumnInfo(name = "idDay", index = true)
+//    val IdDay: Date,
 
     @JvmField
     @PropertyName("type")
@@ -66,5 +66,5 @@ data class DefaultDietMealInPlan(
     val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", Date(), "", 0f, 0f, 0f, 0f,"")
+    constructor() : this("", "", 0f, 0f, 0f, 0f,"")
 }

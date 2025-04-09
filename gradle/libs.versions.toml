@@ -17,6 +17,8 @@ firebaseFirestore = "25.1.3"
 navigationCompose = "2.8.9"
 navigationRuntimeAndroid = "2.9.0-alpha08"
 wheelpickercompose = "1.0.0"
+volley = "1.2.1"
+playServicesFido = "20.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +43,8 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 wheelpickercompose = { module = "com.github.commandiron:WheelPickerCompose", version.ref = "wheelpickercompose" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+play-services-fido = { group = "com.google.android.gms", name = "play-services-fido", version.ref = "playServicesFido" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

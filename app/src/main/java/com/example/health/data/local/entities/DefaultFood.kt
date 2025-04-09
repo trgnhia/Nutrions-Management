@@ -60,7 +60,7 @@ data class DefaultFood(
     val QuantityType: String,
 
     @JvmField
-    @PropertyName("urlImage")
+    @PropertyName("urlimage")
     @ColumnInfo(name = "urlImage")
     val UrlImage: String
 

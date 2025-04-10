@@ -28,7 +28,7 @@ import com.example.health.data.local.entities.*
         TotalNutrionsPerDay::class,
         Macro::class
     ],
-    version = 12,
+    version = 13,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -10,6 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.health.data.local.appdatabase.AppDatabase
+import com.example.health.data.local.repostories.BaseInfoRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
@@ -23,12 +25,12 @@ import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.navigation.BottomNavItem
 import com.example.health.navigation.BottomNavigationBar
 import com.example.health.navigation.graph.*
 import com.example.health.navigation.routes.DiaryRoutes
-import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
 import com.example.health.navigation.routes.ProfileRoutes
 import com.example.health.navigation.routes.StatisticalRoutes
@@ -74,7 +76,16 @@ fun MainScreen(
         ProfileRoutes.Profile.route -> true
         else -> false
     }
-
+    val context = LocalContext.current
+    val baseInfoViewModel: BaseInfoViewModel = viewModel(
+        factory = BaseInfoViewModelFactory(
+            BaseInfoRepository(
+                baseInfoDao = AppDatabase.getDatabase(context).baseInfoDao(),
+                pendingActionDao = AppDatabase.getDatabase(context).pendingActionDao(),
+                firestore = FirebaseFirestore.getInstance()
+            )
+        )
+    )
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
@@ -109,7 +120,7 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
             )
-            planNavGraph(bottomNavController)
+            planNavGraph(bottomNavController,baseInfoViewModel)
             statisticalNavGraph(bottomNavController)
             profileNavGraph(
                 navController = bottomNavController,

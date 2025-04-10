@@ -17,7 +17,7 @@ fun NavGraphBuilder.dietNavGraph(navController: NavController,baseInfoViewModel:
 
         composable(PlanRoutes.Type.route){
 
-            Type(navController)
+            Type(navController,baseInfoViewModel)
         }
 
         typeDietNavGraph(navController,baseInfoViewModel)

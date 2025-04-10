@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.health.data.local.entities.BurnOutCaloPerDay
 import com.example.health.data.local.viewmodel.*
 import com.example.health.navigation.routes.DiaryRoutes
+import com.example.health.screens.main.ParenCompose
 import com.example.health.screens.main.diary.compose.AddFoodCard
 import com.example.health.screens.main.diary.compose.FoodCard
 import com.example.health.screens.main.diary.compose.HeaderSection
@@ -124,39 +125,12 @@ fun DiaryMainScreen(
                     })
                 } else {
                     AddFoodCard(onClick = {
-                        navController.navigate(DiaryRoutes.Add.route)
+                        navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
                     })
                 }
             }
 
         }
 
-        // TODO: hiển thị danh sách món ăn từ eatenDish.value ở đây
     }
 }
-
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(24.dp),
-//        verticalArrangement = Arrangement.Top,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(text = "This is diary main screen")
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        Button(onClick = {
-//            navController.navigate(DiaryRoutes.Add.route)
-//        }) {
-//            Text("Nav to Add")
-//        }
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//
-//        Button(onClick = {
-//            navController.navigate(DiaryRoutes.Info.route)
-//        }) {
-//            Text("Nav to Info")
-//        }
-//    }

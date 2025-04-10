@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
+    implementation(libs.androidx.navigation.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

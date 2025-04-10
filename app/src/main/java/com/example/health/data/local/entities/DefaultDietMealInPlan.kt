@@ -38,7 +38,7 @@ data class DefaultDietMealInPlan(
     @JvmField
     @PropertyName("type")
     @ColumnInfo(name = "type")
-    val Type: String,
+    val Type: Int,
 
     @JvmField
     @PropertyName("totalCalo")
@@ -66,5 +66,5 @@ data class DefaultDietMealInPlan(
     val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", "", 0f, 0f, 0f, 0f,"")
+    constructor() : this("", 1, 0f, 0f, 0f, 0f,"")
 }

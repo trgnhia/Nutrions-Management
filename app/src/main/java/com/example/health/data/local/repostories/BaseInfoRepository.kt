@@ -1,5 +1,6 @@
 package com.example.health.data.local.repostories
 
+import android.util.Log
 import com.example.health.data.local.daos.BaseInfoDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.BaseInfo
@@ -79,26 +80,32 @@ class BaseInfoRepository(
     }
 
     suspend fun updateIsDiet(uid: String, dietCode: Int) {
-        val current = baseInfoDao.getBaseInfoNow()
-        val updated = current?.copy(IsDiet = dietCode) ?: return
-
-        baseInfoDao.updateBaseInfo(updated)
+        // ✅ Cập nhật trong Room
+        baseInfoDao.updateIsDiet(uid, dietCode)
+        Log.d("BaseInfoRepo", "updateIsDiet Room: $uid → $dietCode")
 
         try {
+            // ✅ Chỉ đồng bộ 1 trường cụ thể lên Firestore
             firestore.collection("accounts")
                 .document(uid)
                 .collection("base_info")
                 .document("data")
-                .set(updated)
+                .update("isDiet", dietCode)
                 .await()
+
+            Log.d("BaseInfoRepo", "updateIsDiet Firestore success")
         } catch (e: Exception) {
-            val json = Gson().toJson(updated)
+            // Nếu lỗi Firestore → Tạo bản ghi chờ
+            val fallback = mapOf("isDiet" to dietCode)
+            val json = Gson().toJson(fallback)
             val action = PendingAction(
                 type = PendingActionTypes.UPDATE_BASE_INFO,
                 uid = uid,
                 payload = json
             )
             pendingActionDao.insert(action)
+
+            Log.e("BaseInfoRepo", "updateIsDiet Firestore failed, pending saved", e)
         }
     }
 

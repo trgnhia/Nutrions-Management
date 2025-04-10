@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,11 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.navigation.routes.PlanRoutes
 import com.example.health.screens.main.plan.NoticeDialog
 
 @Composable
-fun HighProteinMainScreen(navController: NavController) {
+fun HighProteinMainScreen(navController: NavController, baseInfoViewModel: BaseInfoViewModel) {
+    val baseInfo = baseInfoViewModel.baseInfo.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
@@ -222,6 +225,7 @@ fun HighProteinMainScreen(navController: NavController) {
                     message = "When you start the diet, you will need to follow only the meals we provide and will not be allowed to eat food from outside. Are you ready?",
                     onAccept = {
                         showDialog = false
+                        baseInfo.value?.let { baseInfoViewModel.startDiet(it.Uid,2) }
                         // TODO: Start diet or navigate
                     },
                     onDecline = { showDialog = false },

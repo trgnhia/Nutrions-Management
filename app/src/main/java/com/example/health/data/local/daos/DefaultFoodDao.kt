@@ -27,5 +27,4 @@ interface DefaultFoodDao {
     // ✅ Truy vấn lấy món ăn ngẫu nhiên theo type
     @Query("SELECT * FROM default_food WHERE type = :type ORDER BY RANDOM() LIMIT :count")
     suspend fun getRandomFoodsByType(count: Int, type: Int): List<DefaultFood>
-
 }

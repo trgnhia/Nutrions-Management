@@ -36,7 +36,7 @@ fun SearchBarWithResult(
         OutlinedTextField(
             value = searchText,
             onValueChange = onTextChange,
-            placeholder = { Text("Find...") },
+            placeholder = { Text("Search online food...") },
             trailingIcon = {
                 IconButton(onClick = onSearchClick) {
                     Icon(Icons.Default.Search, contentDescription = "Search")

@@ -3,9 +3,14 @@ package com.example.health.screens.main.diary
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.data.local.viewmodel.*
@@ -35,52 +40,92 @@ fun DiaryAdd(
 
     val customFoods by customFoodViewModel.getAllByUser(uid!!).collectAsState(initial = emptyList())
 
-
-    val meatFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5,1) }
-    val vegetableFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5,2) }
-    val starchFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5,3) }
-    val snackFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5,4) }
+    val meatFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 1) }
+    val vegetableFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 2) }
+    val starchFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 3) }
+    val snackFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 4) }
 
     val meatFoods by meatFlow.collectAsState(initial = emptyList())
     val vegetableFoods by vegetableFlow.collectAsState(initial = emptyList())
     val starchFoods by starchFlow.collectAsState(initial = emptyList())
     val snackFoods by snackFlow.collectAsState(initial = emptyList())
+
     val canEdit = parent == ParenCompose.FROMDIARY
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Bọc Column trong verticalScroll để cuộn dọc
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())) {
+    // State to handle selected tab
+    val selectedTab = remember { mutableStateOf("Discover") }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Header and Search Bar
             SearchBarWithResult(
                 searchText = searchText.value,
                 onTextChange = { searchText.value = it },
                 onSearchClick = {
-                    // TODO: Trigger API call and update searchResult
+                    // Trigger API call and update searchResult
                 },
                 results = searchResult,
                 onResultClick = {
-                    // TODO: Show detail or add to selection
+                    // Show detail or add to selection
                 }
             )
 
-            CustomFoodRow(
-                customFoods = customFoods,
-                onAddClick = { /* Show popup */ },
-                onItemClick = { /* Detail */ }
-            )
+            // Tab Navigation buttons (Discover & Eaten Meal)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = { selectedTab.value = "Discover" },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTab.value == "Discover") MaterialTheme.colorScheme.primary else Color.Gray
+                    )
+                ) {
+                    Text("Discover")
+                }
+                Button(
+                    onClick = { selectedTab.value = "Eaten meal" },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTab.value == "Eaten meal") MaterialTheme.colorScheme.primary else Color.Gray
+                    )
+                ) {
+                    Text("Eaten Meal")
+                }
+            }
 
-            DefaultFoodRow("Meat / Fish", meatFoods, onViewMoreClick = {}, onItemClick = {})
-            DefaultFoodRow("Vegetable / Fruit", vegetableFoods,  onViewMoreClick = {}, onItemClick = {})
-            DefaultFoodRow("Starch", starchFoods,  onViewMoreClick = {}, onItemClick = {})
-            DefaultFoodRow("Snack / Light meal", snackFoods,  onViewMoreClick = {}, onItemClick = {})
+            // Content that changes based on selectedTab
+            if (selectedTab.value == "Discover") {
+                // Discover Tab: Show Custom Food Row and Default Food Rows
+                CustomFoodRow(
+                    customFoods = customFoods,
+                    onAddClick = { /* Show popup */ },
+                    onItemClick = { /* Detail */ }
+                )
+
+                DefaultFoodRow("Meat / Fish", meatFoods, onViewMoreClick = {}, onItemClick = {})
+                DefaultFoodRow("Vegetable / Fruit", vegetableFoods, onViewMoreClick = {}, onItemClick = {})
+                DefaultFoodRow("Starch", starchFoods, onViewMoreClick = {}, onItemClick = {})
+                DefaultFoodRow("Snack / Light meal", snackFoods, onViewMoreClick = {}, onItemClick = {})
+            } else {
+                // Eaten Meal Tab: Display some other content (e.g., meals already eaten)
+                Text("Meals you have eaten will be shown here.")
+            }
         }
 
-        if (canEdit) {
+        // Only show the Meal Summary Button if we are in the "Discover" tab
+        if (canEdit && selectedTab.value == "Discover") {
             MealSummaryButton { showDialog.value = true }
         }
 
+        // Dialog for today's meals
         if (showDialog.value) {
             TodayMealDialog(
                 foods = searchResult, // temporary sample

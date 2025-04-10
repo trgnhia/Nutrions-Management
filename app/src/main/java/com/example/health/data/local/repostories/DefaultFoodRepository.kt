@@ -36,5 +36,11 @@ class DefaultFoodRepository(
             }
         }
     }
+    fun getByType(type: Int): Flow<List<DefaultFood>> = dao.getByType(type)
+
+    // ✅ Lấy món ăn ngẫu nhiên theo loại
+    suspend fun getRandomFoodsByType(count: Int, type: Int): List<DefaultFood> = dao.getRandomFoodsByType(count, type)
+
+
 }
 

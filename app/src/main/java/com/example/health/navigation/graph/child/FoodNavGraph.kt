@@ -5,7 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
@@ -24,7 +26,9 @@ fun NavGraphBuilder.foodNavGraph(
     eatenMealViewModel: EatenMealViewModel,
     eatenDishViewModel: EatenDishViewModel,
     baseInfoViewModel: BaseInfoViewModel,
-    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel
+    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
+    customFoodViewModel: CustomFoodViewModel,
+    accountViewModel: AccountViewModel
 ) {
     navigation(
         route = GraphRoute.Food.route,
@@ -49,7 +53,9 @@ fun NavGraphBuilder.foodNavGraph(
                 eatenMealViewModel = eatenMealViewModel,
                 eatenDishViewModel = eatenDishViewModel,
                 baseInfoViewModel = baseInfoViewModel,
-                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+                accountViewModel = accountViewModel
             )
         }
     }

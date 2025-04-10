@@ -84,7 +84,9 @@ fun NavGraphBuilder.diaryNavGraph(
                 eatenMealViewModel = eatenMealViewModel,
                 eatenDishViewModel = eatenDishViewModel,
                 baseInfoViewModel = baseInfoViewModel,
-                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+                accountViewModel = accountViewModel
             )
         }
         composable(DiaryRoutes.Info.route){

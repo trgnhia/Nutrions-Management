@@ -54,7 +54,9 @@ fun NavGraphBuilder.planNavGraph(
             eatenMealViewModel = eatenMealViewModel,
             eatenDishViewModel = eatenDishViewModel,
             baseInfoViewModel = baseInfoViewModel,
-            totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+            totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+            customFoodViewModel = customFoodViewModel,
+            accountViewModel = accountViewModel
             )
 
     }

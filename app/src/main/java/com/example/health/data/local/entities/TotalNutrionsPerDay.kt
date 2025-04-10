@@ -1,4 +1,4 @@
-package com.example.health.data.local.entities.quyen
+package com.example.health.data.local.entities
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -14,7 +14,7 @@ import java.util.Date
 @Parcelize
 @IgnoreExtraProperties
 @Entity(
-    tableName = "eaten_meal",
+    tableName = "total_nutrions_per_day",
     foreignKeys = [
         ForeignKey(
             entity = Account::class,
@@ -23,7 +23,7 @@ import java.util.Date
         )
     ]
 )
-data class EatenMeal(
+data class TotalNutrionsPerDay(
 
     @JvmField
     @PropertyName("id")
@@ -31,44 +31,44 @@ data class EatenMeal(
     @ColumnInfo(name = "id")
     val id: String,
 
-    // 📅 Thời gian ghi nhận bữa ăn
+    // 📅 Ngày áp dụng (lưu riêng biệt)
     @JvmField
     @PropertyName("date")
     @ColumnInfo(name = "date")
     val Date: Date,
 
-    // 🧑 UID người dùng (liên kết Account)
+    // 🔗 Liên kết người dùng
     @JvmField
     @PropertyName("uid")
     @ColumnInfo(name = "uid", index = true)
     val Uid: String,
 
-    // 🍱 Dữ liệu dinh dưỡng
+    // 🍱 Thông tin dinh dưỡng tổng hợp
     @JvmField
-    @PropertyName("totalCalos")
-    @ColumnInfo(name = "totalCalos")
-    val TotalCalos: Float,
-
-    @JvmField
-    @PropertyName("totalFats")
-    @ColumnInfo(name = "totalFats")
-    val TotalFats: Float,
-
-    @JvmField
-    @PropertyName("totalCarbs")
-    @ColumnInfo(name = "totalCarbs")
-    val TotalCarbs: Float,
+    @PropertyName("totalCalo")
+    @ColumnInfo(name = "totalCalo")
+    val TotalCalo: Float,
 
     @JvmField
     @PropertyName("totalPro")
     @ColumnInfo(name = "totalPro")
     val TotalPro: Float,
 
-    // 🕐 Loại bữa ăn (Sáng, Trưa, Tối, Snack)
     @JvmField
-    @PropertyName("type")
-    @ColumnInfo(name = "type")
-    val Type: Int
+    @PropertyName("totalCarb")
+    @ColumnInfo(name = "totalCarb")
+    val TotalCarb: Float,
+
+    @JvmField
+    @PropertyName("totalFat")
+    @ColumnInfo(name = "totalFat")
+    val TotalFat: Float,
+
+
+    @JvmField
+    @PropertyName("dietType")
+    @ColumnInfo(name = "dietType")
+    val DietType: Int
 
 ) : Parcelable {
     constructor() : this("", Date(), "", 0f, 0f, 0f, 0f, 0)

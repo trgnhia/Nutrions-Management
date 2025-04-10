@@ -11,15 +11,8 @@ fun NavGraphBuilder.typeDietNavGraph(navController: NavController) {
         route = GraphRoute.Type.route,
         startDestination = GraphRoute.Vegan.route
     ){
-
         veganNavGraph(navController)
-
-
         highProteinNavGraph(navController)
-
-
         ketoNavGraph(navController)
-
-
     }
 }

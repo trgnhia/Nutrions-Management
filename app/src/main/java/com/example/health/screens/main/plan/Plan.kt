@@ -24,48 +24,85 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
-
 @Composable
 fun Plan(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color.White)
     ) {
-        Text(
-            text = "Choose your plan",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(start = 4.dp)
-        )
+        // Header với ảnh nền và chữ
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(320.dp)
+                .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.top_back_plan),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 16.dp, top = 40.dp, end = 16.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                // Tiêu đề lớn (dịch xuống dưới)
+                Text(
+                    text = "Set Your\nCustom \n Plan",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
 
-        PlanOptionCard(
-            title = "Food",
-            description = "Healthy Meals for your daily intake",
-            backgroundRes = R.drawable.food_back,
-            onClick = { navController.navigate(GraphRoute.Food.route) }
-        )
+                Spacer(modifier = Modifier.height(55.dp)) // 👈 Dịch khối chữ này xuống dưới
+
+                // Dòng mô tả ở trên ảnh tròn
+                Text(
+                    text = "Or choose from our meal plans.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PlanOptionCard(
-            title = "Diet Plan",
-            description = "Customized 7-day diet programs",
-            backgroundRes = R.drawable.diet_back,
-            onClick = { navController.navigate(GraphRoute.Diet.route) }
-        )
+        // Các nút Food & Diet
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            PlanOptionCard(
+                title = "Food",
+                description = "Healthy Meals for your daily intake",
+                backgroundRes = R.drawable.food_back,
+                onClick = { navController.navigate(GraphRoute.Food.route) }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PlanOptionCard(
+                title = "Diet Plan",
+                description = "Customized 7-day diet programs",
+                backgroundRes = R.drawable.diet_back,
+                onClick = { navController.navigate(GraphRoute.Diet.route) }
+            )
+        }
     }
 }
+
+
+
 @Composable
 fun PlanOptionCard(
     title: String,

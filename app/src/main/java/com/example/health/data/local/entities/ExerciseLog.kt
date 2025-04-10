@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.example.health.data.local.entities.quyen.BurnOutCaloPerDay
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
@@ -36,10 +35,6 @@ data class ExerciseLog(
     @ColumnInfo(name = "id")
     val id: String,
 
-    @JvmField
-    @PropertyName("practiceTime")
-    @ColumnInfo(name = "practiceTime")
-    val PracticeTime: Date,
 
     @JvmField
     @PropertyName("idExercise")
@@ -78,5 +73,5 @@ data class ExerciseLog(
 ) : Parcelable {
 
     // ✅ Constructor mặc định mới đúng thứ tự & kiểu dữ liệu
-    constructor() : this("", Date(), "", 0, "", 0, "", Date(),"")
+    constructor() : this("", "", 0, "", 0, "", Date(),"")
 }

@@ -1,7 +1,8 @@
-package com.example.health.data.local.daos.quyen
+package com.example.health.data.local.daos
 
 import androidx.room.*
-import com.example.health.data.local.entities.quyen.CustomFood
+import com.example.health.data.local.entities.CustomFood
+
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -25,5 +26,4 @@ interface CustomFoodDao {
     // 🔍 Tìm kiếm món ăn tuỳ chỉnh theo tên (gần đúng, không phân biệt hoa thường)
     @Query("SELECT * FROM custom_food WHERE uid = :uid AND name LIKE '%' || :query || '%' COLLATE NOCASE")
     fun searchByName(uid: String, query: String): Flow<List<CustomFood>>
-
 }

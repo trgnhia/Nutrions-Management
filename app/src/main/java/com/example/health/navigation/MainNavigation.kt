@@ -1,18 +1,65 @@
 package com.example.health.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.health.data.local.viewmodel.AccountViewModel
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomFoodViewModel
+import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
+import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
+import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.EatenDishViewModel
+import com.example.health.data.local.viewmodel.EatenMealViewModel
+import com.example.health.data.local.viewmodel.ExerciseLogViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.screens.main.MainScreen
 
 @Composable
-fun MainNavigation(navController: NavHostController) {
+fun MainNavigation(
+    navController: NavHostController,
+    authViewModel: AuthViewModel,
+    accountViewModel: AccountViewModel,
+    baseInfoViewModel: BaseInfoViewModel,
+    healthMetricViewModel: HealthMetricViewModel,
+    defaultFoodViewModel : DefaultFoodViewModel,
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
+    macroViewModel : MacroViewModel,
+    totalNutrionsPerDayViewModel : TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    eatenMealViewModel : EatenMealViewModel,
+    eatenDishViewModel : EatenDishViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customFoodViewModel : CustomFoodViewModel,
+) {
     // đây là nav tổng quát nhất ( gọi toàn bộ ứng dụng luôn ( sẽ được gọi trong main))
     NavHost(navController = navController, startDestination = "main") {
         composable("main") {
             // compose được khai báo ở nav này
-            MainScreen(navController)
+            MainScreen(
+                rootNavController = navController,
+                authViewModel = authViewModel,
+                accountViewModel = accountViewModel,
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel  = customFoodViewModel,
+                )
         }
     }
 }

@@ -12,9 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.entities.HealthMetric
+import com.example.health.data.local.entities.Macro
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.utils.HealthMetricUtil
+import com.example.health.data.utils.MacroCalculator
 import com.example.health.screens.loader.ActLoader
 import kotlinx.coroutines.delay
 import java.util.Date
@@ -24,6 +27,7 @@ fun HealthMetricScreen(
     navController: NavController,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
+    macroViewModel : MacroViewModel,
     onLoadData: suspend () -> Unit
 ) {
     val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
@@ -42,6 +46,21 @@ fun HealthMetricScreen(
             val resDay = HealthMetricUtil.restDay(dif, calorDeltaPerDay)
             val now = Date()
 
+            val result = MacroCalculator.calculateMacros(
+                tdee = tdee.toInt(),
+                carbPercent = 40f,
+                proteinPercent = 35f,
+                fatPercent = 25f
+            )
+            val macro = Macro(
+                Uid = it.Uid,
+                Calo = result.carbInGrams,
+                Protein = result.proteinInGrams,
+                Fat = result.fatInGrams,
+                Carb = result.carbInGrams,
+                TDEE = tdee
+            )
+
             val metric = HealthMetric(
                 metricId = metricId,
                 Uid = it.Uid,
@@ -58,6 +77,7 @@ fun HealthMetricScreen(
 
             // ✅ Lưu vào Room
             healthMetricViewModel.insertHealthMetric(metric)
+            macroViewModel.insert(macro)
 
             // ✅ Load dữ liệu mặc định nếu cần
             onLoadData()

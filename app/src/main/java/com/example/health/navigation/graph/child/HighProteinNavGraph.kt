@@ -27,13 +27,7 @@ fun NavGraphBuilder.highProteinNavGraph(navController: NavController,baseInfoVie
         composable(PlanRoutes.HighProteinPlan.route){
             HighProteinPlanScreen(navController,defaultDietMealInPlanViewModel)
         }
-//        composable(
-//            route = PlanRoutes.KetoPlanDetail.route,
-//            arguments = listOf(navArgument("mealPlanId") { type = NavType.StringType })
-//        ) { backStackEntry ->
-//            val mealPlanId = backStackEntry.arguments?.getString("mealPlanId") ?: return@composable
-//            KetoDetailsScreen(navController, dietDishViewModel, mealPlanId)
-//        }
+
 
         composable(
             PlanRoutes.HighProteinPlanDetail.route, // <-- route có {mealPlanId}

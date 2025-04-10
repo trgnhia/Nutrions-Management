@@ -120,7 +120,11 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
             )
-            planNavGraph(bottomNavController,baseInfoViewModel)
+            planNavGraph(
+                navController = bottomNavController,
+                baseInfoViewModel = baseInfoViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel
+            )
             statisticalNavGraph(bottomNavController)
             profileNavGraph(
                 navController = bottomNavController,

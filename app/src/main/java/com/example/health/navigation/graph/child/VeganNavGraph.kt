@@ -5,12 +5,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
 
 import com.example.health.screens.main.plan.vegan.*
 
-fun NavGraphBuilder.veganNavGraph(navController: NavController, baseInfoViewModel: BaseInfoViewModel) {
+fun NavGraphBuilder.veganNavGraph(navController: NavController, baseInfoViewModel: BaseInfoViewModel, viewModel: DefaultDietMealInPlanViewModel) {
     navigation(
         route = GraphRoute.Vegan.route,
         startDestination = PlanRoutes.Vegan.route
@@ -19,7 +20,7 @@ fun NavGraphBuilder.veganNavGraph(navController: NavController, baseInfoViewMode
             VeganMainScreen(navController, baseInfoViewModel)
         }
         composable(PlanRoutes.VeganPlan.route){
-            VeganPlanScreen(navController)
+            VeganPlanScreen(navController,viewModel)
         }
         composable(PlanRoutes.VeganPlanDetail.route){
             VeganDetailsScreen(navController)

@@ -35,10 +35,6 @@ data class ExerciseLog(
     @ColumnInfo(name = "id")
     val id: String,
 
-    @JvmField
-    @PropertyName("practiceTime")
-    @ColumnInfo(name = "practiceTime")
-    val PracticeTime: Date,
 
     @JvmField
     @PropertyName("idExercise")
@@ -77,5 +73,5 @@ data class ExerciseLog(
 ) : Parcelable {
 
     // ✅ Constructor mặc định mới đúng thứ tự & kiểu dữ liệu
-    constructor() : this("", Date(), "", 0, "", 0, "", Date(),"")
+    constructor() : this("", "", 0, "", 0, "", Date(),"")
 }

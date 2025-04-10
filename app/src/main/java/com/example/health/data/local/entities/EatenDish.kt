@@ -44,7 +44,7 @@ data class EatenDish(
     @JvmField
     @PropertyName("idEatenMeal")
     @ColumnInfo(name = "idEatenMeal", index = true)
-    val IdEatenMeal: Date,
+    val IdEatenMeal: String,
 
     @JvmField
     @PropertyName("dishName")
@@ -87,5 +87,5 @@ data class EatenDish(
     val UrlImage: String
 
 ) : Parcelable {
-    constructor() : this("", "", Date(), "", 0f, 0f, 0f, 0f, "", 0f,"")
+    constructor() : this("", "", "", "", 0f, 0f, 0f, 0f, "", 0f,"")
 }

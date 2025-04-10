@@ -95,6 +95,15 @@ dependencies {
     // Nếu bạn dùng Compose (có thể bỏ nếu không dùng Compose)
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("com.kizitonwose.calendar:compose:2.3.0")
+    //implementation("io.github.ehsannarmani:compose-charts:1.0.0-beta04")
+    //implementation("com.github.tehras:charts:0.2.4")
+    implementation("com.patrykandpatrick.vico:core:1.6.4")
+    implementation("com.patrykandpatrick.vico:compose:1.6.4")
+    implementation("com.patrykandpatrick.vico:views:1.6.4")
+    implementation("androidx.compose.material3:material3:1.1.2")
+
 
 
 }

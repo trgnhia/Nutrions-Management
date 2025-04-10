@@ -103,7 +103,7 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose:1.6.4")
     implementation("com.patrykandpatrick.vico:views:1.6.4")
     implementation("androidx.compose.material3:material3:1.1.2")
-
+    implementation("androidx.compose.ui:ui-text") // 👈 Dòng này rất quan trọng
 
 
 }

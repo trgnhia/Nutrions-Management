@@ -28,30 +28,28 @@ import com.example.health.R
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.navigation.routes.PlanRoutes
 import com.example.health.screens.main.plan.NoticeDialog
+import com.example.health.screens.main.plan.StartDietButton
 
 @Composable
 fun HighProteinMainScreen(navController: NavController, baseInfoViewModel: BaseInfoViewModel) {
     val baseInfo = baseInfoViewModel.baseInfo.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
+    val userDiet = baseInfo.value?.IsDiet ?: 0
+    val isStop = userDiet == 2
+
+    var showStartDialog by remember { mutableStateOf(false) }
+    var showStopDialog by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
-            Button(
+            StartDietButton(
+                currentDietCode = 2,
+                userDietCode = userDiet,
+                isStop = isStop, // 👈 truyền vào
                 onClick = {
-                    // TODO: xử lý khi người dùng nhấn bắt đầu kế hoạch
-                    showDialog = true
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                //  .navigationBarsPadding(), // tránh che thanh điều hướng
-                shape = RoundedCornerShape(45),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE87046), // màu xanh đậm
-                    contentColor = Color.White
-                )
-            ) {
-                Text("Start your diet now", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
+                    if (isStop) showStopDialog = true
+                    else showStartDialog = true
+                }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ){
@@ -220,16 +218,26 @@ fun HighProteinMainScreen(navController: NavController, baseInfoViewModel: BaseI
 
                 Spacer(modifier = Modifier.height(100.dp))
             }
-            if (showDialog) {
+            if (showStartDialog) {
                 NoticeDialog(
                     message = "When you start the diet, you will need to follow only the meals we provide and will not be allowed to eat food from outside. Are you ready?",
                     onAccept = {
-                        showDialog = false
+                        showStartDialog = false
                         baseInfo.value?.let { baseInfoViewModel.startDiet(it.Uid,2) }
-                        // TODO: Start diet or navigate
                     },
-                    onDecline = { showDialog = false },
-                    onDismiss = { showDialog = false }
+                    onDecline = { showStartDialog = false },
+                    onDismiss = { showStartDialog = false }
+                )
+            }
+            if (showStopDialog) {
+                NoticeDialog(
+                    message = "Are you sure you want to stop your current diet plan?",
+                    onAccept = {
+                        showStopDialog = false
+                        baseInfo.value?.let { baseInfoViewModel.startDiet(it.Uid, 0) } // 👈 Set isDiet = 0
+                    },
+                    onDecline = { showStopDialog = false },
+                    onDismiss = { showStopDialog = false }
                 )
             }
         }

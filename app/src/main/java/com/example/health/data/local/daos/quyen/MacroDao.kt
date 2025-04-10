@@ -6,7 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.health.data.local.entities.quyen.Macro
+import com.example.health.data.local.entities.Macro
+
 import kotlinx.coroutines.flow.Flow
 
 @Dao

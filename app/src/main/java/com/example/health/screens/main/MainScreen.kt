@@ -8,6 +8,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.health.data.local.viewmodel.AccountViewModel
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomFoodViewModel
+import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
+import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
+import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.EatenDishViewModel
+import com.example.health.data.local.viewmodel.EatenMealViewModel
+import com.example.health.data.local.viewmodel.ExerciseLogViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.navigation.BottomNavItem
 import com.example.health.navigation.BottomNavigationBar
 import com.example.health.navigation.graph.*
@@ -19,7 +33,23 @@ import com.example.health.navigation.routes.StatisticalRoutes
 import com.example.health.navigation.routes.WorkoutRoutes
 
 @Composable
-fun MainScreen(rootNavController: NavController) {
+fun MainScreen(
+    rootNavController: NavController,
+    authViewModel: AuthViewModel,
+    accountViewModel: AccountViewModel,
+    baseInfoViewModel: BaseInfoViewModel,
+    healthMetricViewModel: HealthMetricViewModel,
+    defaultFoodViewModel : DefaultFoodViewModel,
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
+    macroViewModel : MacroViewModel,
+    totalNutrionsPerDayViewModel : TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    eatenMealViewModel : EatenMealViewModel,
+    eatenDishViewModel : EatenDishViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customFoodViewModel : CustomFoodViewModel,
+) {
     val bottomNavController = rememberNavController()
     val bottomItems = listOf(
         BottomNavItem.Diary,
@@ -54,11 +84,36 @@ fun MainScreen(rootNavController: NavController) {
             startDestination = BottomNavItem.Diary.route,
             modifier = Modifier.padding(padding)
         ) {
-            diaryNavGraph(bottomNavController)
-            workoutNavGraph(bottomNavController)
+            diaryNavGraph(
+                navController =bottomNavController,
+                accountViewModel = accountViewModel,
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+            )
+            workoutNavGraph(
+                navController = bottomNavController,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+            )
             planNavGraph(bottomNavController)
             statisticalNavGraph(bottomNavController)
-            profileNavGraph(bottomNavController)
+            profileNavGraph(
+                navController = bottomNavController,
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                macroViewModel = macroViewModel,
+            )
         }
     }
 }

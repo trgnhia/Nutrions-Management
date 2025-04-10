@@ -19,11 +19,37 @@ fun HomeScreen(
     accountViewModel: AccountViewModel,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
-    navController: NavController
+    navController: NavController,
+    defaultFoodViewModel : DefaultFoodViewModel,
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
+    macroViewModel : MacroViewModel,
+    totalNutrionsPerDayViewModel : TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    eatenMealViewModel : EatenMealViewModel,
+    eatenDishViewModel : EatenDishViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customFoodViewModel : CustomFoodViewModel,
 ) {
     val account = accountViewModel.account.collectAsState().value
     val baseInfo = baseInfoViewModel.baseInfo.collectAsState().value
     val lastMetric = healthMetricViewModel.lastMetric.collectAsState(initial = null).value
     val rootNavController = rememberNavController()
-    MainNavigation(rootNavController)
+    MainNavigation(
+        navController = rootNavController,
+        authViewModel = authViewModel,
+        accountViewModel = accountViewModel,
+        baseInfoViewModel = baseInfoViewModel,
+        healthMetricViewModel = healthMetricViewModel,
+        defaultFoodViewModel = defaultFoodViewModel,
+        defaultExerciseViewModel = defaultExerciseViewModel,
+        defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+        macroViewModel = macroViewModel,
+        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+        exerciseLogViewModel = exerciseLogViewModel,
+        eatenMealViewModel = eatenMealViewModel,
+        eatenDishViewModel = eatenDishViewModel,
+        burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+        customFoodViewModel  = customFoodViewModel,
+    )
 }

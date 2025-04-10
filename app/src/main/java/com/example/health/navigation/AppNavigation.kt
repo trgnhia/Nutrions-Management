@@ -93,7 +93,17 @@ fun AppNavigation(
                 accountViewModel = accountViewModel,
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
-                navController = navController
+                navController = navController,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel  = customFoodViewModel,
             )
         }
     }

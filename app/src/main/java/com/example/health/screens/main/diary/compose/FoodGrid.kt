@@ -10,16 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@Composable
-fun FoodGrid(foodList: List<FoodItem>) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxWidth().padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        itemsIndexed(foodList) { index, food ->
-            FoodCard(index + 1, food)
-        }
-    }
-}
+//@Composable
+//fun FoodGrid(foodList: List<FoodItem>) {
+//    LazyVerticalGrid(
+//        columns = GridCells.Fixed(2),
+//        modifier = Modifier.fillMaxWidth().padding(12.dp),
+//        horizontalArrangement = Arrangement.spacedBy(8.dp),
+//        verticalArrangement = Arrangement.spacedBy(8.dp)
+//    ) {
+//        itemsIndexed(foodList) { index, food ->
+//            FoodCard(index + 1, food)
+//        }
+//    }
+//}

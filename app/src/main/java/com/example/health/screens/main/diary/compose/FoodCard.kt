@@ -27,9 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.health.R
+import com.example.health.data.local.entities.EatenDish
 
 @Composable
-fun FoodCard(index: Int, food: FoodItem) {
+fun FoodCard(
+    index: Int,
+    food: EatenDish,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,7 +52,7 @@ fun FoodCard(index: Int, food: FoodItem) {
         ) {
             // Tiêu đề "Món ăn x"
             Text(
-                text = "Món ăn $index",
+                text = "Dish $index",
                 color = Color(0xFFDE8025),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold
@@ -58,9 +63,9 @@ fun FoodCard(index: Int, food: FoodItem) {
             // Ảnh hình tròn
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = food.imageUrl,
-                    placeholder = painterResource(id = R.drawable.ic_calendar),
-                    error = painterResource(R.drawable.ic_launcher_foreground)
+                    model = food.UrlImage,
+                    placeholder = painterResource(id = R.drawable.default_dish),
+                    error = painterResource(R.drawable.default_dish)
                     ,
                     onError = {
                         Log.e("ImageLoad", "Load failed: ${it.result.throwable}")
@@ -79,7 +84,7 @@ fun FoodCard(index: Int, food: FoodItem) {
 
             // Tên món ăn + lượng ăn
             Text(
-                text = "${food.name} (${food.amount})",
+                text = "${food.DishName} (${food.Quantity})",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
@@ -89,7 +94,7 @@ fun FoodCard(index: Int, food: FoodItem) {
 
             // Calories
             Text(
-                text = "${food.calories} kcal",
+                text = "${food.Calo} kcal",
                 fontSize = 13.sp,
                 color = Color.Gray
             )

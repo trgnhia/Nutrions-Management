@@ -43,13 +43,13 @@ fun AddFoodCard(onClick: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.Default.Add, // hoặc dùng Icons.Default.Add
-                contentDescription = "Thêm món mới",
+                contentDescription = "New Food",
                 tint = Color(0xFFDE8025),
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Thêm món mới",
+                text = "New Food",
                 color = Color(0xFFDE8025),
                 fontWeight = FontWeight.SemiBold
             )

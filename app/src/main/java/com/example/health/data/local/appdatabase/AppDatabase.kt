@@ -1,10 +1,7 @@
 package com.example.health.data.local.appdatabase
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.example.health.data.local.converters.Converters
 import com.example.health.data.local.daos.*
 import com.example.health.data.local.entities.*
@@ -28,7 +25,7 @@ import com.example.health.data.local.entities.*
         TotalNutrionsPerDay::class,
         Macro::class
     ],
-    version = 14,
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

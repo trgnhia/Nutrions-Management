@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.repostories.BaseInfoRepository
+import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
@@ -19,6 +20,7 @@ import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
@@ -26,6 +28,7 @@ import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
+import com.example.health.data.local.viewmodelfactory.DietDishViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.navigation.BottomNavItem
 import com.example.health.navigation.BottomNavigationBar
@@ -86,6 +89,15 @@ fun MainScreen(
             )
         )
     )
+    val dietDishViewModel: DietDishViewModel = viewModel(
+        factory = DietDishViewModelFactory(
+            DietDishRepository(
+                dao = AppDatabase.getDatabase(context).dietDishDao(),
+                firestore = FirebaseFirestore.getInstance()
+            )
+        )
+    )
+
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
@@ -123,7 +135,8 @@ fun MainScreen(
             planNavGraph(
                 navController = bottomNavController,
                 baseInfoViewModel = baseInfoViewModel,
-                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                dietDishViewModel = dietDishViewModel
             )
             statisticalNavGraph(bottomNavController)
             profileNavGraph(

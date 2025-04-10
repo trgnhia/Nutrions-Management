@@ -55,7 +55,7 @@ fun HeaderWithBackButton(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)) // 👈 Bo góc dưới
-            .background(color = Color(0xFF466448)) // Xanh đậm
+            .background(color = Color(0xFF508351)) // Xanh đậm
             .padding(vertical = 20.dp, horizontal = 12.dp)
     ) {
         // 👉 Back icon (nằm trái)
@@ -148,7 +148,7 @@ fun DaySection(day: Int, meals: List<DefaultDietMealInPlan>, navController: NavC
                 MealItem(
                     meal = meal,
                     onClick = {
-                        navController.navigate(PlanRoutes.VeganPlanDetail.route)
+                        navController.navigate(PlanRoutes.VeganPlanDetail.createRoute(meal.Id)) //navigation//
                     }
                 )
             }

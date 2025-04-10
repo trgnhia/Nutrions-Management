@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.navigation.graph.child.dietNavGraph
 import com.example.health.navigation.graph.child.foodNavGraph
 import com.example.health.navigation.routes.GraphRoute
@@ -14,7 +15,8 @@ import com.example.health.screens.main.plan.Plan
 
 fun NavGraphBuilder.planNavGraph(navController: NavController,
                                  baseInfoViewModel: BaseInfoViewModel,
-                                 defaultDietMealInPlanViewModel: DefaultDietMealInPlanViewModel) {
+                                 defaultDietMealInPlanViewModel: DefaultDietMealInPlanViewModel,
+                                 dietDishViewModel: DietDishViewModel) {
     navigation(
         route = GraphRoute.Plan.route,
         startDestination = PlanRoutes.Plan.route
@@ -22,7 +24,7 @@ fun NavGraphBuilder.planNavGraph(navController: NavController,
         composable(PlanRoutes.Plan.route){
             Plan(navController)
         }
-        dietNavGraph(navController,baseInfoViewModel,defaultDietMealInPlanViewModel)
+        dietNavGraph(navController,baseInfoViewModel,defaultDietMealInPlanViewModel,dietDishViewModel)
 
         foodNavGraph(navController)
 

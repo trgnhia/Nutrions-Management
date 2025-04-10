@@ -1,6 +1,5 @@
 package com.example.health.data.local.repostories
 
-import android.util.Log
 import com.example.health.data.local.daos.BaseInfoDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.BaseInfo
@@ -16,19 +15,20 @@ class BaseInfoRepository(
     private val pendingActionDao: PendingActionDao,
     private val firestore: FirebaseFirestore
 ) {
-    fun getBaseInfo() : Flow<BaseInfo?> = baseInfoDao.getBaseInfo()
+    fun getBaseInfo(): Flow<BaseInfo?> = baseInfoDao.getBaseInfo()
+
     suspend fun deleteBaseInfo() = baseInfoDao.deleteBaseInfo()
+
     suspend fun insertBaseInfo(baseInfo: BaseInfo) {
         baseInfoDao.insertBaseInfo(baseInfo)
-        try{
+        try {
             firestore.collection("accounts")
                 .document(baseInfo.Uid)
                 .collection("base_info")
                 .document("data")
                 .set(baseInfo)
                 .await()
-        }
-        catch (_: Exception) {
+        } catch (_: Exception) {
             val json = Gson().toJson(baseInfo)
             val action = PendingAction(
                 type = PendingActionTypes.INSERT_BASE_INFO,
@@ -36,32 +36,31 @@ class BaseInfoRepository(
                 payload = json
             )
             pendingActionDao.insert(action)
-
         }
-
     }
-    suspend fun updateBaseInfo(baseInfo: BaseInfo){
+
+    suspend fun updateBaseInfo(baseInfo: BaseInfo) {
         baseInfoDao.updateBaseInfo(baseInfo)
-        try{
+        try {
             firestore.collection("accounts")
                 .document(baseInfo.Uid)
                 .collection("base_info")
                 .document("data")
                 .set(baseInfo)
                 .await()
-        }
-        catch (_: Exception) {
+        } catch (_: Exception) {
             val json = Gson().toJson(baseInfo)
             val action = PendingAction(
                 type = PendingActionTypes.UPDATE_BASE_INFO,
                 uid = baseInfo.Uid,
-                payload = json)
+                payload = json
+            )
             pendingActionDao.insert(action)
         }
-
     }
+
     suspend fun fetchFromRemote(uid: String): BaseInfo? {
-        try{
+        return try {
             val snapshot = firestore.collection("accounts")
                 .document(uid)
                 .collection("base_info")
@@ -72,12 +71,35 @@ class BaseInfoRepository(
             remote?.let {
                 baseInfoDao.insertBaseInfo(it)
             }
-            return remote
-        }
-        catch (e: Exception) {
-            // Log chi tiết lỗi
-            e.printStackTrace() // In thông tin lỗi đầy đủ vào log
-            return null
+            remote
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
+
+    suspend fun updateIsDiet(uid: String, dietCode: Int) {
+        val current = baseInfoDao.getBaseInfoNow()
+        val updated = current?.copy(IsDiet = dietCode) ?: return
+
+        baseInfoDao.updateBaseInfo(updated)
+
+        try {
+            firestore.collection("accounts")
+                .document(uid)
+                .collection("base_info")
+                .document("data")
+                .set(updated)
+                .await()
+        } catch (e: Exception) {
+            val json = Gson().toJson(updated)
+            val action = PendingAction(
+                type = PendingActionTypes.UPDATE_BASE_INFO,
+                uid = uid,
+                payload = json
+            )
+            pendingActionDao.insert(action)
+        }
+    }
+
 }

@@ -74,49 +74,6 @@ class MainActivity : ComponentActivity() {
         val db = AppDatabase.getDatabase(applicationContext)
         val firestore = FirebaseFirestore.getInstance()
 
-//        val accountRepository = AccountRepository(db.accountDao(), db.pendingActionDao(), firestore)
-//        val baseInfoRepository = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
-//        val healthMetricRepository = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
-//
-//        val authViewModel = ViewModelProvider(
-//            this,
-//            AuthViewModelFactory(applicationContext, accountRepository)
-//        )[AuthViewModel::class.java]
-//
-//        val accountViewModel = ViewModelProvider(
-//            this,
-//            AccountViewModelFactory(accountRepository)
-//        )[AccountViewModel::class.java]
-//
-//        val baseInfoViewModel = ViewModelProvider(
-//            this,
-//            BaseInfoViewModelFactory(baseInfoRepository)
-//        )[BaseInfoViewModel::class.java]
-//
-//        val healthMetricViewModel = ViewModelProvider(
-//            this,
-//            HealthMetricViewModelFactory(healthMetricRepository)
-//        )[HealthMetricViewModel::class.java]
-//        val defaultFoodRepository = DefaultFoodRepository(db.defaultFoodDao(), firestore)
-//        val defaultExerciseRepository = DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
-//
-//
-//        val defaultFoodViewModel = ViewModelProvider(
-//            this,
-//            DefaultFoodViewModelFactory(defaultFoodRepository)
-//        )[DefaultFoodViewModel::class.java]
-//
-//        val defaultExerciseViewModel = ViewModelProvider(
-//            this,
-//            DefaultExerciseViewModelFactory(defaultExerciseRepository)
-//        )[DefaultExerciseViewModel::class.java]
-//
-//        val macroRepository = MacroRepository(db.macroDao(), db.pendingActionDao(),firestore)
-//        val macroViewModel = ViewModelProvider(
-//            this,
-//            MacroViewModelFactory(macroRepository)
-//        )[com.example.health.data.local.viewmodel.MacroViewModel::class.java]
-
         val accountRepository = AccountRepository(db.accountDao(), db.pendingActionDao(), firestore)
         val baseInfoRepository = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
         val healthMetricRepository = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
@@ -131,8 +88,6 @@ class MainActivity : ComponentActivity() {
         val burnOutRepository = BurnOutCaloPerDayRepository(db.burnOutCaloPerDayDao(), db.pendingActionDao(), firestore)
         val customFoodRepository = CustomFoodRepository(db.customFoodDao(), db.pendingActionDao(), firestore)
         val customExerciseRepository = CustomExerciseRepository(db.customExerciseDao(), db.pendingActionDao(), firestore)
-        //val notifyRepository = NotifyRepository(db.notifyDao(), db.pendingActionDao(), firestore)
-        //val dietDishRepository = DietDishRepository(db.dietDishDao(), db.pendingActionDao(), firestore)
         val notifyRepository = NotifyRepository(db.notifyDao(), firestore, db.pendingActionDao())
         val dietDishRepository = DietDishRepository(db.dietDishDao(), firestore)
 

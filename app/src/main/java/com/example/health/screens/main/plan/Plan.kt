@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,13 +44,13 @@ fun Plan(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(320.dp)
+                .aspectRatio(375f / 320f) // 🔁 Tỷ lệ chuẩn 375:320
                 .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
         ) {
             Image(
                 painter = painterResource(id = R.drawable.top_back_plan),
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit, // ✅ Hiển thị toàn bộ ảnh, không crop
                 modifier = Modifier.fillMaxSize()
             )
 
@@ -59,17 +60,18 @@ fun Plan(navController: NavController) {
                     .padding(start = 16.dp, top = 40.dp, end = 16.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                // Tiêu đề lớn (dịch xuống dưới)
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Set Your\nCustom \n Plan",
-                    style = MaterialTheme.typography.headlineMedium,
+                    text = "Set Your\nCustom \nPlan",
+                    fontSize = 33.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
+                    color = Color.White,
+                    lineHeight = 40.sp, // 👉 khoảng cách dòng (~125% của fontSize)
+                    modifier = Modifier.padding(start = 25.dp)
                 )
 
-                Spacer(modifier = Modifier.height(55.dp)) // 👈 Dịch khối chữ này xuống dưới
+                Spacer(modifier = Modifier.height(45.dp))
 
-                // Dòng mô tả ở trên ảnh tròn
                 Text(
                     text = "Or choose from our meal plans.",
                     style = MaterialTheme.typography.bodyLarge,
@@ -88,6 +90,8 @@ fun Plan(navController: NavController) {
                 title = "Food",
                 description = "Healthy Meals for your daily intake",
                 backgroundRes = R.drawable.food_back,
+                titleFontSize = 25.sp,       // ⬅ tăng kích thước tiêu đề
+                descriptionFontSize = 20.sp, // ⬅ tăng mô tả
                 onClick = {
                     navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMPLAN}")
                 }
@@ -99,6 +103,8 @@ fun Plan(navController: NavController) {
                 title = "Diet Plan",
                 description = "Customized 7-day diet programs",
                 backgroundRes = R.drawable.diet_back,
+                titleFontSize = 25.sp,
+                descriptionFontSize = 20.sp,
                 onClick = { navController.navigate(GraphRoute.Diet.route) }
             )
         }
@@ -112,6 +118,8 @@ fun PlanOptionCard(
     title: String,
     description: String,
     backgroundRes: Int,
+    titleFontSize: androidx.compose.ui.unit.TextUnit = 20.sp,
+    descriptionFontSize: androidx.compose.ui.unit.TextUnit = 14.sp,
     onClick: () -> Unit
 ) {
     Box(
@@ -128,12 +136,8 @@ fun PlanOptionCard(
             modifier = Modifier.fillMaxSize()
         )
 
-        // Overlay mờ để dễ nhìn chữ
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                //.background(Color.Black.copy(alpha = 0.3f))
-        )
+        // Overlay mờ nếu cần
+        Box(modifier = Modifier.fillMaxSize())
 
         Column(
             modifier = Modifier
@@ -144,14 +148,14 @@ fun PlanOptionCard(
             Text(
                 text = title,
                 color = Color.White,
-                style = MaterialTheme.typography.titleLarge,
+                fontSize = titleFontSize,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
                 color = Color.White,
-                style = MaterialTheme.typography.bodyMedium
+                fontSize = descriptionFontSize
             )
         }
     }

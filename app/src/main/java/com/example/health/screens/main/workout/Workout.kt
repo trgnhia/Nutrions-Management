@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +32,10 @@ import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
 import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.navigation.routes.WorkoutRoutes
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import androidx.compose.ui.platform.LocalContext
+
 
 @Composable
 fun Workout(
@@ -174,6 +179,7 @@ fun WorkoutScreenContent(
 
 @Composable
 fun ImageIconWithLabelHorizontal(resId: Int, label: String, onClick: () -> Unit) {
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable { onClick() }
@@ -200,10 +206,17 @@ fun ExerciseItem(exercise: DefaultExercise, onClick: () -> Unit) {
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.abs_exercise),  // Placeholder image icon
+        val context = LocalContext.current
+        AsyncImage(
+            model = ImageRequest.Builder(context)
+                .data(exercise.UrlImage) // ✅ lấy URL online từ exercise
+                .crossfade(true)
+                .build(),
             contentDescription = exercise.Name,
-            modifier = Modifier.size(60.dp)
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(60.dp)
+                .clip(RoundedCornerShape(12.dp))
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(exercise.Name, fontSize = 16.sp, fontWeight = FontWeight.Medium)
@@ -306,6 +319,8 @@ fun AddCaloriesDialog(
     var minutes by remember { mutableStateOf("") }
     var selectedExercise by remember { mutableStateOf<DefaultExercise?>(null) }
     var expanded by remember { mutableStateOf(false) }
+
+
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(

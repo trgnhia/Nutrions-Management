@@ -23,11 +23,11 @@ class EatenDishRepository(
     fun getByDate(date: Date): Flow<List<EatenDish>> =
         dao.getByDate(date)
 
-    suspend fun insert(dish: EatenDish) {
+    suspend fun insert(dish: EatenDish , uid: String) {
         dao.insert(dish)
         try {
             firestore.collection("accounts")
-                .document(dish.IdEatenMeal) // 👈 dùng idEatenMeal làm tham chiếu cha
+                .document(uid) // 👈 dùng idEatenMeal làm tham chiếu cha
                 .collection("eaten_dish")
                 .document(dish.id)
                 .set(dish)
@@ -43,11 +43,11 @@ class EatenDishRepository(
         }
     }
 
-    suspend fun update(dish: EatenDish) {
+    suspend fun update(dish: EatenDish , uid:String) {
         dao.update(dish)
         try {
             firestore.collection("accounts")
-                .document(dish.IdEatenMeal)
+                .document(uid)
                 .collection("eaten_dish")
                 .document(dish.id)
                 .set(dish)
@@ -63,11 +63,11 @@ class EatenDishRepository(
         }
     }
 
-    suspend fun delete(dish: EatenDish) {
+    suspend fun delete(dish: EatenDish , uid:String) {
         dao.delete(dish)
         try {
             firestore.collection("accounts")
-                .document(dish.IdEatenMeal)
+                .document(uid)
                 .collection("eaten_dish")
                 .document(dish.id)
                 .delete()

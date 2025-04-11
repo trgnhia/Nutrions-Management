@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.health"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -105,6 +105,8 @@ dependencies {
     implementation("com.patrykandpatrick.vico:views:1.6.4")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation( "androidx.compose.foundation:foundation:1.7.8" )// hoặc mới hơn
+    implementation ("com.google.android.gms:play-services-fitness:21.1.0")
+
 
 
 

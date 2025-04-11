@@ -53,6 +53,8 @@ fun ViewMore(
     val showAddDialog = remember { mutableStateOf(false) }
     var search by remember { mutableStateOf("") }
 
+    val selectedFood = remember { mutableStateOf<DefaultFood?>(null) }
+
     val typeName = when (foodType) {
         1 -> "Meat / Fish"
         2 -> "Vegetable / Fruit"
@@ -99,8 +101,8 @@ fun ViewMore(
             items(foods.filter { it.Name.contains(search, ignoreCase = true) }, key = { it.Id }) { food ->
                 FoodGridCard(
                     food = food,
-                    onClick = { showClickDialog.value = true },
-                    onAddClick = { showAddDialog.value = true },
+                    onClick = { selectedFood.value = food },
+
                     canEdit = parent == ParenCompose.FROMDIARY
                 )
             }
@@ -149,16 +151,14 @@ fun ViewMore(
             )
         }
 
-        // Add button click dialog
-        if (showAddDialog.value) {
-            AlertDialog(
-                onDismissRequest = { showAddDialog.value = false },
-                title = { Text("Add Food") },
-                text = { Text("Bạn muốn thêm món ăn này?") },
-                confirmButton = {
-                    TextButton(onClick = { showAddDialog.value = false }) {
-                        Text("OK")
-                    }
+        selectedFood.value?.let { food ->
+            FoodDetailDialog(
+                food = food,
+                parent = parent,
+                onDismiss = { selectedFood.value = null },
+                onSave = { weight ->
+                    // TODO: lưu vào EatenDish, bạn có thể xử lý thêm ở đây
+                    selectedFood.value = null
                 }
             )
         }
@@ -168,7 +168,6 @@ fun ViewMore(
 fun FoodGridCard(
     food: DefaultFood,
     onClick: () -> Unit,
-    onAddClick: () -> Unit,
     canEdit: Boolean
 ) {
     val context = LocalContext.current
@@ -211,19 +210,19 @@ fun FoodGridCard(
                 softWrap = false
             )
 
-            if (canEdit) {
-                Button(
-                    onClick = onAddClick,
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .height(30.dp)
-                        .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    contentPadding = PaddingValues(horizontal = 0.dp)
-                ) {
-                    Text("Add", style = MaterialTheme.typography.labelSmall)
-                }
-            }
+//            if (canEdit) {
+//                Button(
+//                    onClick = onAddClick,
+//                    modifier = Modifier
+//                        .padding(top = 4.dp)
+//                        .height(30.dp)
+//                        .fillMaxWidth(),
+//                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+//                    contentPadding = PaddingValues(horizontal = 0.dp)
+//                ) {
+//                    Text("Add", style = MaterialTheme.typography.labelSmall)
+//                }
+//            }
         }
     }
 }

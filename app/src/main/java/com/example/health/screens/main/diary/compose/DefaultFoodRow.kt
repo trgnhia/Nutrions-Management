@@ -18,15 +18,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 @Composable
 fun DefaultFoodRow(
     title: String,
     foods: List<DefaultFood>,
     onItemClick: (DefaultFood) -> Unit,
-    onViewMoreClick: () -> Unit
+    onViewMoreClick: () -> Unit,
+    onSaveFood: () -> Unit,
+    parent: String
 ) {
     val displayItems = foods.take(5)
+    var selectedFood by remember { mutableStateOf<DefaultFood?>(null) }
 
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Row(
@@ -46,8 +53,18 @@ fun DefaultFoodRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(displayItems, key = { it.Id }) { food ->
-                DefaultFoodCard(food, onClick = { onItemClick(food) })
+                DefaultFoodCard(food, onClick = { selectedFood = food })
             }
+        }
+        selectedFood?.let {
+            FoodDetailDialog(
+                food = it,
+                parent = parent,
+                onDismiss = { selectedFood = null },
+                onSave = { weight ->
+                    onSaveFood()
+                }
+            )
         }
     }
 }

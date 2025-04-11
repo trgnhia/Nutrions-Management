@@ -23,6 +23,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.navigation.routes.WorkoutRoutes
@@ -33,7 +34,7 @@ fun Workout(
     defaultExerciseViewModel : DefaultExerciseViewModel,
     exerciseLogViewModel : ExerciseLogViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
-    customExerciseViewModel : DefaultExerciseViewModel
+    customExerciseViewModel : CustomExerciseViewModel
 ) {
     Column(
         modifier = Modifier

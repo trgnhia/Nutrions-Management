@@ -139,6 +139,7 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customExerciseViewModel = customExerciseViewModel,
+
             )
 
             planNavGraph(

@@ -110,26 +110,29 @@ fun DiaryMainScreen(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize().padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(foodList.value.size + 1) { index ->
-                if (index < foodList.value.size) {
-                    FoodCard(index + 1, foodList.value[index], onClick = {
-                        navController.navigate(DiaryRoutes.Info.route)
-                    })
-                } else {
-                    AddFoodCard(onClick = {
-                        navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
-                    })
+        if(isDiet == 0){
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize().padding(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(foodList.value.size + 1) { index ->
+                    if (index < foodList.value.size) {
+                        FoodCard(index + 1, foodList.value[index], onClick = {
+                            navController.navigate(DiaryRoutes.Info.route)
+                        })
+                    } else {
+                        AddFoodCard(onClick = {
+                            navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
+                        })
+                    }
                 }
+
             }
-
         }
-
+        else{
+            Text("Is in diet")
+        }
     }
 }

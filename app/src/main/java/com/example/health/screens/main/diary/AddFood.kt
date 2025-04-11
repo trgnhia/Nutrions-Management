@@ -68,7 +68,7 @@ fun AddFood(
             Quantity = quantity,
             UrlImage = urlImage
         )
-        eatenDishViewModel.insert(newDish)
+        eatenDishViewModel.insert(newDish,uid)
 
         // 4. Cập nhật lại dinh dưỡng cho meal
         val updatedMeal = meal.copy(
@@ -107,9 +107,7 @@ fun AddFood(
             TotalCarb = existingTotal.TotalCarb + carb,
             TotalFat = existingTotal.TotalFat + fat
         )
-
 // Luôn cập nhật sau cùng
         totalNutrionsPerDayViewModel.update(updatedTotal)
-
     }
 }

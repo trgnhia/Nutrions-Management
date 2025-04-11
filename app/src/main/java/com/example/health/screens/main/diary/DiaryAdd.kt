@@ -3,6 +3,7 @@ package com.example.health.screens.main.diary
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.health.R
 import com.example.health.data.local.viewmodel.*
 import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.screens.main.ParenCompose
@@ -197,8 +199,31 @@ fun DiaryAdd(
                     )
                 }
             } else {
-                // Eaten Meal Tab: Display some other content (e.g., meals already eaten)
-                Text("Meals you have eaten will be shown here.")
+//                val sampleMeals = listOf(
+//                    MealInfo(
+//                        date = "07/04/2025",
+//                        meals = listOf(
+//                            MealDetail("Breakfast", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
+//                            MealDetail("Lunch", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
+//                            MealDetail("Dinner", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480)
+//                        )
+//                    ),
+//                    MealInfo(
+//                        date = "08/04/2025",
+//                        meals = listOf(
+//                            MealDetail("Breakfast", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
+//                            MealDetail("Lunch", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
+//                            MealDetail("Dinner", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480)
+//                        )
+//                    )
+//                )
+//
+//                LazyColumn(modifier = Modifier.padding(horizontal = 12.dp)) {
+//                    items(sampleMeals) { plan ->
+//                        MealPlanCard(plan)
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                    }
+//                }
             }
         }
         // Only show the Meal Summary Button if we are in the "Discover" tab

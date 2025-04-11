@@ -337,7 +337,7 @@ fun AddCaloriesDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TextButton(onClick = onSkip) { Text("Skip", color = Color.Black) }
+                    TextButton(onClick = onSkip) { Text("Cancel", color = Color.Black) }
                     TextButton(onClick = { onDone(title, kcal, minutes) }) { Text("Done", color = Color.Red) }
                 }
             }

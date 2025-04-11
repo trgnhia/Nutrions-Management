@@ -45,11 +45,15 @@ object MacroCalculator {
     }
 
     private fun roundToOneDecimal(value: Float): Float {
-        return String.format("%.1f", value).toFloat()
+        return try {
+            String.format("%.1f", value).replace(",", ".").toFloat()
+        } catch (e: Exception) {
+            0f
+        }
     }
 }
 
-/* CÁCH SỬ DUNG hehe
+/* CÁCH SỬ DỤNG hehe
 val result = MacroCalculator.calculateMacros(
     tdee = 2500,
     carbPercent = 40f,
@@ -60,5 +64,4 @@ val result = MacroCalculator.calculateMacros(
 println("Carbs: ${result.carbInGrams}g")
 println("Protein: ${result.proteinInGrams}g")
 println("Fat: ${result.fatInGrams}g")
-
- */
+*/

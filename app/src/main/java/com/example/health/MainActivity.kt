@@ -14,11 +14,13 @@ import com.example.health.data.local.repostories.CustomFoodRepository
 import com.example.health.data.local.repostories.DefaultDietMealInPlanRepository
 import com.example.health.data.local.repostories.DefaultExerciseRepository
 import com.example.health.data.local.repostories.DefaultFoodRepository
+import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.repostories.EatenDishRepository
 import com.example.health.data.local.repostories.EatenMealRepository
 import com.example.health.data.local.repostories.ExerciseLogRepository
 import com.example.health.data.local.repostories.HealthMetricRepository
 import com.example.health.data.local.repostories.MacroRepository
+import com.example.health.data.local.repostories.NotifyRepository
 import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.remote.auth.AuthViewModel
@@ -28,11 +30,13 @@ import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.local.viewmodelfactory.AccountViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModelFactory
@@ -42,11 +46,13 @@ import com.example.health.data.local.viewmodelfactory.CustomFoodViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultDietMealInPlanViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultExerciseViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultFoodViewModelFactory
+import com.example.health.data.local.viewmodelfactory.DietDishViewModelFactory
 import com.example.health.data.local.viewmodelfactory.EatenDishViewModelFactory
 import com.example.health.data.local.viewmodelfactory.EatenMealViewModelFactory
 import com.example.health.data.local.viewmodelfactory.ExerciseLogViewModelFactory
 import com.example.health.data.local.viewmodelfactory.HealthMetricViewModelFactory
 import com.example.health.data.local.viewmodelfactory.MacroViewModelFactory
+import com.example.health.data.local.viewmodelfactory.NotifyViewModelFactory
 import com.example.health.data.local.viewmodelfactory.TotalNutrionsPerDayViewModelFactory
 import com.example.health.data.remote.sync.PendingSyncScheduler
 import com.example.health.navigation.AppNavigation
@@ -117,8 +123,8 @@ class MainActivity : ComponentActivity() {
         val eatenDishRepository = EatenDishRepository(db.eatenDishDao(), db.pendingActionDao(), firestore)
         val burnOutRepository = BurnOutCaloPerDayRepository(db.burnOutCaloPerDayDao(), db.pendingActionDao(), firestore)
         val customFoodRepository = CustomFoodRepository(db.customFoodDao(), db.pendingActionDao(), firestore)
-        //val notifyRepository = NotifyRepository(db.notifyDao(), db.pendingActionDao(), firestore)
-        //val dietDishRepository = DietDishRepository(db.dietDishDao(), db.pendingActionDao(), firestore)
+        val notifyRepository = NotifyRepository(db.notifyDao(), firestore, db.pendingActionDao())
+        val dietDishRepository = DietDishRepository(db.dietDishDao(), firestore)
 
         // ✅ ViewModel
         val authViewModel = ViewModelProvider(this, AuthViewModelFactory(applicationContext, accountRepository))[AuthViewModel::class.java]
@@ -135,8 +141,8 @@ class MainActivity : ComponentActivity() {
         val eatenDishViewModel = ViewModelProvider(this, EatenDishViewModelFactory(eatenDishRepository))[EatenDishViewModel::class.java]
         val burnOutViewModel = ViewModelProvider(this, BurnOutCaloPerDayViewModelFactory(burnOutRepository))[BurnOutCaloPerDayViewModel::class.java]
         val customFoodViewModel = ViewModelProvider(this, CustomFoodViewModelFactory(customFoodRepository))[CustomFoodViewModel::class.java]
-        //val notifyViewModel = ViewModelProvider(this, NotifyViewModelFactory(notifyRepository))[NotifyViewModel::class.java]
-        //val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
+        val notifyViewModel = ViewModelProvider(this, NotifyViewModelFactory(notifyRepository))[NotifyViewModel::class.java]
+        val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
@@ -156,9 +162,8 @@ class MainActivity : ComponentActivity() {
                     eatenDishViewModel = eatenDishViewModel,
                     burnOutCaloPerDayViewModel = burnOutViewModel,
                     customFoodViewModel = customFoodViewModel,
-//                    notifyViewModel = notifyViewModel,
-//                    dietDishViewModel = dietDishViewModel
-
+                    notifyViewModel = notifyViewModel,
+                    dietDishViewModel = dietDishViewModel
                 )
             }
         }

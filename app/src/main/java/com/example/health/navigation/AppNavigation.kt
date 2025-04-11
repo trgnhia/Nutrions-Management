@@ -30,8 +30,8 @@ fun AppNavigation(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
-    //notifyViewModel : NotifyViewModel,
-    //dietDishViewModel : DietDishViewModel
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 
 ) {
     val navController = rememberNavController()
@@ -77,11 +77,13 @@ fun AppNavigation(
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
                 macroViewModel = macroViewModel,
+                notifyViewModel = notifyViewModel,
                 onLoadData = {
                     fetchAllDefaultData(
                         context = context,
                         defaultFoodViewModel = defaultFoodViewModel,
-                        defaultExerciseViewModel = defaultExerciseViewModel
+                        defaultExerciseViewModel = defaultExerciseViewModel,
+
                     )
                 }
             )

@@ -6,10 +6,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.health.data.local.appdatabase.AppDatabase
+import com.example.health.data.local.repostories.BaseInfoRepository
+import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
@@ -17,22 +22,25 @@ import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
+import com.example.health.data.local.viewmodelfactory.DietDishViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.navigation.BottomNavItem
 import com.example.health.navigation.BottomNavigationBar
 import com.example.health.navigation.graph.*
 import com.example.health.navigation.routes.DiaryRoutes
-import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
 import com.example.health.navigation.routes.ProfileRoutes
 import com.example.health.navigation.routes.StatisticalRoutes
 import com.example.health.navigation.routes.WorkoutRoutes
+import com.google.firebase.firestore.FirebaseFirestore
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -74,6 +82,24 @@ fun MainScreen(
         ProfileRoutes.Profile.route -> true
         else -> false
     }
+    val context = LocalContext.current
+    val baseInfoViewModel: BaseInfoViewModel = viewModel(
+        factory = BaseInfoViewModelFactory(
+            BaseInfoRepository(
+                baseInfoDao = AppDatabase.getDatabase(context).baseInfoDao(),
+                pendingActionDao = AppDatabase.getDatabase(context).pendingActionDao(),
+                firestore = FirebaseFirestore.getInstance()
+            )
+        )
+    )
+    val dietDishViewModel: DietDishViewModel = viewModel(
+        factory = DietDishViewModelFactory(
+            DietDishRepository(
+                dao = AppDatabase.getDatabase(context).dietDishDao(),
+                firestore = FirebaseFirestore.getInstance()
+            )
+        )
+    )
 
     Scaffold(
         bottomBar = {
@@ -124,6 +150,12 @@ fun MainScreen(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel = customFoodViewModel,
+            )
+            planNavGraph(
+                navController = bottomNavController,
+                baseInfoViewModel = baseInfoViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                dietDishViewModel = dietDishViewModel
             )
             statisticalNavGraph(bottomNavController)
             profileNavGraph(

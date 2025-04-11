@@ -17,11 +17,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,16 +36,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.navigation.routes.GraphRoute
 
 @Composable
-fun Type(navController: NavController) {
+fun Type(navController: NavController, baseInfoViewModel: BaseInfoViewModel) {
+    val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
+    val currentDietCode = baseInfo?.IsDiet ?: 0
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // 👉 Top header với background + ảnh + tiêu đề
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,7 +62,6 @@ fun Type(navController: NavController) {
                 modifier = Modifier.fillMaxSize()
             )
 
-            // 👉 Column chứa icon back, tiêu đề, nút 30 days
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -92,7 +97,7 @@ fun Type(navController: NavController) {
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { },
                     shape = RoundedCornerShape(50),
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 6.dp)
                 ) {
@@ -101,7 +106,6 @@ fun Type(navController: NavController) {
             }
         }
 
-        // Line separator
         Spacer(modifier = Modifier.height(12.dp))
         Box(
             modifier = Modifier
@@ -113,12 +117,12 @@ fun Type(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 👉 Các loại chế độ ăn
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             DietTypeCard(
                 title = "Vegan",
                 description = "Veggies only. No meat \n or animal products.",
                 backgroundRes = R.drawable.vegan_btn_back,
+                isLocked = currentDietCode != 0 && currentDietCode != 1,
                 onClick = { navController.navigate(GraphRoute.Vegan.route) }
             )
 
@@ -128,6 +132,7 @@ fun Type(navController: NavController) {
                 title = "High Protein",
                 description = "Lean meat & seafood \n to build muscle.",
                 backgroundRes = R.drawable.high_btn_back,
+                isLocked = currentDietCode != 0 && currentDietCode != 2,
                 onClick = { navController.navigate(GraphRoute.HighProtein.route) }
             )
 
@@ -137,16 +142,19 @@ fun Type(navController: NavController) {
                 title = "Keto",
                 description = "Low-carb, high-fat for fat burning.",
                 backgroundRes = R.drawable.keto_btn_back,
+                isLocked = currentDietCode != 0 && currentDietCode != 3,
                 onClick = { navController.navigate(GraphRoute.Keto.route) }
             )
         }
     }
 }
+
 @Composable
 fun DietTypeCard(
     title: String,
     description: String,
     backgroundRes: Int,
+    isLocked: Boolean = false,
     onClick: () -> Unit
 ) {
     Box(
@@ -163,33 +171,44 @@ fun DietTypeCard(
             contentScale = ContentScale.Crop
         )
 
-        // Lớp mờ overlay
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                //.background(Color.Black.copy(alpha = 0.25f))
-        )
+        if (isLocked) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+            )
+        }
 
-        // Nội dung chữ căn giữa
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start // bạn có thể đổi thành CenterHorizontally nếu muốn căn giữa tuyệt đối
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = title,
-                color = Color.White,
+                color = if (isLocked) Color.LightGray else Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp // 👉 nhỏ hơn
+                fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = description,
-                color = Color.White,
-                fontSize = 12.sp, // 👉 nhỏ hơn
+                color = if (isLocked) Color.LightGray else Color.White,
+                fontSize = 12.sp,
                 lineHeight = 13.sp,
+            )
+        }
+
+        if (isLocked) {
+            Icon(
+                imageVector = Icons.Default.Lock,
+                contentDescription = "Locked",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 24.dp)
             )
         }
     }

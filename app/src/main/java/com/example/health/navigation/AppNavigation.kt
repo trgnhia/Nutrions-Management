@@ -112,7 +112,9 @@ fun AppNavigation(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel  = customFoodViewModel,
-                customExerciseViewModel = customExerciseViewModel
+                customExerciseViewModel = customExerciseViewModel,
+                notifyViewModel = notifyViewModel,
+                dietDishViewModel = dietDishViewModel
             )
         }
     }

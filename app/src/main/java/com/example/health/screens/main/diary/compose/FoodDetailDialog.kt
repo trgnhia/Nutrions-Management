@@ -6,14 +6,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.health.data.local.entities.DefaultFood
-import com.example.health.screens.main.ParenCompose // Đảm bảo ParenCompose được định nghĩa đúng trong project
+import com.example.health.data.utils.calculateNutritionByWeight
+import com.example.health.screens.main.ParenCompose
 
 @Composable
 fun FoodDetailDialog(
     food: DefaultFood,
     parent: String,
     onDismiss: () -> Unit,
-    onSave: (Float) -> Unit = {}
+    onSave: (
+        weight: Float,
+        calo: Float,
+        fat: Float,
+        carb: Float,
+        protein: Float
+    ) -> Unit = { _, _, _, _, _ -> }
 ) {
     var weightInput by remember { mutableStateOf("") }
 
@@ -23,7 +30,22 @@ fun FoodDetailDialog(
             if (parent == ParenCompose.FROMDIARY) {
                 TextButton(onClick = {
                     val weight = weightInput.toFloatOrNull() ?: 0f
-                    onSave(weight)
+                    val result = calculateNutritionByWeight(
+                        defaultWeight = food.Quantity.toFloat(),
+                        actualWeight = weight,
+                        calories = food.Calo,
+                        fat = food.Fat,
+                        carb = food.Carb,
+                        protein = food.Protein
+                    )
+
+                    onSave(
+                        result.actualWeight,
+                        result.calories,
+                        result.fat,
+                        result.carb,
+                        result.protein
+                    )
                     onDismiss()
                 }) {
                     Text("Save")

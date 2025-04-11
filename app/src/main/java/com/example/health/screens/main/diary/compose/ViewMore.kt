@@ -1,5 +1,7 @@
 package com.example.health.screens.main.diary.compose
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -28,9 +30,13 @@ import coil.request.ImageRequest
 import com.example.health.R
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.local.viewmodel.*
+import com.example.health.data.utils.toStartOfDay
 import com.example.health.screens.main.ParenCompose
+import com.example.health.screens.main.diary.AddFood
 import java.io.File
+import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ViewMore(
     navController: NavController,
@@ -42,17 +48,15 @@ fun ViewMore(
     totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
     accountViewModel: AccountViewModel,
     parent: String,
+    mealType: Int
 ) {
     val account = accountViewModel.account.collectAsState().value
-    val uid = account?.Uid
+    val uid = account?.Uid ?: return
+    val today: Date = Date().toStartOfDay()
 
     val foodList = remember { defaultFoodViewModel.getRandomFoodsByType(20, foodType) }
     val foods by foodList.collectAsState(initial = emptyList())
-
-    val showClickDialog = remember { mutableStateOf(false) }
-    val showAddDialog = remember { mutableStateOf(false) }
     var search by remember { mutableStateOf("") }
-
     val selectedFood = remember { mutableStateOf<DefaultFood?>(null) }
 
     val typeName = when (foodType) {
@@ -102,29 +106,15 @@ fun ViewMore(
                 FoodGridCard(
                     food = food,
                     onClick = { selectedFood.value = food },
-
                     canEdit = parent == ParenCompose.FROMDIARY
                 )
             }
-
-//            // Add button (bottom)
-//            if (parent == ParenCompose.FROMDIARY) {
-//                item(span = { GridItemSpan(3) }) {
-//                    Button(
-//                        onClick = { showAddDialog.value = true },
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(top = 16.dp)
-//                    ) {
-//                        Text("ADD ${typeName.uppercase()}")
-//                    }
-//                }
-//            }
         }
-        // Floating bát icon
+
+        // Floating Add Button
         if (parent == ParenCompose.FROMDIARY) {
             FloatingActionButton(
-                onClick = { showAddDialog.value = true },
+                onClick = { /* TODO: mở thêm món ăn */ },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
@@ -137,33 +127,37 @@ fun ViewMore(
             }
         }
 
-        // Clicked on food card dialog
-        if (showClickDialog.value) {
-            AlertDialog(
-                onDismissRequest = { showClickDialog.value = false },
-                title = { Text("Food Clicked") },
-                text = { Text("Bạn đã chọn món ăn này!") },
-                confirmButton = {
-                    TextButton(onClick = { showClickDialog.value = false }) {
-                        Text("OK")
-                    }
-                }
-            )
-        }
-
+        // Dialog khi chọn món ăn
         selectedFood.value?.let { food ->
             FoodDetailDialog(
                 food = food,
                 parent = parent,
                 onDismiss = { selectedFood.value = null },
-                onSave = { weight ->
-                    // TODO: lưu vào EatenDish, bạn có thể xử lý thêm ở đây
+                onSave = { weight, calo, fat, carb, protein ->
+                    AddFood(
+                        uid = uid,
+                        eatenDishViewModel = eatenDishViewModel,
+                        eatenMealViewModel = eatenMealViewModel,
+                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                        today = today,
+                        foodID = food.Id,
+                        dishName = food.Name,
+                        calo = calo,
+                        fat = fat,
+                        carb = carb,
+                        protein = protein,
+                        type = mealType,
+                        quantityType = food.QuantityType,
+                        quantity = weight,
+                        urlImage = food.UrlImage
+                    )
                     selectedFood.value = null
                 }
             )
         }
     }
 }
+
 @Composable
 fun FoodGridCard(
     food: DefaultFood,

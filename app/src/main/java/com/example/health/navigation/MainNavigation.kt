@@ -15,11 +15,13 @@ import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.screens.main.MainScreen
@@ -43,8 +45,8 @@ fun MainNavigation(
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
-    //notifyViewModel : NotifyViewModel,
-    //dietDishViewModel : DietDishViewModel
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 ) {
     // đây là nav tổng quát nhất ( gọi toàn bộ ứng dụng luôn ( sẽ được gọi trong main))
     NavHost(navController = navController, startDestination = "main") {
@@ -67,8 +69,8 @@ fun MainNavigation(
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel  = customFoodViewModel,
                 customExerciseViewModel = customExerciseViewModel,
-                //notifyViewModel = notifyViewModel,
-                //dietDishViewModel = dietDishViewModel
+                notifyViewModel = notifyViewModel,
+                dietDishViewModel = dietDishViewModel
                 )
         }
     }

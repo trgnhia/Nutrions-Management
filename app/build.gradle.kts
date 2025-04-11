@@ -72,7 +72,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation("network.chaintech:kmp-date-time-picker:1.0.7")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
 

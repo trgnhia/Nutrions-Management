@@ -1,25 +1,10 @@
 package com.example.health.data.local.appdatabase
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.example.health.data.local.converters.Converters
 import com.example.health.data.local.daos.*
-import com.example.health.data.local.daos.quyen.BurnOutCaloPerDayDao
-import com.example.health.data.local.daos.quyen.CustomFoodDao
-import com.example.health.data.local.daos.quyen.EatenDishDao
-import com.example.health.data.local.daos.quyen.EatenMealDao
-import com.example.health.data.local.daos.quyen.MacroDao
-import com.example.health.data.local.daos.quyen.TotalNutrionsPerDayDao
 import com.example.health.data.local.entities.*
-import com.example.health.data.local.entities.quyen.BurnOutCaloPerDay
-import com.example.health.data.local.entities.quyen.CustomFood
-import com.example.health.data.local.entities.quyen.EatenDish
-import com.example.health.data.local.entities.quyen.EatenMeal
-import com.example.health.data.local.entities.quyen.Macro
-import com.example.health.data.local.entities.quyen.TotalNutrionsPerDay
 
 @Database(
     entities = [
@@ -38,9 +23,11 @@ import com.example.health.data.local.entities.quyen.TotalNutrionsPerDay
         ExerciseLog::class,
         Notify::class,
         TotalNutrionsPerDay::class,
-        Macro::class
+        Macro::class,
+        CustomExercise::class
+
     ],
-    version = 11,
+    version = 19,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -62,6 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notifyDao(): NotifyDao
     abstract fun totalNutrionsPerDayDao(): TotalNutrionsPerDayDao
     abstract fun macroDao(): MacroDao
+    abstract fun customExerciseDao(): CustomExerciseDao
 
     companion object {
         @Volatile

@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
+    implementation(libs.androidx.navigation.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,7 +73,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation("network.chaintech:kmp-date-time-picker:1.0.7")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -94,6 +95,17 @@ dependencies {
 
     // Nếu bạn dùng Compose (có thể bỏ nếu không dùng Compose)
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("com.kizitonwose.calendar:compose:2.3.0")
+    //implementation("io.github.ehsannarmani:compose-charts:1.0.0-beta04")
+    //implementation("com.github.tehras:charts:0.2.4")
+    implementation("com.patrykandpatrick.vico:core:1.6.4")
+    implementation("com.patrykandpatrick.vico:compose:1.6.4")
+    implementation("com.patrykandpatrick.vico:views:1.6.4")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation( "androidx.compose.foundation:foundation:1.7.8" )// hoặc mới hơn
+
 
 
 

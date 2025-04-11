@@ -12,9 +12,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.entities.HealthMetric
+import com.example.health.data.local.entities.Macro
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.utils.HealthMetricUtil
+import com.example.health.data.utils.MacroCalculator
 import com.example.health.screens.loader.ActLoader
 import kotlinx.coroutines.delay
 import java.util.Date
@@ -24,6 +28,8 @@ fun HealthMetricScreen(
     navController: NavController,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
+    macroViewModel : MacroViewModel,
+    notifyViewModel: NotifyViewModel,
     onLoadData: suspend () -> Unit
 ) {
     val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
@@ -31,7 +37,6 @@ fun HealthMetricScreen(
 
     LaunchedEffect(Unit) {
         baseInfo?.let {
-            // 🔢 Tính toán chỉ số
             val bmr = HealthMetricUtil.calculateBMR(it.Weight, it.Height, it.Age, it.Gender)
             val bmi = HealthMetricUtil.calculateBMI(it.Weight, it.Height)
             val tdee = HealthMetricUtil.calculateTDEE(bmr, it.ActivityLevel)
@@ -41,6 +46,21 @@ fun HealthMetricScreen(
             val calorDeltaPerDay = HealthMetricUtil.calculateCalorieDeltaPerDay(tdee, dif)
             val resDay = HealthMetricUtil.restDay(dif, calorDeltaPerDay)
             val now = Date()
+
+            val result = MacroCalculator.calculateMacros(
+                tdee = tdee.toInt(),
+                carbPercent = 40f,
+                proteinPercent = 35f,
+                fatPercent = 25f
+            )
+            val macro = Macro(
+                Uid = it.Uid,
+                Calo = result.carbInGrams,
+                Protein = result.proteinInGrams,
+                Fat = result.fatInGrams,
+                Carb = result.carbInGrams,
+                TDEE = tdee
+            )
 
             val metric = HealthMetric(
                 metricId = metricId,
@@ -56,20 +76,22 @@ fun HealthMetricScreen(
                 UpdateAt = now
             )
 
-            // ✅ Lưu vào Room
+            // ✅ Lưu dữ liệu
             healthMetricViewModel.insertHealthMetric(metric)
+            macroViewModel.insert(macro)
+            notifyViewModel.initDefaultNotifications(it.Uid) // ✅ thêm dòng này
 
-            // ✅ Load dữ liệu mặc định nếu cần
+            // ✅ Load mặc định
             onLoadData()
 
-            delay(3000) // Optional: giữ UI mượt
-
+            delay(3000)
             isLoading = false
             navController.navigate("home") {
                 popUpTo("health_metric") { inclusive = true }
             }
         }
     }
+
 
     // UI Loading
     Box(

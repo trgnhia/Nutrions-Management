@@ -11,12 +11,12 @@ import com.example.health.data.utils.downloadImageAndSave
 import com.example.health.data.utils.toSafeFileName
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 class DefaultFoodViewModel(
     private val repository: DefaultFoodRepository
 ) : ViewModel() {
-
     val defaultFoods: StateFlow<List<DefaultFood>> = repository.getAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -27,11 +27,9 @@ class DefaultFoodViewModel(
             val file = downloadImageAndSave(context, food.UrlImage, safeFileName)
             val localPath = file?.absolutePath ?: food.UrlImage
             val updated = food.copy(UrlImage = localPath)
-
             repository.insert(updated)
         }
     }
-
     fun syncIfNeeded(context: Context) = viewModelScope.launch {
         if (defaultFoods.value.isEmpty()) {
             Log.d("DefaultFoodViewModel", "Room empty → loading from Firestore...")
@@ -39,5 +37,12 @@ class DefaultFoodViewModel(
         } else {
             Log.d("DefaultFoodViewModel", "Room already has data → skip loading.")
         }
+    }
+    // ✅ Lấy món ăn ngẫu nhiên theo loại
+    fun getRandomFoodsByType(count: Int, type: Int): StateFlow<List<DefaultFood>> {
+        return flow {
+            val foods = repository.getRandomFoodsByType(count, type)
+            emit(foods)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 }

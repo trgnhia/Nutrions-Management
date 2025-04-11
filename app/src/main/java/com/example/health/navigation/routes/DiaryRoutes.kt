@@ -4,5 +4,6 @@ sealed class DiaryRoutes(val route: String ){
     object Diary : DiaryRoutes("diary")
     object Add : DiaryRoutes("diary/add")
     object Info : DiaryRoutes("diary/info")
+    object ViewMore : DiaryRoutes("diary/view_more")
 }
 

@@ -188,7 +188,7 @@ fun ResultsItem(weight: Float, targetWeight: Float, restDays: Int, onValueChange
                         ),
                         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
                         modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                        colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color(0xFF00BEBE),
                             focusedLabelColor = Color(0xFF00BEBE),
                             cursorColor = Color(0xFF00BEBE)

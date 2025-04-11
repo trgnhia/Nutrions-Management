@@ -28,4 +28,12 @@ interface BaseInfoDao {
     @Update
     suspend fun updateBaseInfo(baseInfo: BaseInfo)
 
+    @Query("SELECT * FROM base_info LIMIT 1")
+    suspend fun getBaseInfoNow(): BaseInfo?
+
+
+    @Query("UPDATE base_info SET is_diet = :isDiet WHERE uid = :uid")
+    suspend fun updateIsDiet(uid: String, isDiet: Int)
+
+
 }

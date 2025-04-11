@@ -19,6 +19,7 @@ navigationRuntimeAndroid = "2.9.0-alpha08"
 wheelpickercompose = "1.0.0"
 volley = "1.2.1"
 playServicesFido = "20.0.1"
+navigationCommonKtx = "2.8.9"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,7 @@ androidx-navigation-runtime-android = { group = "androidx.navigation", name = "n
 wheelpickercompose = { module = "com.github.commandiron:WheelPickerCompose", version.ref = "wheelpickercompose" }
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 play-services-fido = { group = "com.google.android.gms", name = "play-services-fido", version.ref = "playServicesFido" }
+androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

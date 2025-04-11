@@ -1,5 +1,7 @@
 package com.example.health.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -14,6 +16,7 @@ import com.example.health.screens.login.LoginScreen
 import com.example.health.screens.login.SplashScreen
 import com.example.health.screens.main.HomeScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
     authViewModel: AuthViewModel,
@@ -21,7 +24,21 @@ fun AppNavigation(
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
     defaultFoodViewModel : DefaultFoodViewModel,
-    defaultExerciseViewModel : DefaultExerciseViewModel
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
+    macroViewModel : MacroViewModel,
+    totalNutrionsPerDayViewModel : TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    eatenMealViewModel : EatenMealViewModel,
+    eatenDishViewModel : EatenDishViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
+    //notifyViewModel : NotifyViewModel,
+    //dietDishViewModel : DietDishViewModel
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
+
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -65,11 +82,14 @@ fun AppNavigation(
                 navController = navController,
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
+                macroViewModel = macroViewModel,
+                notifyViewModel = notifyViewModel,
                 onLoadData = {
                     fetchAllDefaultData(
                         context = context,
                         defaultFoodViewModel = defaultFoodViewModel,
-                        defaultExerciseViewModel = defaultExerciseViewModel
+                        defaultExerciseViewModel = defaultExerciseViewModel,
+
                     )
                 }
             )
@@ -81,7 +101,20 @@ fun AppNavigation(
                 accountViewModel = accountViewModel,
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
-                navController = navController
+                navController = navController,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel  = customFoodViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+                notifyViewModel = notifyViewModel,
+                dietDishViewModel = dietDishViewModel
             )
         }
     }

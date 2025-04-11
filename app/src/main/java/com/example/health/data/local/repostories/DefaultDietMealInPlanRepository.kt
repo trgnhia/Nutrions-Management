@@ -5,7 +5,6 @@ import com.example.health.data.local.entities.DefaultDietMealInPlan
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import java.util.*
 
 class DefaultDietMealInPlanRepository(
     private val dao: DefaultDietMealInPlanDao,
@@ -16,6 +15,9 @@ class DefaultDietMealInPlanRepository(
 
     suspend fun getById(id: String): DefaultDietMealInPlan? = dao.getById(id)
 
+    suspend fun insert(meal: DefaultDietMealInPlan) {
+        dao.insert(meal)
+    }
 
     suspend fun syncFromRemote() {
         val snapshot = firestore.collection("default_diet_meal_in_plan").get().await()
@@ -24,5 +26,18 @@ class DefaultDietMealInPlanRepository(
             item?.copy(Id = doc.id)
         }
         dao.insertAll(list)
+    }
+
+    suspend fun fetchRemoteAndInsertEach(
+        onEachFetched: suspend (DefaultDietMealInPlan) -> Unit
+    ) {
+        val snapshot = firestore.collection("default_diet_meal_in_plan").get().await()
+        for (doc in snapshot.documents) {
+            val item = doc.toObject(DefaultDietMealInPlan::class.java)
+            if (item != null) {
+                val meal = item.copy(Id = doc.id)
+                onEachFetched(meal)
+            }
+        }
     }
 }

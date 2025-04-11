@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +37,18 @@ import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import kotlinx.datetime.LocalTime
 import network.chaintech.kmp_date_time_picker.utils.MAX
 import network.chaintech.kmp_date_time_picker.utils.MIN
+import android.Manifest
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.provider.Settings
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.activity.ComponentActivity
+import androidx.compose.runtime.LaunchedEffect
+
+
 
 @Composable
 fun FlippableSwitch(
@@ -73,34 +86,48 @@ fun FlippableSwitch(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Reminder(navController: NavController,notifyViewModel: NotifyViewModel,
-             accountViewModel: AccountViewModel
+fun Reminder(
+    navController: NavController,
+    notifyViewModel: NotifyViewModel,
+    accountViewModel: AccountViewModel
 ) {
+    val context = LocalContext.current
     val orange = Color(0xFFFF8000)
     val meals = listOf("Breakfast", "Lunch", "Dinner", "Snack")
     val icons = listOf("🥞", "🍝", "🍲", "🍪")
     val uid = accountViewModel.getCurrentUid()
     val notifyList by notifyViewModel.getAllByUid(uid).collectAsState()
-    val reminderStates: Map<String, MutableState<Boolean>> = remember {
-        meals.associateWith { mutableStateOf(true) }
+
+    // ✅ Xin quyền POST_NOTIFICATIONS cho Android 13+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permission = Manifest.permission.POST_NOTIFICATIONS
+            val isGranted = ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+            if (!isGranted && context is ComponentActivity) {
+                ActivityCompat.requestPermissions(context, arrayOf(permission), 1001)
+            }
+        }
+
+        // ✅ Xin quyền SCHEDULE_EXACT_ALARM cho Android 12+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = android.net.Uri.parse("package:${context.packageName}")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(intent)
+            }
+        }
     }
 
-//    val timeStates = remember(notifyList) {
-//        meals.associateWith { meal ->
-//            val notify = notifyList.find { it.id == meal.lowercase() }
-//            mutableStateOf(
-//                notify?.NotifyTime?.let { DateUtils.toKxLocalTime(it) }
-//                    ?: kotlinx.datetime.LocalTime(7 + meals.indexOf(meal), 15)
-//            )
-//        }
-//    }
-
+    val reminderStates = remember {
+        meals.associateWith { mutableStateOf(true) }.toMutableMap()
+    }
+    // ✅ Thời gian hiển thị theo Notify trong DB
     val timeStates = remember {
-        meals.associateWith {
-            mutableStateOf<kotlinx.datetime.LocalTime?>(null)
-        }.toMutableMap()
+        meals.associateWith { mutableStateOf<kotlinx.datetime.LocalTime?>(null) }.toMutableMap()
     }
-
     LaunchedEffect(notifyList) {
         notifyList.forEach { notify ->
             val meal = meals.find { it.lowercase() == notify.id } ?: return@forEach
@@ -108,8 +135,6 @@ fun Reminder(navController: NavController,notifyViewModel: NotifyViewModel,
             timeStates[meal]?.value = localTime
         }
     }
-
-
 
     var selectedMeal by remember { mutableStateOf<String?>(null) }
 
@@ -197,7 +222,6 @@ fun Reminder(navController: NavController,notifyViewModel: NotifyViewModel,
                 showTimePicker = true,
                 height = 200.dp,
                 startTime = timeStates[meal]?.value ?: LocalTime(7 + meals.indexOf(meal), 15),
-               // startTime = timeStates[meal]!!.value,
                 minTime = LocalTime.MIN(),
                 maxTime = LocalTime.MAX(),
                 dateTimePickerView = DateTimePickerView.BOTTOM_SHEET_VIEW,
@@ -217,22 +241,22 @@ fun Reminder(navController: NavController,notifyViewModel: NotifyViewModel,
                 rowCount = 3,
                 onDoneClick = { newTime ->
                     timeStates[meal]?.value = newTime
-
-                    // GỌI HÀM cập nhật giờ trong database
                     notifyViewModel.updateNotifyTime(
-                        uid = accountViewModel.getCurrentUid(), // ✅ lấy từ AccountViewModel
+                        uid = accountViewModel.getCurrentUid(),
                         mealId = meal.lowercase(),
-                        newTime = DateUtils.toTodayDate(newTime.hour, newTime.minute)
+                        newTime = DateUtils.toTodayDate(newTime.hour, newTime.minute),
+                        context = context
                     )
-
-                    selectedMeal = null
+                    selectedMeal = null // ✅ Dismiss sau khi xong
+                },
+                onDismiss = {
+                    selectedMeal = null // ✅ Bắt buộc để tránh đơ giao diện
                 }
-
             )
         }
+
     }
 }
-
 @Composable
 fun MealItem(
     icon: String,

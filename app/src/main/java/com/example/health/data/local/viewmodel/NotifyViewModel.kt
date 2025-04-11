@@ -1,7 +1,9 @@
 package com.example.health.data.local.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.health.alarm.AlarmScheduler
 import com.example.health.data.local.entities.Notify
 import com.example.health.data.local.repostories.NotifyRepository
 import com.example.health.data.utils.DateUtils
@@ -23,7 +25,7 @@ class NotifyViewModel(
         )
     }
 
-    fun updateNotifyTime(uid: String, mealId: String, newTime: Date) {
+    fun updateNotifyTime(uid: String, mealId: String, newTime: Date, context: Context) {
         viewModelScope.launch {
             val notify = Notify(
                 id = mealId,
@@ -32,6 +34,7 @@ class NotifyViewModel(
                 NotifyTime = newTime
             )
             repository.update(notify)
+            AlarmScheduler.scheduleAlarm(context, notify)
         }
     }
 

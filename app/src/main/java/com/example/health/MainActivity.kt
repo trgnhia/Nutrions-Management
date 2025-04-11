@@ -57,7 +57,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PendingSyncScheduler.schedule(this)
+        PendingSyncScheduler.schedule(applicationContext)
         enableEdgeToEdge()
         val db = AppDatabase.getDatabase(applicationContext)
         val firestore = FirebaseFirestore.getInstance()

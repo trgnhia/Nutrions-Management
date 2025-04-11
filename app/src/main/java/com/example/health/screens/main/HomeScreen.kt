@@ -38,6 +38,9 @@ fun HomeScreen(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 ) {
     val account = accountViewModel.account.collectAsState().value
     val rootNavController = rememberNavController()
@@ -76,29 +79,6 @@ fun HomeScreen(
                     )
                 )
             }
-//            // ✅ CHECK MACRO
-//            if (macroViewModel.macro.value == null) {
-//                val baseInfo = baseInfoViewModel.baseInfo.value
-//                baseInfo?.let {
-//                    val tdee = healthMetricViewModel.lastMetric.value?.TDEE ?: 2000f
-//                    val result = MacroCalculator.calculateMacros(
-//                        tdee = tdee.toInt(),
-//                        carbPercent = 40f,
-//                        proteinPercent = 35f,
-//                        fatPercent = 25f
-//                    )
-//
-//                    val macro = Macro(
-//                        Uid = uid,
-//                        Calo = result.carbInGrams,
-//                        Protein = result.proteinInGrams,
-//                        Fat = result.fatInGrams,
-//                        Carb = result.carbInGrams,
-//                        TDEE = tdee
-//                    )
-//                    macroViewModel.insert(macro)
-//                }
-//            }
         }}
         LaunchedEffect(account?.Uid, lastMetric, macro) {
             val uid = account?.Uid
@@ -141,5 +121,8 @@ fun HomeScreen(
         eatenDishViewModel = eatenDishViewModel,
         burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
         customFoodViewModel  = customFoodViewModel,
+        customExerciseViewModel = customExerciseViewModel,
+        notifyViewModel = notifyViewModel,
+        dietDishViewModel = dietDishViewModel
     )
 }

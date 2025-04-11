@@ -8,7 +8,6 @@ import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
 import com.example.health.data.local.viewmodel.CustomFoodViewModel
-import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
@@ -17,6 +16,8 @@ import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.navigation.graph.child.dietNavGraph
 import com.example.health.navigation.graph.child.foodNavGraph
 import com.example.health.navigation.routes.GraphRoute
@@ -38,6 +39,7 @@ fun NavGraphBuilder.planNavGraph(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    dietDishViewModel: DietDishViewModel
 ) {
     navigation(
         route = GraphRoute.Plan.route,
@@ -49,7 +51,10 @@ fun NavGraphBuilder.planNavGraph(
         dietNavGraph(
             navController = navController,
             baseInfoViewModel = baseInfoViewModel,
+            dietDishViewModel = dietDishViewModel,
+            viewModel = defaultDietMealInPlanViewModel
         )
+        dietNavGraph(navController,baseInfoViewModel,defaultDietMealInPlanViewModel,dietDishViewModel)
 
         foodNavGraph(
             navController = navController,

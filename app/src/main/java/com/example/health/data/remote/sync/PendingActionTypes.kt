@@ -7,6 +7,8 @@ object PendingActionTypes {
     const val INSERT_BASE_INFO = "insert_base_info"
     const val UPDATE_BASE_INFO = "update_base_info"
 
+    const val INSERT_NOTIFY = "insert_notify"
+
     const val INSERT_HEALTH_METRIC = "insert_metric"
     const val UPDATE_HEALTH_METRIC = "update_metric"
 
@@ -36,6 +38,12 @@ object PendingActionTypes {
     const val INSERT_BURN_OUT = "insert_burn_out"
     const val UPDATE_BURN_OUT = "update_burn_out"
     const val DELETE_BURN_OUT = "delete_burn_out"
+
+    const val INSERT_CUSTOM_EXERCISE = "INSERT_CUSTOM_EXERCISE"
+    const val UPDATE_CUSTOM_EXERCISE = "UPDATE_CUSTOM_EXERCISE"
+    const val DELETE_CUSTOM_EXERCISE = "DELETE_CUSTOM_EXERCISE"
+
+
 
 
 }

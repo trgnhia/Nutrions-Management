@@ -1,10 +1,7 @@
 package com.example.health.data.local.appdatabase
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.example.health.data.local.converters.Converters
 import com.example.health.data.local.daos.*
 import com.example.health.data.local.entities.*
@@ -26,9 +23,11 @@ import com.example.health.data.local.entities.*
         ExerciseLog::class,
         Notify::class,
         TotalNutrionsPerDay::class,
-        Macro::class
+        Macro::class,
+        CustomExercise::class
+
     ],
-    version = 13,
+    version = 19,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -50,6 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun notifyDao(): NotifyDao
     abstract fun totalNutrionsPerDayDao(): TotalNutrionsPerDayDao
     abstract fun macroDao(): MacroDao
+    abstract fun customExerciseDao(): CustomExerciseDao
 
     companion object {
         @Volatile

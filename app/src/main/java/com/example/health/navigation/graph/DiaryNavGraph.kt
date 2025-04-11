@@ -94,14 +94,17 @@ fun NavGraphBuilder.diaryNavGraph(
             DiaryInfo(navController)
         }
         composable(
-            route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}",
+            route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}&mealType={mealType}",
             arguments = listOf(
                 navArgument("parent") { nullable = true; defaultValue = null },
-                navArgument("foodType") { defaultValue = 1 } // hoặc required = true
+                navArgument("foodType") { defaultValue = 1 },
+                navArgument("mealType") { defaultValue = 1 } // truyền kèm mealType
             )
         ) { backStackEntry ->
             val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
             val foodType = backStackEntry.arguments?.getInt("foodType") ?: 1
+            val mealType = backStackEntry.arguments?.getInt("mealType") ?: 1
+
             ViewMore(
                 navController = navController,
                 foodType = foodType,
@@ -111,7 +114,8 @@ fun NavGraphBuilder.diaryNavGraph(
                 baseInfoViewModel = baseInfoViewModel,
                 totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
                 accountViewModel = accountViewModel,
-                parent = parent
+                parent = parent,
+                mealType = mealType
             )
         }
 

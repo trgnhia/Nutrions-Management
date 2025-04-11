@@ -13,18 +13,18 @@ import kotlinx.parcelize.Parcelize
 @IgnoreExtraProperties
 @Entity(
     tableName = "diet_dish",
-    foreignKeys = [
-        ForeignKey(
-            entity = DefaultDietMealInPlan::class,
-            parentColumns = ["id"],
-            childColumns = ["mealPlanId"]
-        ),
-        ForeignKey(
-            entity = DefaultFood::class,
-            parentColumns = ["id"],
-            childColumns = ["foodId"]
-        )
-    ]
+//    foreignKeys = [
+//        ForeignKey(
+//            entity = DefaultDietMealInPlan::class,
+//            parentColumns = ["id"],
+//            childColumns = ["mealPlanId"]
+//        ),
+//        ForeignKey(
+//            entity = DefaultFood::class,
+//            parentColumns = ["id"],
+//            childColumns = ["foodId"]
+//        )
+//    ]
 )
 data class DietDish(
 

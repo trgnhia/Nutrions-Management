@@ -5,7 +5,13 @@ import androidx.work.*
 import java.util.concurrent.TimeUnit
 
 object PendingSyncScheduler {
+    private var hasScheduled = false
+
     fun schedule(context: Context) {
+        if (hasScheduled) return
+
+        hasScheduled = true
+
         val request = PeriodicWorkRequestBuilder<PendingSyncWorker>(15, TimeUnit.MINUTES)
             .setConstraints(
                 Constraints.Builder()

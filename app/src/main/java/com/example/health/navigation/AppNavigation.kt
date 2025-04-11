@@ -1,5 +1,7 @@
 package com.example.health.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -14,6 +16,7 @@ import com.example.health.screens.login.LoginScreen
 import com.example.health.screens.login.SplashScreen
 import com.example.health.screens.main.HomeScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
     authViewModel: AuthViewModel,
@@ -30,8 +33,11 @@ fun AppNavigation(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
     //notifyViewModel : NotifyViewModel,
     //dietDishViewModel : DietDishViewModel
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 
 ) {
     val navController = rememberNavController()
@@ -77,11 +83,13 @@ fun AppNavigation(
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
                 macroViewModel = macroViewModel,
+                notifyViewModel = notifyViewModel,
                 onLoadData = {
                     fetchAllDefaultData(
                         context = context,
                         defaultFoodViewModel = defaultFoodViewModel,
-                        defaultExerciseViewModel = defaultExerciseViewModel
+                        defaultExerciseViewModel = defaultExerciseViewModel,
+
                     )
                 }
             )
@@ -104,6 +112,9 @@ fun AppNavigation(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel  = customFoodViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+                notifyViewModel = notifyViewModel,
+                dietDishViewModel = dietDishViewModel
             )
         }
     }

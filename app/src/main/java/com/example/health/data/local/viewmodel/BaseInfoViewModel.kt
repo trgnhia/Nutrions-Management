@@ -74,8 +74,23 @@ class BaseInfoViewModel(
      * ✅ Ưu điểm: dùng trực tiếp uid để đảm bảo không bị null
      * ⚠️ Tránh dùng baseInfo.value?.Uid vì nó có thể bị null nếu chưa collect xong
      */
+//    fun startDiet(uid: String, dietCode: Int) = viewModelScope.launch {
+//        repository.updateIsDiet(uid, dietCode)
+//    }
+
     fun startDiet(uid: String, dietCode: Int) = viewModelScope.launch {
-        repository.updateIsDiet(uid, dietCode)
+        val current = baseInfo.value
+        if (current != null && current.Uid == uid) {
+            val updated = current.copy(
+                IsDiet = dietCode,
+                DietStartDate = System.currentTimeMillis()
+            )
+            repository.updateBaseInfo(updated)
+        } else {
+            // nếu chưa có BaseInfo trong Room, có thể fetch hoặc tạo mới (nếu cần)
+            Log.w("BaseInfoViewModel", "BaseInfo null hoặc sai UID, không thể cập nhật chế độ ăn.")
+        }
     }
+
 
 }

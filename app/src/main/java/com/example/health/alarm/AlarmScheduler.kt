@@ -39,4 +39,21 @@ object AlarmScheduler {
 
         Log.d("AlarmScheduler", "Alarm set for ${notify.id} at ${notify.NotifyTime}")
     }
+    fun cancelAlarm(context: Context, notify: Notify) {
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("message", notify.Message)
+            putExtra("mealId", notify.id)
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            notify.id.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+    }
+
 }

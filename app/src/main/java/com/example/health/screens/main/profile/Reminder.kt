@@ -47,7 +47,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.LaunchedEffect
-
+import com.example.health.alarm.AlarmScheduler
 
 
 @Composable
@@ -161,19 +161,44 @@ fun Reminder(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+//            meals.forEachIndexed { index, meal ->
+//                MealItem(
+//                    icon = icons[index],
+//                    meal = meal,
+//                    //time = timeStates[meal]!!.value,
+//                    time = timeStates[meal]?.value ?: LocalTime(7 + meals.indexOf(meal), 15),
+//
+//                    reminderEnabled = reminderStates[meal]!!.value,
+//                    onTimeClick = {
+//                        selectedMeal = meal
+//                    },
+//                    onSwitchToggle = {
+//                        reminderStates[meal]?.value = it
+//                    }
+//                )
+//            }
             meals.forEachIndexed { index, meal ->
                 MealItem(
                     icon = icons[index],
                     meal = meal,
-                    //time = timeStates[meal]!!.value,
-                    time = timeStates[meal]?.value ?: LocalTime(7 + meals.indexOf(meal), 15),
-
-                    reminderEnabled = reminderStates[meal]!!.value,
+                    time = timeStates[meal]?.value ?: LocalTime(7 + index * 3, 15),
+                    reminderEnabled = reminderStates[meal]?.value == true,
                     onTimeClick = {
                         selectedMeal = meal
                     },
-                    onSwitchToggle = {
-                        reminderStates[meal]?.value = it
+                    onSwitchToggle = { isEnabled ->
+                        // ✅ Cập nhật trạng thái UI
+                        reminderStates[meal]?.value = isEnabled
+
+                        // ✅ Gọi alarm logic
+                        val notify = notifyList.find { it.id == meal.lowercase() }
+                        if (notify != null) {
+                            if (isEnabled) {
+                                AlarmScheduler.scheduleAlarm(context, notify)
+                            } else {
+                                AlarmScheduler.cancelAlarm(context, notify)
+                            }
+                        }
                     }
                 )
             }
@@ -187,7 +212,7 @@ fun Reminder(
                     .padding(horizontal = 24.dp),
                 color = Color.Gray,
                 lineHeight = 20.sp,
-                fontSize = 12.sp,
+                fontSize = 15.sp,
                 textAlign = TextAlign.Center
             )
 
@@ -196,25 +221,12 @@ fun Reminder(
                 contentDescription = "Reminder Bell",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .height(160.dp)
+                    .padding(top = 10.dp)
+                    .height(200.dp)
                     .align(Alignment.CenterHorizontally)
             )
 
             Spacer(modifier = Modifier.weight(1f))
-
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                    .navigationBarsPadding()
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = orange),
-                shape = RoundedCornerShape(24.dp)
-            ) {
-                Text("Next", color = Color.White, fontSize = 16.sp)
-            }
         }
 
         selectedMeal?.let { meal ->
@@ -278,6 +290,7 @@ fun MealItem(
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        //  Biểu tượng món ăn
         Text(
             text = icon,
             fontSize = 28.sp,
@@ -286,16 +299,19 @@ fun MealItem(
 
         Spacer(modifier = Modifier.width(10.dp))
 
+        // Tên bữa ăn
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = meal, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = meal,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
-
+        // Hiển thị giờ nếu switch bật
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
-                .clickable {
-                    if (reminderEnabled) onTimeClick()
-                }
+                .clickable(enabled = reminderEnabled) { onTimeClick() } // ✅ chỉ clickable khi bật switch
                 .background(orange)
                 .padding(horizontal = 10.dp, vertical = 6.dp)
         ) {
@@ -306,9 +322,9 @@ fun MealItem(
                 fontWeight = FontWeight.SemiBold
             )
         }
-
         Spacer(modifier = Modifier.width(8.dp))
 
+        // 🔁 Switch bật/tắt thông báo
         FlippableSwitch(
             isChecked = reminderEnabled,
             onCheckedChange = onSwitchToggle

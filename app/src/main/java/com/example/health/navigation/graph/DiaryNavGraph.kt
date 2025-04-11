@@ -14,6 +14,7 @@ import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
@@ -44,6 +45,7 @@ fun NavGraphBuilder.diaryNavGraph(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    dietDishViewModel: DietDishViewModel
 
     ) {
     navigation(
@@ -66,6 +68,7 @@ fun NavGraphBuilder.diaryNavGraph(
                eatenDishViewModel = eatenDishViewModel,
                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                customFoodViewModel = customFoodViewModel,
+               dietDishViewModel = dietDishViewModel
            )
         }
         composable(

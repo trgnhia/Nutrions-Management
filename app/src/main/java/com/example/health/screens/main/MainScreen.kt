@@ -133,6 +133,7 @@ fun MainScreen(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel = customFoodViewModel,
+                dietDishViewModel = dietDishViewModel
             )
             workoutNavGraph(
                 navController = bottomNavController,

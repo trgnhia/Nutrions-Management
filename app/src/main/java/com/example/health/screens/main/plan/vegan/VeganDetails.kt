@@ -101,7 +101,6 @@ fun NutritionTagFixedWidth(iconRes: Int, label: String, value: Float, background
     }
 }
 
-
 @Composable
 fun DietDishCard(dish: DietDish) {
     Card(

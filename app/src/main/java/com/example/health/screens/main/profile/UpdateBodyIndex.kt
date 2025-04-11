@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -25,25 +27,40 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.health.R
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
 
 @Composable
-fun UpdateBodyIndex(navController: NavController) {
-    var height by remember { mutableStateOf(170) }
-    var currentWeight by remember { mutableStateOf(88) }
-    var targetWeight by remember { mutableStateOf(80) }
-    var trainingIntensity by remember { mutableStateOf("Lightly") }
+fun UpdateBodyIndex(
+    navController: NavController,
+    heightDefault: Int,
+    currentWeightDefault: Int,
+    targetWeightDefault: Int,
+    trainingLevelDefault: String,
+    age: Int,
+    gender: String,
+    bmi: Float,
+    bmr: Float,
+    tdee: Float,
+    healthMetricViewModel: HealthMetricViewModel
+) {
+    var height by remember { mutableStateOf(heightDefault) }
+    var currentWeight by remember { mutableStateOf(currentWeightDefault) }
+    var targetWeight by remember { mutableStateOf(targetWeightDefault) }
+    var trainingIntensity by remember { mutableStateOf(trainingLevelDefault) }
 
     var isEditingField by remember { mutableStateOf<String?>(null) }
     var tempInput by remember { mutableStateOf("") }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(Color.White),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,32 +81,38 @@ fun UpdateBodyIndex(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        EditableRow("Height", "$height", R.drawable.ic_height, onEditClick = {
+        EditableRow("Height", "$height", R.drawable.ic_height) {
             isEditingField = "Height"
             tempInput = height.toString()
-        })
-        EditableRow("Current Weight", "$currentWeight", R.drawable.ic_current_weight, onEditClick = {
+        }
+        EditableRow("Current Weight", "$currentWeight", R.drawable.ic_current_weight) {
             isEditingField = "Current Weight"
             tempInput = currentWeight.toString()
-        })
-        EditableRow("Target Weight", "$targetWeight", R.drawable.ic_current_weight, onEditClick = {
+        }
+        EditableRow("Target Weight", "$targetWeight", R.drawable.ic_current_weight) {
             isEditingField = "Target Weight"
             tempInput = targetWeight.toString()
-        })
-        EditableRow("Training intensity", trainingIntensity, R.drawable.ic_training, onEditClick = {
+        }
+        EditableRow("Training intensity", trainingIntensity, R.drawable.ic_training) {
             isEditingField = "Training Intensity"
-        })
+        }
 
-        StaticRow("Age", "21", R.drawable.ic_age)
-        StaticRow("Gender", "Male", R.drawable.ic_gender)
-        StaticRow("BMI", "24.3", R.drawable.ic_bmi)
-        StaticRow("BMR", "1757,54", R.drawable.ic_bmr)
-        StaticRow("TDEE", "2345", R.drawable.ic_tdee)
+        StaticRow("Age", age.toString(), R.drawable.ic_age)
+        StaticRow("Gender", gender, R.drawable.ic_gender)
+        StaticRow("BMI", String.format("%.1f", bmi), R.drawable.ic_bmi)
+        StaticRow("BMR", String.format("%.2f", bmr), R.drawable.ic_bmr)
+        StaticRow("TDEE", String.format("%.0f", tdee), R.drawable.ic_tdee)
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { /* Save logic */ },
+            onClick = {
+                healthMetricViewModel.updateCurrentAndTargetWeight(
+                    current = currentWeight.toFloat(),
+                    target = targetWeight.toFloat()
+                )
+                navController.popBackStack()
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6F00)),
             shape = RoundedCornerShape(50),
             modifier = Modifier
@@ -106,7 +129,7 @@ fun UpdateBodyIndex(navController: NavController) {
                     isEditingField = null
                     tempInput = ""
                 },
-                title = { Text("Edit Your ${isEditingField}") },
+                title = { Text("Edit Your $isEditingField") },
                 text = {
                     OutlinedTextField(
                         value = tempInput,
@@ -116,17 +139,15 @@ fun UpdateBodyIndex(navController: NavController) {
                     )
                 },
                 confirmButton = {
-                    TextButton(
-                        onClick = {
-                            when (isEditingField) {
-                                "Height" -> tempInput.toIntOrNull()?.let { height = it }
-                                "Current Weight" -> tempInput.toIntOrNull()?.let { currentWeight = it }
-                                "Target Weight" -> tempInput.toIntOrNull()?.let { targetWeight = it }
-                            }
-                            isEditingField = null
-                            tempInput = ""
+                    TextButton(onClick = {
+                        when (isEditingField) {
+                            "Height" -> tempInput.toIntOrNull()?.let { height = it }
+                            "Current Weight" -> tempInput.toIntOrNull()?.let { currentWeight = it }
+                            "Target Weight" -> tempInput.toIntOrNull()?.let { targetWeight = it }
                         }
-                    ) {
+                        isEditingField = null
+                        tempInput = ""
+                    }) {
                         Text("Save", color = Color(0xFFFF6F00), fontWeight = FontWeight.Bold)
                     }
                 },
@@ -141,9 +162,7 @@ fun UpdateBodyIndex(navController: NavController) {
             )
         } else if (isEditingField == "Training Intensity") {
             AlertDialog(
-                onDismissRequest = {
-                    isEditingField = null
-                },
+                onDismissRequest = { isEditingField = null },
                 title = { Text("Edit Your Training intensity") },
                 text = {
                     Column {
@@ -172,7 +191,7 @@ fun UpdateBodyIndex(navController: NavController) {
                                     Text(text = desc, fontSize = 12.sp)
                                 }
                                 AsyncImage(
-                                    model = "https://example.com/image_$level.png", // TODO: Replace with real image links
+                                    model = "https://example.com/image_${level}.png",
                                     contentDescription = level,
                                     modifier = Modifier
                                         .size(48.dp)

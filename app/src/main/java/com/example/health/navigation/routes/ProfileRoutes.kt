@@ -1,8 +1,8 @@
 package com.example.health.navigation.routes
 
-sealed class ProfileRoutes(val route: String){
-    object Profile: ProfileRoutes("profile")
-    object MacroSetting: ProfileRoutes("macro_setting")
-    object UpdateBodyIndex: ProfileRoutes("update_body_index")
-    object Reminder: ProfileRoutes("reminder")
+object ProfileRoutes {
+    const val ProfileWithWeight = "profile/{weight}"         // Route chính có argument weight
+    const val MacroSetting = "profile/macro"                 // Route đến MacroSetting screen
+    const val UpdateBodyIndex = "profile/update"             // Route đến UpdateBodyIndex screen
+    const val Reminder = "profile/reminder"                  // Route đến Reminder screen
 }

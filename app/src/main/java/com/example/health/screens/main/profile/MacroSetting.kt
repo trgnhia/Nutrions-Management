@@ -1,7 +1,5 @@
 package com.example.health.screens.main.profile
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,7 +19,6 @@ import androidx.navigation.NavController
 import com.example.health.R
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MacroSetting(navController: NavController) {
     var carbs by remember { mutableStateOf(30) }
@@ -102,6 +99,7 @@ fun MacroSetting(navController: NavController) {
 
             Button(
                 onClick = {
+                    // TODO: Lưu macro nếu cần
                     navController.popBackStack()
                 },
                 enabled = total == 100,
@@ -124,12 +122,11 @@ fun MacroPickerColumn(title: String, selected: Int, onSelectedChange: (Int) -> U
     val percentages = (0..100 step 5).toList()
     val listState = rememberLazyListState()
 
-    // Tự động nhận giá trị tại vị trí trung tâm khi scroll
     LaunchedEffect(
         listState.firstVisibleItemIndex,
         listState.firstVisibleItemScrollOffset
     ) {
-        val centerIndex = listState.firstVisibleItemIndex + 2 // vì padding top+bottom là 24dp
+        val centerIndex = listState.firstVisibleItemIndex + 2
         if (centerIndex in percentages.indices) {
             val value = percentages[centerIndex]
             if (value != selected) {
@@ -168,7 +165,6 @@ fun MacroPickerColumn(title: String, selected: Int, onSelectedChange: (Int) -> U
                 }
             }
 
-            // Optional: Highlight vùng giữa
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)

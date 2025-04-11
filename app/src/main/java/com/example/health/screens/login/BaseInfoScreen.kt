@@ -38,25 +38,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class BaseInfoInput(
-    val name: String,
-    val age: Int,
-    val height: Float,
-    val weight: Float,
-    val gender: String,
-    val activityLevel: Int,
-)
-data class MetricInput(
-    val height : Float,
-    val weight: Float,
-    var weightTarget: Float,
-    val bmr: Float,
-    val bmi: Float,
-    val tdee: Float,
-    val calorPerDay: Float,
-    val restDays: Int,
-    val updateAt: Date
-)
 @Composable
 fun BaseInfoScreen(
     authViewModel: AuthViewModel,
@@ -68,7 +49,6 @@ fun BaseInfoScreen(
     val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
     val healthMetric by healthMetricViewModel.lastMetric.collectAsState()
 
-
     val defaultInfo = baseInfo?.let {
         BaseInfoInput(
             name = it.Name,
@@ -79,6 +59,7 @@ fun BaseInfoScreen(
             activityLevel = it.ActivityLevel,
         )
     } ?: BaseInfoInput("", 0, 0f, 0f, "" , 0)
+
     val defaultMetric = healthMetric?.let {
         MetricInput(
             height = it.Height,
@@ -98,7 +79,6 @@ fun BaseInfoScreen(
         default = defaultInfo,
         defaultMetric = defaultMetric,
         onDone = { info, metric ->
-            // Lưu Room
             val base = BaseInfo(
                 Uid = uid,
                 Name = info.name,
@@ -124,7 +104,6 @@ fun BaseInfoScreen(
 
             baseInfoViewModel.insertBaseInfo(base)
             healthMetricViewModel.insertHealthMetric(metricF)
-            // Cập nhật trạng thái & điều hướng
             authViewModel.updateStatus(uid, "completed")
             navController.navigate("health_metric") {
                 popUpTo("base_info") { inclusive = true }
@@ -144,22 +123,11 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var name by remember { mutableStateOf(default.name) }
-    var age by remember {
-        mutableIntStateOf(if (default.age in 10..100) default.age else 20)
-    }
-    var height by remember {
-        mutableFloatStateOf(if (default.height in 100f..230f) default.height else 160f)
-    }
-    var weight by remember {
-        mutableFloatStateOf(if (default.weight in 40f..150f) default.weight else 60f)
-    }
-
-    var gender by remember { mutableStateOf(
-        if(default.gender == "") "Male" else default.gender
-    ) }
-    var activityLevel by remember { mutableIntStateOf(
-        if(default.activityLevel in 1..5) default.activityLevel else 3
-    ) }
+    var age by remember { mutableIntStateOf(if (default.age in 10..100) default.age else 20) }
+    var height by remember { mutableFloatStateOf(if (default.height in 100f..230f) default.height else 160f) }
+    var weight by remember { mutableFloatStateOf(if (default.weight in 40f..150f) default.weight else 60f) }
+    var gender by remember { mutableStateOf(if(default.gender == "") "Male" else default.gender) }
+    var activityLevel by remember { mutableIntStateOf(if(default.activityLevel in 1..5) default.activityLevel else 3) }
 
     var TargetWeight by remember { mutableFloatStateOf(0f) }
 
@@ -169,7 +137,6 @@ fun OnboardingScreen(
         else
             HealthMetricUtil.calculateWeightTarget(height)
     }
-
 
     val BMR by remember(weight, height, age, gender) {
         derivedStateOf { HealthMetricUtil.calculateBMR(weight, height, age, gender) }
@@ -194,40 +161,34 @@ fun OnboardingScreen(
     val RestDay by remember(diff, calorPerDay) {
         derivedStateOf { HealthMetricUtil.restDay(diff, calorPerDay) }
     }
-    val now = Date()
-    val UpdateAt by remember {
-        mutableStateOf(now) // chỉ cần lấy 1 lần
-    }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // Nền là ảnh
+    val now = Date()
+    val UpdateAt by remember { mutableStateOf(now) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.whitebackground), // Thay bằng tên ảnh của bạn
+            painter = painterResource(id = R.drawable.whitebackground),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
-            )
+        )
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                ,
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             StepProgressBar(currentStep = pagerState.currentPage, totalSteps = 8)
 
-            HorizontalPager(state = pagerState, modifier = Modifier.weight(1f) , key = {it} ) { page ->
+            HorizontalPager(state = pagerState, modifier = Modifier.weight(1f), key = { it }) { page ->
                 when(page){
                     0 -> NameItem(name, onValueChange = { name = it })
                     1 -> AgeItem(age, onValueChange = { age = it })
                     2 -> HeightItem(height, onValueChange = { height = it })
-                    3-> WeightItem(weight, onValueChange = { weight = it })
+                    3 -> WeightItem(weight, onValueChange = { weight = it })
                     4 -> GenderItem(gender, onValueChange = { gender = it })
                     5 -> ActivityLevelItem(activityLevel, onValueChange = { activityLevel = it })
-                    6 -> BodyIndexesItem(age , height , weight , gender , activityLevel)
-                    7 -> ResultsItem(weight, TargetWeight, RestDay , onValueChange = {TargetWeight = it})
+                    6 -> BodyIndexesItem(age, height, weight, gender, activityLevel)
+                    7 -> ResultsItem(weight, TargetWeight, RestDay, onValueChange = { TargetWeight = it })
                 }
             }
 
@@ -249,24 +210,20 @@ fun OnboardingScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Button(onClick = {
-                    if (pagerState.currentPage == 7) {
-                        onDone(
-                            BaseInfoInput(
-                                name, age, height, weight, gender, activityLevel
-                            ),
-                            MetricInput(
-                                height,weight, TargetWeight , BMR ,BMI , TDEE ,calorPerDay , RestDay , UpdateAt
+                Button(
+                    onClick = {
+                        if (pagerState.currentPage == 7) {
+                            onDone(
+                                BaseInfoInput(name, age, height, weight, gender, activityLevel),
+                                MetricInput(height, weight, TargetWeight, BMR, BMI, TDEE, calorPerDay, RestDay, UpdateAt)
                             )
-
-                        )
-                    } else {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        } else {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
                         }
-                    }
-                },
-                modifier = Modifier.navigationBarsPadding()
+                    },
+                    modifier = Modifier.navigationBarsPadding()
                 ) {
                     Text(if (pagerState.currentPage == 7) "Finish" else "Next")
                 }
@@ -304,3 +261,23 @@ fun StepProgressBar(currentStep: Int, totalSteps: Int = 7) {
     }
 }
 
+data class BaseInfoInput(
+    val name: String,
+    val age: Int,
+    val height: Float,
+    val weight: Float,
+    val gender: String,
+    val activityLevel: Int
+)
+
+data class MetricInput(
+    val height: Float,
+    val weight: Float,
+    var weightTarget: Float,
+    val bmr: Float,
+    val bmi: Float,
+    val tdee: Float,
+    val calorPerDay: Float,
+    val restDays: Int,
+    val updateAt: Date
+)

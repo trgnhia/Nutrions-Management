@@ -38,10 +38,19 @@ class HealthMetricViewModel(
     fun fetchAllFromRemote(uid: String) = viewModelScope.launch {
         repository.fetchAllFromRemote(uid)
     }
+
     fun syncIfNeeded(uid: String) = viewModelScope.launch {
         if (allMetrics.value.isEmpty()) {
             fetchAllFromRemote(uid)
         }
     }
 
+    fun updateCurrentAndTargetWeight(current: Float, target: Float) = viewModelScope.launch {
+        val metric = lastMetric.value ?: return@launch
+        val updated = metric.copy(
+            Weight = current,
+            WeightTarget = target
+        )
+        repository.updateHealthMetric(updated)
+    }
 }

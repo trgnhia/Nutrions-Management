@@ -29,6 +29,7 @@ import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DietDishViewModelFactory
@@ -62,8 +63,8 @@ fun MainScreen(
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
-    //notifyViewModel : NotifyViewModel,
-    //dietDishViewModel : DietDishViewModel
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 ) {
     val bottomNavController = rememberNavController()
     val bottomItems = listOf(
@@ -165,6 +166,8 @@ fun MainScreen(
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
                 macroViewModel = macroViewModel,
+                notifyViewModel = notifyViewModel,
+                accountViewModel = accountViewModel
             )
         }
     }

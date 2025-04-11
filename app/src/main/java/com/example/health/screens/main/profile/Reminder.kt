@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.AccountViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
+import com.example.health.data.utils.DateUtils
 import network.chaintech.kmp_date_time_picker.ui.timepicker.WheelTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import kotlinx.datetime.LocalTime
@@ -70,20 +73,43 @@ fun FlippableSwitch(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Reminder(navController: NavController) {
+fun Reminder(navController: NavController,notifyViewModel: NotifyViewModel,
+             accountViewModel: AccountViewModel
+) {
     val orange = Color(0xFFFF8000)
     val meals = listOf("Breakfast", "Lunch", "Dinner", "Snack")
     val icons = listOf("🥞", "🍝", "🍲", "🍪")
-
+    val uid = accountViewModel.getCurrentUid()
+    val notifyList by notifyViewModel.getAllByUid(uid).collectAsState()
     val reminderStates: Map<String, MutableState<Boolean>> = remember {
         meals.associateWith { mutableStateOf(true) }
     }
 
-    val timeStates: Map<String, MutableState<LocalTime>> = remember {
+//    val timeStates = remember(notifyList) {
+//        meals.associateWith { meal ->
+//            val notify = notifyList.find { it.id == meal.lowercase() }
+//            mutableStateOf(
+//                notify?.NotifyTime?.let { DateUtils.toKxLocalTime(it) }
+//                    ?: kotlinx.datetime.LocalTime(7 + meals.indexOf(meal), 15)
+//            )
+//        }
+//    }
+
+    val timeStates = remember {
         meals.associateWith {
-            mutableStateOf(LocalTime(7 + meals.indexOf(it) * 3, 15))
+            mutableStateOf<kotlinx.datetime.LocalTime?>(null)
+        }.toMutableMap()
+    }
+
+    LaunchedEffect(notifyList) {
+        notifyList.forEach { notify ->
+            val meal = meals.find { it.lowercase() == notify.id } ?: return@forEach
+            val localTime = DateUtils.toKxLocalTime(notify.NotifyTime)
+            timeStates[meal]?.value = localTime
         }
     }
+
+
 
     var selectedMeal by remember { mutableStateOf<String?>(null) }
 
@@ -114,7 +140,9 @@ fun Reminder(navController: NavController) {
                 MealItem(
                     icon = icons[index],
                     meal = meal,
-                    time = timeStates[meal]!!.value,
+                    //time = timeStates[meal]!!.value,
+                    time = timeStates[meal]?.value ?: LocalTime(7 + meals.indexOf(meal), 15),
+
                     reminderEnabled = reminderStates[meal]!!.value,
                     onTimeClick = {
                         selectedMeal = meal
@@ -168,7 +196,8 @@ fun Reminder(navController: NavController) {
             WheelTimePickerView(
                 showTimePicker = true,
                 height = 200.dp,
-                startTime = timeStates[meal]!!.value,
+                startTime = timeStates[meal]?.value ?: LocalTime(7 + meals.indexOf(meal), 15),
+               // startTime = timeStates[meal]!!.value,
                 minTime = LocalTime.MIN(),
                 maxTime = LocalTime.MAX(),
                 dateTimePickerView = DateTimePickerView.BOTTOM_SHEET_VIEW,
@@ -188,11 +217,17 @@ fun Reminder(navController: NavController) {
                 rowCount = 3,
                 onDoneClick = { newTime ->
                     timeStates[meal]?.value = newTime
-                    selectedMeal = null
-                },
-                onDismiss = {
+
+                    // GỌI HÀM cập nhật giờ trong database
+                    notifyViewModel.updateNotifyTime(
+                        uid = accountViewModel.getCurrentUid(), // ✅ lấy từ AccountViewModel
+                        mealId = meal.lowercase(),
+                        newTime = DateUtils.toTodayDate(newTime.hour, newTime.minute)
+                    )
+
                     selectedMeal = null
                 }
+
             )
         }
     }

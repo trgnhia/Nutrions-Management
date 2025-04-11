@@ -37,24 +37,60 @@ object DateUtils {
     /**
      * Convert giờ + phút (LocalTime) về Date (set ngày hôm nay, giờ/phút cố định)
      */
-    fun toTodayDate(hour: Int, minute: Int): Date {
+//    fun toTodayDate(hour: Int, minute: Int): Date {
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val today = java.time.LocalDate.now()
+//            val localTime = java.time.LocalTime.of(hour, minute)
+//            val dateTime = java.time.LocalDateTime.of(today, localTime)
+//            Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant())
+//
+//        } else {
+//            // Dùng Calendar thay thế
+//            val calendar = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, hour)
+//                set(Calendar.MINUTE, minute)
+//                set(Calendar.SECOND, 0)
+//                set(Calendar.MILLISECOND, 0)
+//            }
+//            calendar.time
+//        }
+//    }
+
+//    fun toTodayDate(hour: Int, minute: Int): java.sql.Date {
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val today = java.time.LocalDate.now()
+//            val localTime = java.time.LocalTime.of(hour, minute)
+//            val dateTime = java.time.LocalDateTime.of(today, localTime)
+//            val instant = dateTime.atZone(ZoneId.systemDefault()).toInstant()
+//            java.sql.Date(instant.toEpochMilli()) // ✅ trả về java.sql.Date
+//        } else {
+//            val calendar = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, hour)
+//                set(Calendar.MINUTE, minute)
+//                set(Calendar.SECOND, 0)
+//                set(Calendar.MILLISECOND, 0)
+//            }
+//            java.sql.Date(calendar.timeInMillis) // ✅ trả về java.sql.Date
+//        }
+//    }
+
+    fun toTodayDate(hour: Int, minute: Int): java.sql.Date {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val today = java.time.LocalDate.now()
             val localTime = java.time.LocalTime.of(hour, minute)
             val dateTime = java.time.LocalDateTime.of(today, localTime)
-            Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant())
+            val instant = dateTime.atZone(ZoneId.systemDefault()).toInstant()
+            java.sql.Date(instant.toEpochMilli())
         } else {
-            // Dùng Calendar thay thế
             val calendar = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, hour)
                 set(Calendar.MINUTE, minute)
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)
             }
-            calendar.time
+            java.sql.Date(calendar.timeInMillis)
         }
     }
-
 
     /**
      * Convert từ Date về LocalTime (để dùng hiển thị trong UI)
@@ -65,4 +101,13 @@ object DateUtils {
             .atZone(ZoneId.systemDefault())
             .toLocalTime()
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun toKxLocalTime(date: java.util.Date): kotlinx.datetime.LocalTime {
+        val instant = date.toInstant()
+        val zone = ZoneId.systemDefault()
+        val localTime = instant.atZone(zone).toLocalTime()
+        return kotlinx.datetime.LocalTime(localTime.hour, localTime.minute)
+    }
+
 }

@@ -39,8 +39,8 @@ fun HomeScreen(
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
-    //notifyViewModel : NotifyViewModel,
-    //dietDishViewModel : DietDishViewModel
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 ) {
     val account = accountViewModel.account.collectAsState().value
     val rootNavController = rememberNavController()
@@ -145,7 +145,7 @@ fun HomeScreen(
         burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
         customFoodViewModel  = customFoodViewModel,
         customExerciseViewModel = customExerciseViewModel,
-        //notifyViewModel = notifyViewModel,
-        //dietDishViewModel = dietDishViewModel
+        notifyViewModel = notifyViewModel,
+        dietDishViewModel = dietDishViewModel
     )
 }

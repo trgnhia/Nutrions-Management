@@ -17,13 +17,14 @@ fun NavGraphBuilder.workoutNavGraph(
     defaultExerciseViewModel : DefaultExerciseViewModel,
     exerciseLogViewModel : ExerciseLogViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customExerciseViewModel : DefaultExerciseViewModel,
 ) {
     navigation(
         route = GraphRoute.Workout.route,
         startDestination = WorkoutRoutes.Workout.route
     ){
         composable(WorkoutRoutes.Workout.route){
-            Workout(navController)
+            Workout(navController , defaultExerciseViewModel , exerciseLogViewModel , burnOutCaloPerDayViewModel , customExerciseViewModel)
         }
         composable(WorkoutRoutes.Sync.route){
             Sync(navController)

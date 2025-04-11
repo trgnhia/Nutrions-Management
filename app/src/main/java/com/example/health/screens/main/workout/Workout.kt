@@ -4,8 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -22,20 +25,24 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
+import com.example.health.data.local.entities.DefaultExercise
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
 import com.example.health.data.local.viewmodel.CustomExerciseViewModel
-import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.navigation.routes.WorkoutRoutes
 
 @Composable
 fun Workout(
     navController: NavController,
-    defaultExerciseViewModel : DefaultExerciseViewModel,
-    exerciseLogViewModel : ExerciseLogViewModel,
-    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
-    customExerciseViewModel : CustomExerciseViewModel
+    defaultExerciseViewModel: DefaultExerciseViewModel,
+    exerciseLogViewModel: ExerciseLogViewModel,
+    burnOutCaloPerDayViewModel: BurnOutCaloPerDayViewModel,
+    customExerciseViewModel: CustomExerciseViewModel
 ) {
+    // Observe the exercises from the ViewModel
+    val exercises by defaultExerciseViewModel.defaultExercises.collectAsState(initial = emptyList())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,24 +50,24 @@ fun Workout(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        WorkoutScreenContent(navController)
+        WorkoutScreenContent(
+            navController = navController,
+            exercises = exercises,
+            showPopup = remember { mutableStateOf(false) },
+            selectedExercise = remember { mutableStateOf<DefaultExercise?>(null) }
+        )
     }
 }
 
 @Composable
-fun WorkoutScreenContent(navController: NavController) {
-    var showPopup by remember { mutableStateOf(false) }
-    var selectedExercise by remember { mutableStateOf<Exercise?>(null) }
-
-    val exercises = listOf(
-        Exercise("Abdominal Exercises", R.drawable.abs_exercise, "Nằm ngửa, co gối 90 độ, hai tay đặt sau đầu hoặc bắt chéo trước ngực...", "Belly"),
-        Exercise("Push-up Exercises", R.drawable.pushup_exercise, "Chống tay xuống sàn, hạ thấp cơ thể, sau đó đẩy lên...", "Arms & Chest"),
-        Exercise("Squad Exercises", R.drawable.squat_exercise, "Đứng thẳng, hạ thấp cơ thể như ngồi ghế...", "Legs"),
-        Exercise("Plank Exercises", R.drawable.plank_exercise, "Chống khuảy tay xuống sàn, giữ thẳng người...", "Core")
-    )
-
+fun WorkoutScreenContent(
+    navController: NavController,
+    exercises: List<DefaultExercise>,
+    showPopup: MutableState<Boolean>,
+    selectedExercise: MutableState<DefaultExercise?>
+) {
     Column(modifier = Modifier.fillMaxSize()) {
-        // Header
+        // Header and Search Bar
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,7 +107,7 @@ fun WorkoutScreenContent(navController: NavController) {
                 ImageIconWithLabelHorizontal(
                     resId = R.drawable.add_calories,
                     label = "Add Calories",
-                    onClick = { showPopup = true }
+                    onClick = { showPopup.value = true }
                 )
             }
         }
@@ -125,27 +132,41 @@ fun WorkoutScreenContent(navController: NavController) {
             )
         }
 
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            exercises.forEach { exercise ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = exercises, key = { it.Id }) { exercise ->
                 ExerciseItem(exercise = exercise, onClick = {
-                    selectedExercise = exercise
+                    selectedExercise.value = exercise
                 })
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(80.dp)) // tránh bị FAB che
             }
         }
 
-        if (showPopup) {
+
+        if (showPopup.value) {
             AddCaloriesDialog(
-                onDismiss = { showPopup = false },
-                onSkip = { showPopup = false },
-                onDone = { title, kcal, minutes -> showPopup = false }
+                onDismiss = { showPopup.value = false },
+                onSkip = { showPopup.value = false },
+                onDone = { title, kcal, minutes, selectedExercise ->
+                    // Handle the logic after the user clicks Done
+                    showPopup.value = false
+                },
+                exercises = exercises  // Pass the list of exercises to the dialog
             )
         }
 
-        selectedExercise?.let {
+        selectedExercise.value?.let {
             ExerciseDetailDialog(
                 exercise = it,
-                onDismiss = { selectedExercise = null },
-                onAdd = { selectedExercise = null }
+                onDismiss = { selectedExercise.value = null },
+                onAdd = { selectedExercise.value = null }
             )
         }
     }
@@ -168,7 +189,7 @@ fun ImageIconWithLabelHorizontal(resId: Int, label: String, onClick: () -> Unit)
 }
 
 @Composable
-fun ExerciseItem(exercise: Exercise, onClick: () -> Unit) {
+fun ExerciseItem(exercise: DefaultExercise, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -180,17 +201,17 @@ fun ExerciseItem(exercise: Exercise, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = exercise.imageRes),
-            contentDescription = exercise.title,
+            painter = painterResource(id = R.drawable.abs_exercise),  // Placeholder image icon
+            contentDescription = exercise.Name,
             modifier = Modifier.size(60.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(exercise.title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Text(exercise.Name, fontSize = 16.sp, fontWeight = FontWeight.Medium)
     }
 }
 
 @Composable
-fun ExerciseDetailDialog(exercise: Exercise, onDismiss: () -> Unit, onAdd: (Int) -> Unit) {
+fun ExerciseDetailDialog(exercise: DefaultExercise, onDismiss: () -> Unit, onAdd: (Int) -> Unit) {
     var time by remember { mutableStateOf(30) }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -206,7 +227,7 @@ fun ExerciseDetailDialog(exercise: Exercise, onDismiss: () -> Unit, onAdd: (Int)
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(exercise.title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(exercise.Name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
@@ -219,7 +240,7 @@ fun ExerciseDetailDialog(exercise: Exercise, onDismiss: () -> Unit, onAdd: (Int)
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Image(
-                    painter = painterResource(id = exercise.imageRes),
+                    painter = painterResource(id = R.drawable.abs_exercise), // Placeholder icon
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -251,12 +272,12 @@ fun ExerciseDetailDialog(exercise: Exercise, onDismiss: () -> Unit, onAdd: (Int)
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text("INSTRUCT", fontWeight = FontWeight.Bold, color = Color(0xFFFF6600))
-                Text(exercise.instruction, fontSize = 14.sp, modifier = Modifier.padding(top = 4.dp))
+                Text(exercise.UnitType, fontSize = 14.sp, modifier = Modifier.padding(top = 4.dp))
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text("FOCUS AREA", fontWeight = FontWeight.Bold, color = Color(0xFFFF6600))
-                Text("\uD83D\uDC49 ${exercise.focusArea}", fontSize = 14.sp, modifier = Modifier.padding(top = 4.dp))
+                Text(exercise.Unit.toString(), fontSize = 14.sp, modifier = Modifier.padding(top = 4.dp))
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -272,15 +293,19 @@ fun ExerciseDetailDialog(exercise: Exercise, onDismiss: () -> Unit, onAdd: (Int)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCaloriesDialog(
     onDismiss: () -> Unit,
     onSkip: () -> Unit,
-    onDone: (title: String, kcal: String, minutes: String) -> Unit
+    onDone: (title: String, kcal: String, minutes: String, selectedExercise: DefaultExercise?) -> Unit,
+    exercises: List<DefaultExercise>  // List of exercises to choose from
 ) {
     var title by remember { mutableStateOf("") }
     var kcal by remember { mutableStateOf("") }
     var minutes by remember { mutableStateOf("") }
+    var selectedExercise by remember { mutableStateOf<DefaultExercise?>(null) }
+    var expanded by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(
@@ -290,65 +315,79 @@ fun AddCaloriesDialog(
                 .padding(20.dp)
         ) {
             Column {
+                // Header section with close button
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Add Calories", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text(
+                        "Add Calories",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",
                         tint = Color.White,
-                        modifier = Modifier.size(24.dp).clickable { onDismiss() }
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onDismiss() }
                     )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Title field with rounded corners
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
                     placeholder = { Text("Title") },
                     singleLine = true,
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // kcal field
                 OutlinedTextField(
                     value = kcal,
                     onValueChange = { kcal = it },
-                    placeholder = { Text("kcal(Obligatory)") },
+                    placeholder = { Text("kcal (Obligatory)") },
                     singleLine = true,
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Minutes field
                 OutlinedTextField(
                     value = minutes,
                     onValueChange = { minutes = it },
                     placeholder = { Text("Minutes") },
                     singleLine = true,
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
+
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TextButton(onClick = onSkip) { Text("Skip", color = Color.Black) }
-                    TextButton(onClick = { onDone(title, kcal, minutes) }) { Text("Done", color = Color.Red) }
+                    TextButton(onClick = onSkip) {
+                        Text("Cancel", color = Color.Black)
+                    }
+                    TextButton(onClick = {
+                        onDone(title, kcal, minutes, selectedExercise)
+                    }) {
+                        Text("Done", color = Color.Red)
+                    }
                 }
             }
         }
     }
 }
-
-// Data class
-data class Exercise(
-    val title: String,
-    val imageRes: Int,
-    val instruction: String,
-    val focusArea: String
-)

@@ -177,7 +177,6 @@ fun DiaryAdd(
                         totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
                     )
                 }
-
 // Snack
                 if (uid != null) {
                     DefaultFoodRow(

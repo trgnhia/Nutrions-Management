@@ -25,14 +25,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.health.R
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
 
 @Composable
-fun UpdateBodyIndex(navController: NavController) {
+fun UpdateBodyIndex(navController: NavController, baseInfoViewModel: BaseInfoViewModel, healthMetricViewModel: HealthMetricViewModel) {
+    var baseInfo = baseInfoViewModel.baseInfo.collectAsState()
+    var metric = healthMetricViewModel.lastMetric.collectAsState()
+    // Goi cac bien can truyen vao thi goi o day : copy chat 2 cai entities baseInfo voi healthmetric
+
     var height by remember { mutableStateOf(170) }
     var currentWeight by remember { mutableStateOf(88) }
     var targetWeight by remember { mutableStateOf(80) }
     var trainingIntensity by remember { mutableStateOf("Lightly") }
-
     var isEditingField by remember { mutableStateOf<String?>(null) }
     var tempInput by remember { mutableStateOf("") }
 

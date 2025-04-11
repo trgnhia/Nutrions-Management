@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,10 +18,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.AccountViewModel
+import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.navigation.routes.ProfileRoutes
 
 @Composable
-fun Profile(navController: NavController) {
+fun Profile(
+    navController: NavController,
+    accountViewModel: AccountViewModel,
+    baseInfoViewModel: BaseInfoViewModel,
+    macroViewModel: MacroViewModel,
+    healthMetricViewModel: HealthMetricViewModel
+    ) {
+    val baseInfo = baseInfoViewModel.baseInfo.collectAsState()
+    val account = accountViewModel.account.collectAsState()
+    val macro = macroViewModel.macro.collectAsState()
+    val metric = healthMetricViewModel.lastMetric.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,31 +51,32 @@ fun Profile(navController: NavController) {
             contentDescription = "Profile Picture",
             modifier = Modifier.size(120.dp).clip(RoundedCornerShape(50))
         )
-        Text(
-            text = "Hoc Beo Dang Giam Can",
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier.padding(top = 8.dp)
-        )
-        Text(
-            text = "nthoc09102004@gmail.com",
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
+        baseInfo.value?.let {
+            Text(
+                text = it.Name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+        account.value?.let {
+            Text(
+                text = it.Email,
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         ProfileOption(
-        text = "Current Weight: 80kg",
+        text = "Current Weight: ${metric.value?.Weight}kg",
         iconId = R.drawable.ic_weight
         )
         ProfileOption(
-            text = "Target: 75kg",
+            text = "Target: ${metric.value?.WeightTarget}{}kg",
             iconId = R.drawable.ic_target
         )
-
-
-
 
         Spacer(modifier = Modifier.height(16.dp))
 

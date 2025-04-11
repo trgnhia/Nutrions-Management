@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
@@ -19,19 +20,26 @@ fun NavGraphBuilder.profileNavGraph(
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
     macroViewModel : MacroViewModel,
+    accountViewModel: AccountViewModel
     ) {
     navigation(
         route = GraphRoute.Profile.route,
         startDestination = ProfileRoutes.Profile.route
     ){
         composable(ProfileRoutes.Profile.route){
-            Profile(navController)
+            Profile(
+                navController,
+                accountViewModel,
+                baseInfoViewModel,
+                macroViewModel,
+                healthMetricViewModel
+            )
         }
         composable(ProfileRoutes.MacroSetting.route){
-            MacroSetting(navController)
+            MacroSetting(navController, macroViewModel)
         }
         composable(ProfileRoutes.UpdateBodyIndex.route){
-            UpdateBodyIndex(navController)
+            UpdateBodyIndex(navController, baseInfoViewModel,healthMetricViewModel)
         }
         composable(ProfileRoutes.Reminder.route){
             Reminder(navController)

@@ -19,15 +19,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.MacroViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MacroSetting(navController: NavController) {
+fun MacroSetting(navController: NavController , macroViewModel: MacroViewModel) {
+    var macro = macroViewModel.macro.collectAsState()
+    // thay cac bien carb , ... bang macro.carb .... goi ham update o day
     var carbs by remember { mutableStateOf(30) }
     var protein by remember { mutableStateOf(30) }
     var fat by remember { mutableStateOf(30) }
-
     val total = carbs + protein + fat
 
     Scaffold(

@@ -2,6 +2,7 @@ package com.example.health.screens.main.diary.compose
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,7 @@ fun FoodCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .height(200.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),

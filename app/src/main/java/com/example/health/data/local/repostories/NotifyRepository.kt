@@ -67,6 +67,7 @@ package com.example.health.data.local.repostories
 import android.util.Log
 import com.example.health.data.local.daos.NotifyDao
 import com.example.health.data.local.daos.PendingActionDao
+import com.example.health.data.local.entities.DietDish
 import com.example.health.data.local.entities.Notify
 import com.example.health.data.local.entities.PendingAction
 import com.example.health.data.remote.sync.PendingActionTypes
@@ -106,6 +107,7 @@ class NotifyRepository(
     suspend fun insertAll(notifies: List<Notify>) {
         notifies.forEach { insert(it) }
     }
+
 
     suspend fun update(notify: Notify) {
         val sdf = SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault())

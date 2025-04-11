@@ -20,6 +20,9 @@ class DietDishRepository(
         return dao.getByMealPlanId(mealPlanId)
     }
 
+    suspend fun getById(id: String): DietDish? {
+        return dao.getById(id)
+    }
     suspend fun fetchRemoteAndInsertEach(
         onEachFetched: suspend (DietDish) -> Unit
     ) {

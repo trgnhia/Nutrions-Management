@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
 import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
@@ -19,13 +20,21 @@ fun NavGraphBuilder.workoutNavGraph(
     exerciseLogViewModel : ExerciseLogViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
+    accountViewModel: AccountViewModel
 ) {
     navigation(
         route = GraphRoute.Workout.route,
         startDestination = WorkoutRoutes.Workout.route
     ){
         composable(WorkoutRoutes.Workout.route){
-            Workout(navController , defaultExerciseViewModel , exerciseLogViewModel , burnOutCaloPerDayViewModel , customExerciseViewModel)
+            Workout(
+                navController = navController,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+                accountViewModel = accountViewModel
+            )
         }
         composable(WorkoutRoutes.Sync.route){
             Sync(navController)

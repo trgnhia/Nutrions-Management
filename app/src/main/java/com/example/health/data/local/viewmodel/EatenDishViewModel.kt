@@ -18,15 +18,15 @@ class EatenDishViewModel(
     fun getByDate(date: Date): Flow<List<EatenDish>> =
         repository.getByDate(date)
 
-    fun insert(dish: EatenDish) = viewModelScope.launch {
-        repository.insert(dish)
+    fun insert(dish: EatenDish,uid: String) = viewModelScope.launch {
+        repository.insert(dish,uid)
     }
 
-    fun update(dish: EatenDish) = viewModelScope.launch {
-        repository.update(dish)
+    fun update(dish: EatenDish,uid: String) = viewModelScope.launch {
+        repository.update(dish,uid)
     }
 
-    fun delete(dish: EatenDish) = viewModelScope.launch {
-        repository.delete(dish)
+    fun delete(dish: EatenDish,uid: String) = viewModelScope.launch {
+        repository.delete(dish,uid)
     }
 }

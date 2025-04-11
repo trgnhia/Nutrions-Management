@@ -1,6 +1,5 @@
 package com.example.health
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,13 +17,11 @@ import com.example.health.data.local.repostories.CustomFoodRepository
 import com.example.health.data.local.repostories.DefaultDietMealInPlanRepository
 import com.example.health.data.local.repostories.DefaultExerciseRepository
 import com.example.health.data.local.repostories.DefaultFoodRepository
-import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.repostories.EatenDishRepository
 import com.example.health.data.local.repostories.EatenMealRepository
 import com.example.health.data.local.repostories.ExerciseLogRepository
 import com.example.health.data.local.repostories.HealthMetricRepository
 import com.example.health.data.local.repostories.MacroRepository
-import com.example.health.data.local.repostories.NotifyRepository
 import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.remote.auth.AuthViewModel
@@ -35,13 +32,11 @@ import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
-import com.example.health.data.local.viewmodel.DietDishViewModel
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
-import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.local.viewmodelfactory.AccountViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModelFactory
@@ -138,4 +133,17 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1001) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d("GoogleFit", "User granted Google Fit permission")
+            } else {
+                Log.e("GoogleFit", "User denied Google Fit permission")
+            }
+        }
+    }
 }
+

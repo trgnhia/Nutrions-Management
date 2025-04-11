@@ -141,6 +141,7 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customExerciseViewModel = customExerciseViewModel,
+                accountViewModel = accountViewModel
 
             )
 

@@ -1,4 +1,3 @@
-
 package com.example.health.navigation
 
 import android.os.Build
@@ -87,9 +86,8 @@ fun AppNavigation(
                     fetchAllDefaultData(
                         context = context,
                         defaultFoodViewModel = defaultFoodViewModel,
-                        defaultExerciseViewModel = defaultExerciseViewModel,
-
-                        )
+                        defaultExerciseViewModel = defaultExerciseViewModel
+                    )
                 }
             )
         }
@@ -112,8 +110,8 @@ fun AppNavigation(
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel  = customFoodViewModel,
                 customExerciseViewModel = customExerciseViewModel,
-                dietDishViewModel = dietDishViewModel,
-                notifyViewModel = notifyViewModel
+                notifyViewModel = notifyViewModel,
+                dietDishViewModel = dietDishViewModel
             )
         }
     }

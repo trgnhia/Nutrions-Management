@@ -2,6 +2,7 @@ package com.example.health.screens.main.diary
 
 import DietDishCard
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -117,33 +118,24 @@ fun DiaryMainScreen(
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp),
+            modifier = Modifier.fillMaxSize().padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (dietCode == 0) {
-                // Trường hợp không theo chế độ ăn → món ăn do người dùng thêm
-                items(foodList.value.size + 1) { index ->
-                    if (index < foodList.value.size) {
-                        FoodCard(index + 1, foodList.value[index], onClick = {
-                            navController.navigate(DiaryRoutes.Info.route)
-                        })
-                    } else {
-                        AddFoodCard(onClick = {
-                            navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
-                        })
-                    }
-                }
-            } else {
-                // Trường hợp đang theo chế độ ăn → chỉ hiển thị các món ăn từ kế hoạch
-                items(mealDishesFromPlan.size) { index ->
-                    val dish = mealDishesFromPlan[index]
-                    DietDishCardInDiary(dish = dish)
+            items(foodList.value.size + 1) { index ->
+                if (index < foodList.value.size) {
+                    FoodCard(index + 1, foodList.value[index], onClick = {
+                        navController.navigate(DiaryRoutes.Info.route)
+                    })
+                } else {
+                    AddFoodCard(onClick = {
+                        navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
+                    })
                 }
             }
+
         }
+
     }
 }
 

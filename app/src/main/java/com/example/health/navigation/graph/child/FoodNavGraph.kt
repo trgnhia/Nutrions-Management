@@ -1,5 +1,7 @@
 package com.example.health.navigation.graph.child
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -21,6 +23,7 @@ import com.example.health.screens.main.diary.compose.ViewMore
 import com.example.health.screens.main.plan.Food
 import com.example.health.screens.main.plan.Plan
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.foodNavGraph(
     navController: NavController,
     defaultFoodViewModel: DefaultFoodViewModel,
@@ -61,14 +64,17 @@ fun NavGraphBuilder.foodNavGraph(
         }
     }
     composable(
-        route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}",
+        route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}&mealType={mealType}",
         arguments = listOf(
             navArgument("parent") { nullable = true; defaultValue = null },
-            navArgument("foodType") { defaultValue = 1 } // hoặc required = true
+            navArgument("foodType") { defaultValue = 1 },
+            navArgument("mealType") { defaultValue = 1 } // truyền kèm mealType
         )
     ) { backStackEntry ->
         val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
         val foodType = backStackEntry.arguments?.getInt("foodType") ?: 1
+        val mealType = backStackEntry.arguments?.getInt("mealType") ?: 1
+
         ViewMore(
             navController = navController,
             foodType = foodType,
@@ -78,7 +84,8 @@ fun NavGraphBuilder.foodNavGraph(
             baseInfoViewModel = baseInfoViewModel,
             totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
             accountViewModel = accountViewModel,
-            parent = parent
+            parent = parent,
+            mealType = mealType
         )
     }
 }

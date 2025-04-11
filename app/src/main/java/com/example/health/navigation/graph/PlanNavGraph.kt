@@ -46,7 +46,10 @@ fun NavGraphBuilder.planNavGraph(
         composable(PlanRoutes.Plan.route){
             Plan(navController)
         }
-        dietNavGraph(navController)
+        dietNavGraph(
+            navController = navController,
+            baseInfoViewModel = baseInfoViewModel,
+        )
 
         foodNavGraph(
             navController = navController,

@@ -53,7 +53,8 @@ object MacroCalculator {
     }
 }
 
-/* CÁCH SỬ DỤNG hehe
+
+/* CÁCH SỬ DUNG hehe
 val result = MacroCalculator.calculateMacros(
     tdee = 2500,
     carbPercent = 40f,
@@ -64,4 +65,5 @@ val result = MacroCalculator.calculateMacros(
 println("Carbs: ${result.carbInGrams}g")
 println("Protein: ${result.proteinInGrams}g")
 println("Fat: ${result.fatInGrams}g")
-*/
+
+ */

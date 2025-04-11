@@ -1,5 +1,6 @@
 package com.example.health.screens.main.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,10 +36,23 @@ fun UpdateBodyIndex(navController: NavController, baseInfoViewModel: BaseInfoVie
     var metric = healthMetricViewModel.lastMetric.collectAsState()
     // Goi cac bien can truyen vao thi goi o day : copy chat 2 cai entities baseInfo voi healthmetric
 
-    var height by remember { mutableStateOf(170) }
-    var currentWeight by remember { mutableStateOf(88) }
-    var targetWeight by remember { mutableStateOf(80) }
-    var trainingIntensity by remember { mutableStateOf("Lightly") }
+//    var height by remember { mutableStateOf(170) }
+//    var currentWeight by remember { mutableStateOf(88) }
+//    var targetWeight by remember { mutableStateOf(80) }
+//    var trainingIntensity by remember { mutableStateOf("Lightly") }
+    val height = remember { mutableStateOf(metric.value?.Height?.toInt() ?: 0) }
+    val currentWeight = remember { mutableStateOf(metric.value?.Weight?.toInt() ?: 0) }
+    val targetWeight = remember { mutableStateOf(metric.value?.WeightTarget?.toInt() ?: 0) }
+    val act = remember { mutableStateOf(baseInfo.value?.ActivityLevel ?: 0) }
+
+    var trainingIntensity = when(act.value){
+        1 -> "Low"
+        2 -> "Lightly"
+        3 -> "Moderate"
+        4 -> "High"
+        else -> "Extreme"
+    }
+    val context = LocalContext.current
     var isEditingField by remember { mutableStateOf<String?>(null) }
     var tempInput by remember { mutableStateOf("") }
 
@@ -69,27 +84,27 @@ fun UpdateBodyIndex(navController: NavController, baseInfoViewModel: BaseInfoVie
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        EditableRow("Height", "$height", R.drawable.ic_height, onEditClick = {
+        EditableRow("Height", "${height.value}", R.drawable.ic_height, onEditClick = {
             isEditingField = "Height"
-            tempInput = height.toString()
+            tempInput = height.value.toString()
         })
-        EditableRow("Current Weight", "$currentWeight", R.drawable.ic_current_weight, onEditClick = {
+        EditableRow("Current Weight", "${currentWeight.value}", R.drawable.ic_current_weight, onEditClick = {
             isEditingField = "Current Weight"
-            tempInput = currentWeight.toString()
+            tempInput = currentWeight.value.toString()
         })
-        EditableRow("Target Weight", "$targetWeight", R.drawable.ic_current_weight, onEditClick = {
+        EditableRow("Target Weight", "${targetWeight.value}", R.drawable.ic_current_weight, onEditClick = {
             isEditingField = "Target Weight"
-            tempInput = targetWeight.toString()
+            tempInput = targetWeight.value.toString()
         })
         EditableRow("Training intensity", trainingIntensity, R.drawable.ic_training, onEditClick = {
             isEditingField = "Training Intensity"
         })
 
-        StaticRow("Age", "21", R.drawable.ic_age)
-        StaticRow("Gender", "Male", R.drawable.ic_gender)
-        StaticRow("BMI", "24.3", R.drawable.ic_bmi)
-        StaticRow("BMR", "1757,54", R.drawable.ic_bmr)
-        StaticRow("TDEE", "2345", R.drawable.ic_tdee)
+        StaticRow("Age", baseInfo.value?.Age.toString(), R.drawable.ic_age)
+        baseInfo.value?.let { StaticRow("Gender", it.Gender, R.drawable.ic_gender) }
+        StaticRow("BMI", metric.value?.BMI?.toInt().toString(), R.drawable.ic_bmi)
+        StaticRow("BMR",  metric.value?.BMR?.toInt().toString(), R.drawable.ic_bmr)
+        StaticRow("TDEE",  metric.value?.TDEE?.toInt().toString(), R.drawable.ic_tdee)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -124,9 +139,9 @@ fun UpdateBodyIndex(navController: NavController, baseInfoViewModel: BaseInfoVie
                     TextButton(
                         onClick = {
                             when (isEditingField) {
-                                "Height" -> tempInput.toIntOrNull()?.let { height = it }
-                                "Current Weight" -> tempInput.toIntOrNull()?.let { currentWeight = it }
-                                "Target Weight" -> tempInput.toIntOrNull()?.let { targetWeight = it }
+                                "Height" -> tempInput.toIntOrNull()?.let { height.value = it }
+                                "Current Weight" -> tempInput.toIntOrNull()?.let { currentWeight.value = it }
+                                "Target Weight" -> tempInput.toIntOrNull()?.let { targetWeight.value = it }
                             }
                             isEditingField = null
                             tempInput = ""
@@ -189,7 +204,32 @@ fun UpdateBodyIndex(navController: NavController, baseInfoViewModel: BaseInfoVie
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = { isEditingField = null }) {
+                    TextButton(onClick = {
+                        isEditingField = null
+                        val actUpdate = when(trainingIntensity){
+                            "Low" -> 1
+                            "Lightly" -> 2
+                            "Moderate" -> 3
+                            "High" -> 4
+                            else -> 5
+                        }
+                        baseInfo.value?.let { current ->
+                            val updatedBaseInfo = current.copy(
+                                ActivityLevel = actUpdate
+                            )
+                            baseInfoViewModel.updateBaseInfo(updatedBaseInfo)
+                        }
+                        metric.value?.let {
+                            val updatedHealthMetric = it.copy(
+                                Weight = currentWeight.value.toFloat(),
+                                Height = height.value.toFloat(),
+                                WeightTarget = targetWeight.value.toFloat()
+                            )
+                            healthMetricViewModel.insertHealthMetric(updatedHealthMetric)
+                        }
+                        Toast.makeText(context, "Update success", Toast.LENGTH_LONG).show()
+
+                    }) {
                         Text("Save", color = Color(0xFFFF6F00), fontWeight = FontWeight.Bold)
                     }
                 },

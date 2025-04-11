@@ -1,6 +1,8 @@
 package com.example.health.screens.main.profile
 
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -20,18 +23,37 @@ import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
 import com.example.health.R
 import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.utils.MacroCalculator
+import com.example.health.data.utils.calculateMacroPercentFromGrams
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MacroSetting(navController: NavController , macroViewModel: MacroViewModel) {
-    var macro = macroViewModel.macro.collectAsState()
-    // thay cac bien carb , ... bang macro.carb .... goi ham update o day
-    var carbs by remember { mutableStateOf(30) }
-    var protein by remember { mutableStateOf(30) }
-    var fat by remember { mutableStateOf(30) }
-    val total = carbs + protein + fat
+    val macro = macroViewModel.macro.collectAsState()
+    if(macro.value == null) {
+        Log.e("Null macro", "MacroSetting: Maccro is null", )
+    }
 
+    // thay cac bien carb , ... bang macro.carb .... goi ham update o day
+    val _carbs= macro.value?.Carb?.toInt() ?: 0
+    val _protein = macro.value?.Protein?.toInt() ?: 0
+    val _fat = macro.value?.Fat?.toInt() ?: 0
+
+    val result = macro.value?.TDEE?.toInt()?.let {
+        calculateMacroPercentFromGrams(
+            it,
+        _carbs.toFloat(),
+        _protein.toFloat(),
+        _fat.toFloat()
+        )
+    }
+    var carbs by remember { mutableStateOf(result?.carbPercent?.toInt() ?: 0) }
+    var protein by remember { mutableStateOf(result?.proteinPercent?.toInt() ?: 0) }
+    var fat by remember { mutableStateOf(result?.fatPercent?.toInt() ?: 0) }
+    Log.e("Check percent: ", "MacroSetting: "+ carbs+" "+protein+" "+fat+" ", )
+    val total = carbs + protein + fat
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -77,9 +99,9 @@ fun MacroSetting(navController: NavController , macroViewModel: MacroViewModel) 
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                MacroPickerColumn("Carbs", carbs) { carbs = it }
-                MacroPickerColumn("Protein", protein) { protein = it }
-                MacroPickerColumn("Fat", fat) { fat = it }
+                MacroPickerColumn("Carbs", carbs, { carbs = it }, initialValue = carbs)
+                MacroPickerColumn("Protein", protein, { protein = it }, initialValue = protein)
+                MacroPickerColumn("Fat", fat, { fat = it }, initialValue = fat)
             }
 
             Spacer(Modifier.height(16.dp))
@@ -104,7 +126,26 @@ fun MacroSetting(navController: NavController , macroViewModel: MacroViewModel) 
 
             Button(
                 onClick = {
-                    navController.popBackStack()
+                    macro.value?.let { current ->
+                        val result_ = MacroCalculator.calculateMacros(
+                            tdee = current.TDEE.toInt(),
+                            carbPercent = carbs.toFloat(),
+                            proteinPercent = protein.toFloat(),
+                            fatPercent = fat.toFloat()
+                        )
+                        val carbs_ = result_.carbInGrams
+                        val protein_ = result_.proteinInGrams
+                        val fat_ = result_.fatInGrams
+
+                        val updatedMacro = current.copy(
+                            Carb = carbs_,
+                            Protein = protein_,
+                            Fat = fat_,
+                        )
+                        macroViewModel.update(updatedMacro)
+                        Toast.makeText(context, "Update macro success", Toast.LENGTH_LONG).show()
+
+                    }
                 },
                 enabled = total == 100,
                 colors = ButtonDefaults.buttonColors(
@@ -120,29 +161,35 @@ fun MacroSetting(navController: NavController , macroViewModel: MacroViewModel) 
         }
     }
 }
-
 @Composable
-fun MacroPickerColumn(title: String, selected: Int, onSelectedChange: (Int) -> Unit) {
-    val percentages = (0..100 step 5).toList()
-    val listState = rememberLazyListState()
+fun MacroPickerColumn(
+    title: String,
+    selected: Int,
+    onSelectedChange: (Int) -> Unit,
+    initialValue: Int
+) {
+    val percentages = (0..100 step 1).toList()
+    val initialIndex = percentages.indexOf(initialValue).coerceAtLeast(0)
+    Log.e("check percen", "MacroPickerColumn: " + initialIndex, )
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = (initialIndex - 2).coerceAtLeast(0))
+    var isFirstLoad by remember { mutableStateOf(true) }
 
-    // Tự động nhận giá trị tại vị trí trung tâm khi scroll
     LaunchedEffect(
         listState.firstVisibleItemIndex,
         listState.firstVisibleItemScrollOffset
     ) {
-        val centerIndex = listState.firstVisibleItemIndex + 2 // vì padding top+bottom là 24dp
+        val centerIndex = listState.firstVisibleItemIndex + 2
         if (centerIndex in percentages.indices) {
-            val value = percentages[centerIndex]
-            if (value != selected) {
-                onSelectedChange(value)
+            val newValue = percentages[centerIndex]
+            if (!isFirstLoad && newValue != selected) {
+                onSelectedChange(newValue)
             }
         }
+        isFirstLoad = false
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(title, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-
         Spacer(modifier = Modifier.height(4.dp))
 
         Box(
@@ -169,8 +216,6 @@ fun MacroPickerColumn(title: String, selected: Int, onSelectedChange: (Int) -> U
                     )
                 }
             }
-
-            // Optional: Highlight vùng giữa
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)

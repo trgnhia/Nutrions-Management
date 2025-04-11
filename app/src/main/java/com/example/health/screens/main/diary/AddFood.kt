@@ -81,7 +81,6 @@ fun AddFood(
 
         // 5. Đảm bảo TotalNutrionsPerDay tồn tại → rồi luôn cập nhật
         var existingTotal = totalNutrionsPerDayViewModel.getByDateAndUidOnce(today.toStartOfDay(), uid)
-
 // Nếu chưa có, tạo mới trước
         if (existingTotal == null) {
             val newTotal = TotalNutrionsPerDay(

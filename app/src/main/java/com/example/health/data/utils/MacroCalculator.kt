@@ -40,19 +40,13 @@ object MacroCalculator {
         val fatGrams = fatKcal / 9f
 
         return MacroResult(
-            carbInGrams = roundToOneDecimal(carbGrams),
-            proteinInGrams = roundToOneDecimal(proteinGrams),
-            fatInGrams = roundToOneDecimal(fatGrams)
+            carbInGrams = carbGrams,
+            proteinInGrams = proteinGrams,
+            fatInGrams = fatGrams
         )
     }
 
-    private fun roundToOneDecimal(value: Float): Float {
-        return try {
-            String.format("%.1f", value).replace(",", ".").toFloat()
-        } catch (e: Exception) {
-            0f
-        }
-    }
+
 }
 
 

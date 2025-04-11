@@ -70,11 +70,11 @@ fun Profile(
         Spacer(modifier = Modifier.height(24.dp))
 
         ProfileOption(
-        text = "Current Weight: ${metric.value?.Weight}kg",
+        text = "Current Weight: ${metric.value?.Weight?.toInt()}kg",
         iconId = R.drawable.ic_weight
         )
         ProfileOption(
-            text = "Target: ${metric.value?.WeightTarget}{}kg",
+            text = "Target: ${metric.value?.WeightTarget?.toInt()}kg",
             iconId = R.drawable.ic_target
         )
 

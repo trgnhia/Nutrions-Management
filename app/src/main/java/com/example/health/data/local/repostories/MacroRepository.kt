@@ -1,6 +1,7 @@
 package com.example.health.data.local.repostories
 
 
+import android.util.Log
 import com.example.health.data.local.daos.MacroDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.Macro
@@ -40,6 +41,7 @@ class MacroRepository(
 
     suspend fun update(macro: Macro) {
         macroDao.update(macro)
+        Log.e("MacroDao", "Updating macro: $macro")
         try {
             firestore.collection("accounts")
                 .document(macro.Uid)
@@ -55,6 +57,7 @@ class MacroRepository(
             )
             pendingActionDao.insert(action)
         }
+        fetchFromRemote(macro.Uid)
     }
 
     suspend fun fetchFromRemote(uid: String): Macro? {

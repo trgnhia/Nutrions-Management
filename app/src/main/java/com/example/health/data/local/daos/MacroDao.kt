@@ -18,6 +18,7 @@ interface MacroDao {
     @Update
     suspend fun update(macro: Macro)
 
+
     // ✅ Truy vấn bản ghi Macro duy nhất
     @Query("SELECT * FROM macro LIMIT 1")
     fun getMacro(): Flow<Macro?>

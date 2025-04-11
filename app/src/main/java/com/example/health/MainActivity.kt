@@ -11,6 +11,7 @@ import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
 import com.example.health.data.local.repostories.BurnOutCaloPerDayRepository
+import com.example.health.data.local.repostories.CustomExerciseRepository
 import com.example.health.data.local.repostories.CustomFoodRepository
 import com.example.health.data.local.repostories.DefaultDietMealInPlanRepository
 import com.example.health.data.local.repostories.DefaultExerciseRepository
@@ -25,6 +26,7 @@ import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
@@ -39,6 +41,7 @@ import com.example.health.data.local.viewmodelfactory.AccountViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModelFactory
 import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
 import com.example.health.data.local.viewmodelfactory.BurnOutCaloPerDayViewModelFactory
+import com.example.health.data.local.viewmodelfactory.CustomExerciseViewModelFactory
 import com.example.health.data.local.viewmodelfactory.CustomFoodViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultDietMealInPlanViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultExerciseViewModelFactory
@@ -57,7 +60,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PendingSyncScheduler.schedule(this)
+        PendingSyncScheduler.schedule(applicationContext)
         enableEdgeToEdge()
         val db = AppDatabase.getDatabase(applicationContext)
         val firestore = FirebaseFirestore.getInstance()
@@ -118,6 +121,7 @@ class MainActivity : ComponentActivity() {
         val eatenDishRepository = EatenDishRepository(db.eatenDishDao(), db.pendingActionDao(), firestore)
         val burnOutRepository = BurnOutCaloPerDayRepository(db.burnOutCaloPerDayDao(), db.pendingActionDao(), firestore)
         val customFoodRepository = CustomFoodRepository(db.customFoodDao(), db.pendingActionDao(), firestore)
+        val customExerciseRepository = CustomExerciseRepository(db.customExerciseDao(), db.pendingActionDao(), firestore)
         //val notifyRepository = NotifyRepository(db.notifyDao(), db.pendingActionDao(), firestore)
         //val dietDishRepository = DietDishRepository(db.dietDishDao(), db.pendingActionDao(), firestore)
 
@@ -136,6 +140,7 @@ class MainActivity : ComponentActivity() {
         val eatenDishViewModel = ViewModelProvider(this, EatenDishViewModelFactory(eatenDishRepository))[EatenDishViewModel::class.java]
         val burnOutViewModel = ViewModelProvider(this, BurnOutCaloPerDayViewModelFactory(burnOutRepository))[BurnOutCaloPerDayViewModel::class.java]
         val customFoodViewModel = ViewModelProvider(this, CustomFoodViewModelFactory(customFoodRepository))[CustomFoodViewModel::class.java]
+        val customExerciseViewModel = ViewModelProvider(this, CustomExerciseViewModelFactory(customExerciseRepository))[CustomExerciseViewModel::class.java]
         //val notifyViewModel = ViewModelProvider(this, NotifyViewModelFactory(notifyRepository))[NotifyViewModel::class.java]
         //val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
         scheduleDaily7AMAlarm()
@@ -157,6 +162,8 @@ class MainActivity : ComponentActivity() {
                     eatenDishViewModel = eatenDishViewModel,
                     burnOutCaloPerDayViewModel = burnOutViewModel,
                     customFoodViewModel = customFoodViewModel,
+                    customExerciseViewModel = customExerciseViewModel,
+
 //                    notifyViewModel = notifyViewModel,
 //                    dietDishViewModel = dietDishViewModel
 

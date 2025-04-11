@@ -37,5 +37,11 @@ object PendingActionTypes {
     const val UPDATE_BURN_OUT = "update_burn_out"
     const val DELETE_BURN_OUT = "delete_burn_out"
 
+    const val INSERT_CUSTOM_EXERCISE = "INSERT_CUSTOM_EXERCISE"
+    const val UPDATE_CUSTOM_EXERCISE = "UPDATE_CUSTOM_EXERCISE"
+    const val DELETE_CUSTOM_EXERCISE = "DELETE_CUSTOM_EXERCISE"
+
+
+
 
 }

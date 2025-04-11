@@ -109,18 +109,18 @@ fun DiaryAdd(
                     onItemClick = { /* Detail */ }
                 )
 
-                DefaultFoodRow("Meat / Fish", meatFoods, onViewMoreClick = {
+                DefaultFoodRow(title = "Meat / Fish",foods =  meatFoods, onViewMoreClick = {
                     navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=1")
-                }, onItemClick = {})
+                }, onItemClick = {} , parent = parent , onSaveFood = {} )
                 DefaultFoodRow("Vegetable / Fruit", vegetableFoods, onViewMoreClick = {
                     navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=2")
-                }, onItemClick = {})
+                }, onItemClick = {} , parent = parent , onSaveFood = {})
                 DefaultFoodRow("Starch", starchFoods, onViewMoreClick = {
                     navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=3")
-                }, onItemClick = {})
+                },onItemClick = {} , parent = parent , onSaveFood = {})
                 DefaultFoodRow("Snack / Light meal", snackFoods, onViewMoreClick = {
                     navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=4")
-                }, onItemClick = {})
+                }, onItemClick = {} , parent = parent , onSaveFood = {})
             } else {
                 // Eaten Meal Tab: Display some other content (e.g., meals already eaten)
                 Text("Meals you have eaten will be shown here.")
@@ -131,7 +131,6 @@ fun DiaryAdd(
         if (canEdit && selectedTab.value == "Discover") {
             MealSummaryButton { showDialog.value = true }
         }
-
         // Dialog for today's meals
         if (showDialog.value) {
             TodayMealDialog(

@@ -22,10 +22,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.health.R
+import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
+import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
+import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.navigation.routes.WorkoutRoutes
 
 @Composable
-fun Workout(navController: NavController) {
+fun Workout(
+    navController: NavController,
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customExerciseViewModel : CustomExerciseViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -18,6 +18,7 @@ import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
@@ -60,6 +61,9 @@ fun MainScreen(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
+    //notifyViewModel : NotifyViewModel,
+    //dietDishViewModel : DietDishViewModel
 ) {
     val bottomNavController = rememberNavController()
     val bottomItems = listOf(
@@ -134,6 +138,8 @@ fun MainScreen(
                 defaultExerciseViewModel = defaultExerciseViewModel,
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+
             )
 
             planNavGraph(

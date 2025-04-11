@@ -147,7 +147,7 @@ fun Sync(navController: NavController) {
                         .height(48.dp),
                     shape = RoundedCornerShape(24.dp)
                 ) {
-                    Text("Connect", color = Color.White, fontSize = 16.sp)
+                    Text("CONNECT", color = Color.White, fontSize = 16.sp)
                 }
             }
         }

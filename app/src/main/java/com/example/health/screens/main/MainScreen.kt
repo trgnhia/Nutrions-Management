@@ -1,5 +1,7 @@
 package com.example.health.screens.main
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -32,6 +34,7 @@ import com.example.health.navigation.routes.ProfileRoutes
 import com.example.health.navigation.routes.StatisticalRoutes
 import com.example.health.navigation.routes.WorkoutRoutes
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
     rootNavController: NavController,
@@ -106,7 +109,22 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
             )
-            planNavGraph(bottomNavController)
+            planNavGraph(
+                navController =bottomNavController,
+                accountViewModel = accountViewModel,
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+            )
             statisticalNavGraph(bottomNavController)
             profileNavGraph(
                 navController = bottomNavController,

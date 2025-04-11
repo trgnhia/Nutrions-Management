@@ -20,4 +20,11 @@ interface DefaultFoodDao {
 
     @Query("SELECT * FROM default_food WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): DefaultFood?
+
+    @Query("SELECT * FROM default_food WHERE type = :type")
+    fun getByType(type: Int): Flow<List<DefaultFood>>
+
+    // ✅ Truy vấn lấy món ăn ngẫu nhiên theo type
+    @Query("SELECT * FROM default_food WHERE type = :type ORDER BY RANDOM() LIMIT :count")
+    suspend fun getRandomFoodsByType(count: Int, type: Int): List<DefaultFood>
 }

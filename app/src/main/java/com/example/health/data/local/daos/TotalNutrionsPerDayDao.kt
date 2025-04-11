@@ -44,4 +44,7 @@ interface TotalNutrionsPerDayDao {
         uid: String,
         date: Date
     ): NutritionAggregate?
+
+    @Query("SELECT * FROM total_nutrions_per_day WHERE date = :date AND uid = :uid LIMIT 1")
+    suspend fun getByDateAndUidOnce(date: Date, uid: String): TotalNutrionsPerDay?
 }

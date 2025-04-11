@@ -9,5 +9,7 @@ enum class MealType(val label: String, val type: Int) {
     companion object {
         fun fromLabel(label: String): MealType =
             entries.first { it.label == label }
+        fun fromType(type: Int): MealType =
+            entries.first { it.type == type }
     }
 }

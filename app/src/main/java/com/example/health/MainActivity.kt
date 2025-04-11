@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.health.alarm.scheduleDaily7AMAlarm
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
@@ -137,7 +138,7 @@ class MainActivity : ComponentActivity() {
         val customFoodViewModel = ViewModelProvider(this, CustomFoodViewModelFactory(customFoodRepository))[CustomFoodViewModel::class.java]
         //val notifyViewModel = ViewModelProvider(this, NotifyViewModelFactory(notifyRepository))[NotifyViewModel::class.java]
         //val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
-
+        scheduleDaily7AMAlarm()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             HealthTheme {

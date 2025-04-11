@@ -30,6 +30,8 @@ import com.example.health.R
 import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
+import com.example.health.screens.main.ParenCompose
+
 @Composable
 fun Plan(navController: NavController) {
     Column(
@@ -86,7 +88,9 @@ fun Plan(navController: NavController) {
                 title = "Food",
                 description = "Healthy Meals for your daily intake",
                 backgroundRes = R.drawable.food_back,
-                onClick = { navController.navigate(GraphRoute.Food.route) }
+                onClick = {
+                    navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMPLAN}")
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))

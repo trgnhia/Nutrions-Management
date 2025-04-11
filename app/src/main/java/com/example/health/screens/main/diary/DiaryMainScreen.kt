@@ -5,6 +5,9 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,6 +18,9 @@ import androidx.navigation.NavController
 import com.example.health.data.local.entities.BurnOutCaloPerDay
 import com.example.health.data.local.viewmodel.*
 import com.example.health.navigation.routes.DiaryRoutes
+import com.example.health.screens.main.ParenCompose
+import com.example.health.screens.main.diary.compose.AddFoodCard
+import com.example.health.screens.main.diary.compose.FoodCard
 import com.example.health.screens.main.diary.compose.HeaderSection
 import com.example.health.screens.main.diary.compose.MealTabs
 import com.example.health.screens.main.diary.compose.MealType
@@ -72,7 +78,7 @@ fun DiaryMainScreen(
         value = burnOutCaloPerDayViewModel.getByDate(selectedDay.value)
     }
 
-    val eatenDish = eatenDishViewModel.getByDateAndType(
+    val foodList = eatenDishViewModel.getByDateAndType(
         selectedDay.value, selectedMeal.value.type
     ).collectAsState(initial = emptyList())
 
@@ -89,7 +95,6 @@ fun DiaryMainScreen(
             totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
             burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel
         )
-
         MealTabs(
             meals = MealType.entries.map { it.label },
             selectedMeal = selectedMeal.value.label,
@@ -101,36 +106,30 @@ fun DiaryMainScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Danh sách món ăn: ${selectedMeal.value.label}",
-            modifier = Modifier.padding(16.dp)
+            "Food list",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
-        // TODO: hiển thị danh sách món ăn từ eatenDish.value ở đây
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(foodList.value.size + 1) { index ->
+                if (index < foodList.value.size) {
+                    FoodCard(index + 1, foodList.value[index], onClick = {
+                        navController.navigate(DiaryRoutes.Info.route)
+                    })
+                } else {
+                    AddFoodCard(onClick = {
+                        navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
+                    })
+                }
+            }
+
+        }
+
     }
 }
-
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(24.dp),
-//        verticalArrangement = Arrangement.Top,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(text = "This is diary main screen")
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        Button(onClick = {
-//            navController.navigate(DiaryRoutes.Add.route)
-//        }) {
-//            Text("Nav to Add")
-//        }
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//
-//        Button(onClick = {
-//            navController.navigate(DiaryRoutes.Info.route)
-//        }) {
-//            Text("Nav to Info")
-//        }
-//    }

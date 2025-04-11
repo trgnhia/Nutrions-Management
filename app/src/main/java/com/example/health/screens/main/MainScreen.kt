@@ -135,14 +135,14 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
             )
+
             planNavGraph(
-                navController =bottomNavController,
-                accountViewModel = accountViewModel,
+                navController = bottomNavController,
                 baseInfoViewModel = baseInfoViewModel,
-                healthMetricViewModel = healthMetricViewModel,
-                defaultFoodViewModel = defaultFoodViewModel,
-                defaultExerciseViewModel = defaultExerciseViewModel,
                 defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                dietDishViewModel = dietDishViewModel,
+                accountViewModel = accountViewModel,
+                healthMetricViewModel = healthMetricViewModel,
                 macroViewModel = macroViewModel,
                 totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
                 exerciseLogViewModel = exerciseLogViewModel,
@@ -150,12 +150,8 @@ fun MainScreen(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel = customFoodViewModel,
-            )
-            planNavGraph(
-                navController = bottomNavController,
-                baseInfoViewModel = baseInfoViewModel,
-                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
-                dietDishViewModel = dietDishViewModel
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
             )
             statisticalNavGraph(bottomNavController)
             profileNavGraph(

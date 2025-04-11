@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.ProfileRoutes
 import com.example.health.screens.main.profile.MacroSetting
@@ -18,25 +19,29 @@ fun NavGraphBuilder.profileNavGraph(
     navController: NavController,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
-    macroViewModel : MacroViewModel,
-    ) {
+    macroViewModel: MacroViewModel,
+    authViewModel: AuthViewModel
+) {
     navigation(
         route = GraphRoute.Profile.route,
         startDestination = ProfileRoutes.Profile.route
-    ){
-        composable(ProfileRoutes.Profile.route){
+    ) {
+        composable(ProfileRoutes.Profile.route) {
             Profile(navController)
         }
-        composable(ProfileRoutes.MacroSetting.route){
+        composable(ProfileRoutes.MacroSetting.route) {
             MacroSetting(navController)
         }
-        composable(ProfileRoutes.UpdateBodyIndex.route){
-            UpdateBodyIndex(navController)
+        composable(ProfileRoutes.UpdateBodyIndex.route) {
+            UpdateBodyIndex(
+                navController = navController,
+                baseInfoViewModel = baseInfoViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                authViewModel = authViewModel
+            )
         }
-        composable(ProfileRoutes.Reminder.route){
+        composable(ProfileRoutes.Reminder.route) {
             Reminder(navController)
         }
-
-
     }
 }

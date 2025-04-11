@@ -166,6 +166,7 @@ fun MainScreen(
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
                 macroViewModel = macroViewModel,
+                authViewModel = authViewModel
             )
         }
     }

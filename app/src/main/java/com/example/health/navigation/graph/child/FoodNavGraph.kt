@@ -17,6 +17,7 @@ import com.example.health.navigation.routes.GraphRoute
 import com.example.health.navigation.routes.PlanRoutes
 import com.example.health.screens.main.diary.DiaryAdd
 import com.example.health.screens.main.diary.compose.MealType
+import com.example.health.screens.main.diary.compose.ViewMore
 import com.example.health.screens.main.plan.Food
 import com.example.health.screens.main.plan.Plan
 
@@ -58,5 +59,26 @@ fun NavGraphBuilder.foodNavGraph(
                 accountViewModel = accountViewModel
             )
         }
+    }
+    composable(
+        route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}",
+        arguments = listOf(
+            navArgument("parent") { nullable = true; defaultValue = null },
+            navArgument("foodType") { defaultValue = 1 } // hoặc required = true
+        )
+    ) { backStackEntry ->
+        val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
+        val foodType = backStackEntry.arguments?.getInt("foodType") ?: 1
+        ViewMore(
+            navController = navController,
+            foodType = foodType,
+            defaultFoodViewModel = defaultFoodViewModel,
+            eatenMealViewModel = eatenMealViewModel,
+            eatenDishViewModel = eatenDishViewModel,
+            baseInfoViewModel = baseInfoViewModel,
+            totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+            accountViewModel = accountViewModel,
+            parent = parent
+        )
     }
 }

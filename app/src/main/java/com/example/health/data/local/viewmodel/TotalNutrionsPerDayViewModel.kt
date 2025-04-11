@@ -42,4 +42,9 @@ class TotalNutrionsPerDayViewModel(
     fun generateLog(uid: String, date: Date, dietType: Int) = viewModelScope.launch {
         repository.generateLog(uid, date, dietType)
     }
+    // ✅ Kiểm tra tồn tại bản ghi theo ngày (dùng trong AutoInit hoặc Home)
+    suspend fun getByDateAndUidOnce(date: Date, uid: String): TotalNutrionsPerDay? {
+        return repository.getByDateAndUidOnce(date, uid)
+    }
+
 }

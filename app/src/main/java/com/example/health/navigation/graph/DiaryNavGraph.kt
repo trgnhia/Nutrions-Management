@@ -26,6 +26,7 @@ import com.example.health.screens.main.diary.DiaryAdd
 import com.example.health.screens.main.diary.DiaryMainScreen
 import com.example.health.screens.main.diary.DiaryInfo
 import com.example.health.screens.main.diary.compose.MealType
+import com.example.health.screens.main.diary.compose.ViewMore
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.diaryNavGraph(
@@ -92,5 +93,27 @@ fun NavGraphBuilder.diaryNavGraph(
         composable(DiaryRoutes.Info.route){
             DiaryInfo(navController)
         }
+        composable(
+            route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}",
+            arguments = listOf(
+                navArgument("parent") { nullable = true; defaultValue = null },
+                navArgument("foodType") { defaultValue = 1 } // hoặc required = true
+            )
+        ) { backStackEntry ->
+            val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
+            val foodType = backStackEntry.arguments?.getInt("foodType") ?: 1
+            ViewMore(
+                navController = navController,
+                foodType = foodType,
+                defaultFoodViewModel = defaultFoodViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                baseInfoViewModel = baseInfoViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                accountViewModel = accountViewModel,
+                parent = parent
+            )
+        }
+
     }
 }

@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 class DefaultFoodViewModel(
     private val repository: DefaultFoodRepository
 ) : ViewModel() {
-
     val defaultFoods: StateFlow<List<DefaultFood>> = repository.getAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -31,7 +30,6 @@ class DefaultFoodViewModel(
             repository.insert(updated)
         }
     }
-
     fun syncIfNeeded(context: Context) = viewModelScope.launch {
         if (defaultFoods.value.isEmpty()) {
             Log.d("DefaultFoodViewModel", "Room empty → loading from Firestore...")
@@ -47,5 +45,4 @@ class DefaultFoodViewModel(
             emit(foods)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
-
 }

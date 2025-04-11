@@ -88,6 +88,8 @@ class TotalNutrionsPerDayRepository(
         }
     }
 
+
+
     // ✅ Hàm sinh log tự động từ eaten_meal
     suspend fun generateLog(uid: String, date: Date, dietType: Int) {
         val aggregate: NutritionAggregate? = dao.getDailyNutritionAggregate(uid, date)
@@ -109,5 +111,8 @@ class TotalNutrionsPerDayRepository(
         } else {
             update(entry)
         }
+    }
+    suspend fun getByDateAndUidOnce(date: Date, uid: String): TotalNutrionsPerDay? {
+        return dao.getByDateAndUidOnce(date, uid)
     }
 }

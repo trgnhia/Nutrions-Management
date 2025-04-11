@@ -39,7 +39,6 @@ fun DiaryAdd(
     val uid = account?.Uid
 
     val customFoods by customFoodViewModel.getAllByUser(uid!!).collectAsState(initial = emptyList())
-
     val meatFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 1) }
     val vegetableFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 2) }
     val starchFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 3) }
@@ -110,10 +109,18 @@ fun DiaryAdd(
                     onItemClick = { /* Detail */ }
                 )
 
-                DefaultFoodRow("Meat / Fish", meatFoods, onViewMoreClick = {}, onItemClick = {})
-                DefaultFoodRow("Vegetable / Fruit", vegetableFoods, onViewMoreClick = {}, onItemClick = {})
-                DefaultFoodRow("Starch", starchFoods, onViewMoreClick = {}, onItemClick = {})
-                DefaultFoodRow("Snack / Light meal", snackFoods, onViewMoreClick = {}, onItemClick = {})
+                DefaultFoodRow("Meat / Fish", meatFoods, onViewMoreClick = {
+                    navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=1")
+                }, onItemClick = {})
+                DefaultFoodRow("Vegetable / Fruit", vegetableFoods, onViewMoreClick = {
+                    navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=2")
+                }, onItemClick = {})
+                DefaultFoodRow("Starch", starchFoods, onViewMoreClick = {
+                    navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=3")
+                }, onItemClick = {})
+                DefaultFoodRow("Snack / Light meal", snackFoods, onViewMoreClick = {
+                    navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=4")
+                }, onItemClick = {})
             } else {
                 // Eaten Meal Tab: Display some other content (e.g., meals already eaten)
                 Text("Meals you have eaten will be shown here.")

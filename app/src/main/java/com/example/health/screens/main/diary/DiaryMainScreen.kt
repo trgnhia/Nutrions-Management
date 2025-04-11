@@ -95,7 +95,6 @@ fun DiaryMainScreen(
             totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
             burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel
         )
-
         MealTabs(
             meals = MealType.entries.map { it.label },
             selectedMeal = selectedMeal.value.label,

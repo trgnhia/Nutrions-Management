@@ -24,4 +24,7 @@ interface AccountDao {
     // cap nhat trang thai
     @Query("UPDATE account SET status = :status WHERE Uid = :uid")
     suspend fun updateStatus(uid: String, status: String)
+
+    @Query("SELECT * FROM account LIMIT 1")
+    suspend fun getAccountOnce(): Account?
 }

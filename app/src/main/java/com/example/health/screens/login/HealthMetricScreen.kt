@@ -16,6 +16,7 @@ import com.example.health.data.local.entities.Macro
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.utils.HealthMetricUtil
 import com.example.health.data.utils.MacroCalculator
 import com.example.health.screens.loader.ActLoader
@@ -28,6 +29,7 @@ fun HealthMetricScreen(
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
     macroViewModel : MacroViewModel,
+    notifyViewModel: NotifyViewModel,
     onLoadData: suspend () -> Unit
 ) {
     val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
@@ -35,7 +37,6 @@ fun HealthMetricScreen(
 
     LaunchedEffect(Unit) {
         baseInfo?.let {
-            // 🔢 Tính toán chỉ số
             val bmr = HealthMetricUtil.calculateBMR(it.Weight, it.Height, it.Age, it.Gender)
             val bmi = HealthMetricUtil.calculateBMI(it.Weight, it.Height)
             val tdee = HealthMetricUtil.calculateTDEE(bmr, it.ActivityLevel)
@@ -75,21 +76,22 @@ fun HealthMetricScreen(
                 UpdateAt = now
             )
 
-            // ✅ Lưu vào Room
+            // ✅ Lưu dữ liệu
             healthMetricViewModel.insertHealthMetric(metric)
             macroViewModel.insert(macro)
+            notifyViewModel.initDefaultNotifications(it.Uid) // ✅ thêm dòng này
 
-            // ✅ Load dữ liệu mặc định nếu cần
+            // ✅ Load mặc định
             onLoadData()
 
-            delay(3000) // Optional: giữ UI mượt
-
+            delay(3000)
             isLoading = false
             navController.navigate("home") {
                 popUpTo("health_metric") { inclusive = true }
             }
         }
     }
+
 
     // UI Loading
     Box(

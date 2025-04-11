@@ -64,7 +64,8 @@ fun MainScreen(
     customFoodViewModel : CustomFoodViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
     notifyViewModel : NotifyViewModel,
-    dietDishViewModel : DietDishViewModel
+    dietDishViewModel : DietDishViewModel,
+    calorBurn: MutableState<Float>
 ) {
     val bottomNavController = rememberNavController()
     val bottomItems = listOf(
@@ -133,6 +134,8 @@ fun MainScreen(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel = customFoodViewModel,
+                calorBurn = calorBurn
+
             )
             workoutNavGraph(
                 navController = bottomNavController,
@@ -140,7 +143,8 @@ fun MainScreen(
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customExerciseViewModel = customExerciseViewModel,
-                accountViewModel = accountViewModel
+                accountViewModel = accountViewModel,
+                calorBurn = calorBurn
 
             )
 

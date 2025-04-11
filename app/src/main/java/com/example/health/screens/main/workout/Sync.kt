@@ -2,7 +2,6 @@ package com.example.health.screens.main.workout
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
@@ -24,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.health.R
@@ -40,14 +38,37 @@ import java.util.concurrent.TimeUnit
 private const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1001
 
 @Composable
-fun Sync(navController: NavController) {
+fun Sync(navController: NavController,
+         calorBurn: MutableState<Float>
+) {
     val context = LocalContext.current
     val activity = context as Activity
-
     var isConnected by remember { mutableStateOf(false) }
     var stepCount by remember { mutableStateOf(0) }
     var calories by remember { mutableStateOf(0f) }
     var distance by remember { mutableStateOf(0f) }
+
+    val fitnessOptions = remember {
+        FitnessOptions.builder()
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+            .build()
+    }
+    val account = remember { GoogleSignIn.getAccountForExtension(context, fitnessOptions) }
+
+    // Nếu đã cấp quyền thì auto load
+    LaunchedEffect(Unit) {
+        if (GoogleSignIn.hasPermissions(account, fitnessOptions)) {
+            Log.d("GoogleFit", "Auto-connected to Google Fit")
+            connectGoogleFit(activity) { steps, cal, dist ->
+                stepCount = steps
+                calories = cal
+                distance = dist
+                isConnected = true
+            }
+        }
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -66,6 +87,7 @@ fun Sync(navController: NavController) {
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
+        // Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -94,6 +116,7 @@ fun Sync(navController: NavController) {
             Spacer(modifier = Modifier.weight(1f))
         }
 
+        // Content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -131,36 +154,41 @@ fun Sync(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Button(
-                    onClick = {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                            ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.ACTIVITY_RECOGNITION
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            Log.d("GoogleFit", "Requesting ACTIVITY_RECOGNITION permission")
-                            permissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
-                        } else {
-                            Log.d("GoogleFit", "Permission already granted. Connecting to Google Fit...")
-                            connectGoogleFit(activity) { steps, cal, dist ->
-                                stepCount = steps
-                                calories = cal
-                                distance = dist
-                                isConnected = true
+                if (!isConnected) {
+                    Button(
+                        onClick = {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                                ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACTIVITY_RECOGNITION
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                Log.d("GoogleFit", "Requesting ACTIVITY_RECOGNITION permission")
+                                permissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
+                            } else {
+                                Log.d("GoogleFit", "Permission already granted. Connecting to Google Fit...")
+                                connectGoogleFit(activity) { steps, cal, dist ->
+                                    stepCount = steps
+                                    calories = cal
+                                    distance = dist
+                                    isConnected = true
+
+                                }
                             }
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9933)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(24.dp)
-                ) {
-                    Text("CONNECT", color = Color.White, fontSize = 16.sp)
+                        },
+
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9933)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(24.dp)
+                    ) {
+                        Text("CONNECT", color = Color.White, fontSize = 16.sp)
+                    }
                 }
 
                 if (isConnected) {
+                    calorBurn.value = calories
                     Spacer(modifier = Modifier.height(24.dp))
                     Text("Synced Info", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))

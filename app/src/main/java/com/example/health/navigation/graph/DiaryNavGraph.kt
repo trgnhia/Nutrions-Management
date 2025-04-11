@@ -2,6 +2,7 @@ package com.example.health.navigation.graph
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -44,8 +45,10 @@ fun NavGraphBuilder.diaryNavGraph(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    calorBurn: MutableState<Float>
 
-    ) {
+
+) {
     navigation(
         route = GraphRoute.Diary.route,
         startDestination = DiaryRoutes.Diary.route
@@ -66,6 +69,7 @@ fun NavGraphBuilder.diaryNavGraph(
                eatenDishViewModel = eatenDishViewModel,
                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                customFoodViewModel = customFoodViewModel,
+               calorBurn = calorBurn
            )
         }
         composable(

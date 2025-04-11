@@ -1,5 +1,6 @@
 package com.example.health.navigation.graph
 
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -20,7 +21,9 @@ fun NavGraphBuilder.workoutNavGraph(
     exerciseLogViewModel : ExerciseLogViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
-    accountViewModel: AccountViewModel
+    accountViewModel: AccountViewModel,
+    calorBurn: MutableState<Float>
+
 ) {
     navigation(
         route = GraphRoute.Workout.route,
@@ -37,7 +40,7 @@ fun NavGraphBuilder.workoutNavGraph(
             )
         }
         composable(WorkoutRoutes.Sync.route){
-            Sync(navController)
+            Sync(navController, calorBurn)
         }
     }
 }

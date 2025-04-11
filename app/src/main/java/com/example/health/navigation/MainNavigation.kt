@@ -3,6 +3,7 @@ package com.example.health.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -46,7 +47,9 @@ fun MainNavigation(
     customFoodViewModel : CustomFoodViewModel,
     customExerciseViewModel : CustomExerciseViewModel,
     notifyViewModel : NotifyViewModel,
-    dietDishViewModel : DietDishViewModel
+    dietDishViewModel : DietDishViewModel,
+    calorBurn: MutableState<Float>
+
 ) {
     // đây là nav tổng quát nhất ( gọi toàn bộ ứng dụng luôn ( sẽ được gọi trong main))
     NavHost(navController = navController, startDestination = "main") {
@@ -70,7 +73,8 @@ fun MainNavigation(
                 customFoodViewModel  = customFoodViewModel,
                 customExerciseViewModel = customExerciseViewModel,
                 notifyViewModel = notifyViewModel,
-                dietDishViewModel = dietDishViewModel
+                dietDishViewModel = dietDishViewModel,
+                calorBurn = calorBurn
                 )
         }
     }

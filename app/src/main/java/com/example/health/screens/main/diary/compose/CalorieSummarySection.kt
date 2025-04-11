@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CalorieSummarySection(loaded: Int, needed: Int, goal: Int, consumed: Int) {
+fun CalorieSummarySection(loaded: Int, needed: Int, goal: Int, consumed: Int,calorBurn: MutableState<Float>
+) {
+    val calor = consumed + calorBurn.value.toInt()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,7 +50,7 @@ fun CalorieSummarySection(loaded: Int, needed: Int, goal: Int, consumed: Int) {
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("$consumed", color = Color.White, style = MaterialTheme.typography.bodyLarge)
+            Text("$calor", color = Color.White, style = MaterialTheme.typography.bodyLarge)
             Text("consumption", color = Color.White, fontSize = 12.sp)
         }
     }

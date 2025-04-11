@@ -45,6 +45,7 @@ fun DiaryMainScreen(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    calorBurn: MutableState<Float>
 ) {
     val selectedDay = remember {
         mutableStateOf(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()))
@@ -56,7 +57,7 @@ fun DiaryMainScreen(
 
     if (account == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Đang tải tài khoản...")
+
         }
         return
     }
@@ -93,7 +94,8 @@ fun DiaryMainScreen(
             healthMetricViewModel = healthMetricViewModel,
             macroViewModel = macroViewModel,
             totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
-            burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel
+            burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+            calorBurn = calorBurn
         )
         MealTabs(
             meals = MealType.entries.map { it.label },

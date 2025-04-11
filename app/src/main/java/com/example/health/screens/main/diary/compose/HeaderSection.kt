@@ -37,6 +37,8 @@ fun HeaderSection(
     macroViewModel: MacroViewModel,
     totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
     burnOutCaloPerDayViewModel: BurnOutCaloPerDayViewModel,
+    calorBurn: MutableState<Float>
+
 ) {
     val openDatePicker = remember { mutableStateOf(false) }
 
@@ -132,7 +134,7 @@ fun HeaderSection(
         Spacer(modifier = Modifier.height(16.dp))
 
         // 🔸 Calorie summary
-        CalorieSummarySection(calor.toInt(), need.toInt(), tdee.toInt(), burnCalo.toInt())
+        CalorieSummarySection(calor.toInt(), need.toInt(), tdee.toInt(), burnCalo.toInt() , calorBurn)
 
         Spacer(modifier = Modifier.height(16.dp))
 

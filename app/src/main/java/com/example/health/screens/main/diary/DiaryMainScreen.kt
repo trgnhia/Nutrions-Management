@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.health.data.local.entities.BurnOutCaloPerDay
 import com.example.health.data.local.viewmodel.*
+import com.example.health.data.utils.toStartOfDay
 import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.screens.main.ParenCompose
 import com.example.health.screens.main.diary.compose.AddFoodCard
@@ -50,7 +51,7 @@ fun DiaryMainScreen(
     calorBurn: MutableState<Float>
 ) {
     val selectedDay = remember {
-        mutableStateOf(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()))
+        mutableStateOf(Date().toStartOfDay())
     }
     val selectedMeal = remember { mutableStateOf(MealType.MORNING) }
 
@@ -113,7 +114,8 @@ fun DiaryMainScreen(
             selectedMeal = selectedMeal.value.label,
             onMealChange = {
                 selectedMeal.value = MealType.fromLabel(it)
-            }
+            },
+            selectedDay = selectedDay.value,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -136,13 +138,17 @@ fun DiaryMainScreen(
                 // Trường hợp không theo chế độ ăn → món ăn do người dùng thêm
                 items(foodList.value.size + 1) { index ->
                     if (index < foodList.value.size) {
-                        FoodCard(index + 1, foodList.value[index], onClick = {
+                        FoodCard(index + 1, foodList.value[index] , selectedDay = selectedDay.value, onClick = {
                             navController.navigate(DiaryRoutes.Info.route)
                         })
                     } else {
-                        AddFoodCard(onClick = {
-                            navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
-                        })
+                        if(selectedDay.value.equals(Date().toStartOfDay())){
+                            AddFoodCard(onClick = {
+                                navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}&selectedDay=${selectedDay.value.time}")
+                            })
+                            Log.e("Check day", "DiaryMainScreen: selectday: " + selectedDay.value, )
+                            Log.e("Check day", "DiaryMainScreen: today: " + Date().toStartOfDay(), )
+                        }
                     }
                 }
             } else {

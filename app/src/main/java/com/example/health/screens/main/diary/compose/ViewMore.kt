@@ -50,11 +50,13 @@ fun ViewMore(
     totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
     accountViewModel: AccountViewModel,
     parent: String,
-    mealType: Int
+    mealType: Int,
+    selectedDay: Long
 ) {
     val account = accountViewModel.account.collectAsState().value
     val uid = account?.Uid ?: return
     val today: Date = Date().toStartOfDay()
+    val selectDay = Date(selectedDay).toStartOfDay()
 
     val foodList = remember { defaultFoodViewModel.getRandomFoodsByType(20, foodType) }
     val foods by foodList.collectAsState(initial = emptyList())
@@ -135,7 +137,8 @@ fun ViewMore(
                     FoodGridCard(
                         food = food,
                         onClick = { selectedFood.value = food },
-                        canEdit = parent == ParenCompose.FROMDIARY
+                        canEdit = parent == ParenCompose.FROMDIARY,
+                        selectDay = selectDay
                     )
                 }
             }
@@ -180,7 +183,8 @@ fun ViewMore(
                         urlImage = food.UrlImage
                     )
                     selectedFood.value = null
-                }
+                },
+                selectedDay = selectDay
             )
         }
     }
@@ -190,7 +194,8 @@ fun ViewMore(
 fun FoodGridCard(
     food: DefaultFood,
     onClick: () -> Unit,
-    canEdit: Boolean
+    canEdit: Boolean,
+    selectDay: Date
 ) {
     val context = LocalContext.current
     val imageRequest = remember(food.UrlImage) {
@@ -235,8 +240,7 @@ fun FoodGridCard(
                 softWrap = false,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-
-            if (canEdit) {
+            if (canEdit && selectDay.toStartOfDay() == Date().toStartOfDay()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 Box(
                     modifier = Modifier

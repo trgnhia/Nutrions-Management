@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.example.health.data.local.entities.DefaultFood
+import java.util.Date
 
 @Composable
 fun MealSummaryButton(onClick: () -> Unit) {
@@ -39,7 +40,8 @@ fun MealSummaryButton(onClick: () -> Unit) {
 fun TodayMealDialog(
     foods: List<DefaultFood>,
     onDismiss: () -> Unit,
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    selectDay: Date
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(

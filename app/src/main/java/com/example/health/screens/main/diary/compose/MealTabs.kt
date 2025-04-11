@@ -13,9 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import java.util.Date
 
 @Composable
-fun MealTabs(meals: List<String>, selectedMeal: String, onMealChange: (String) -> Unit) {
+fun MealTabs(
+    meals: List<String>, selectedMeal: String, onMealChange: (String) -> Unit,
+             selectedDay: Date
+) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly

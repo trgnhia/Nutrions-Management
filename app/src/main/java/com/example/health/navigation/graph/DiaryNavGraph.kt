@@ -75,14 +75,17 @@ fun NavGraphBuilder.diaryNavGraph(
            )
         }
         composable(
-            route = "${DiaryRoutes.Add}?parent={parent}&mealType={mealType}",
+            route = "${DiaryRoutes.Add}?parent={parent}&mealType={mealType}&selectedDay={selectedDay}",
             arguments = listOf(
                 navArgument("parent") { nullable = true; defaultValue = null },
                 navArgument("mealType") {  defaultValue = 1 } // default = MORNING
+                ,
+                navArgument("selectedDay") { type = androidx.navigation.NavType.LongType; defaultValue = 0L }
             )
         ) { backStackEntry ->
             val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
             val mealType = backStackEntry.arguments?.getInt("mealType") ?: 1
+            val selectedDay = backStackEntry.arguments?.getLong("selectedDay") ?: 0L
             DiaryAdd(
                 navController = navController,
                 parent = parent,
@@ -93,23 +96,27 @@ fun NavGraphBuilder.diaryNavGraph(
                 baseInfoViewModel = baseInfoViewModel,
                 totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
                 customFoodViewModel = customFoodViewModel,
-                accountViewModel = accountViewModel
+                accountViewModel = accountViewModel,
+                selectedDay = selectedDay
             )
         }
         composable(DiaryRoutes.Info.route){
             DiaryInfo(navController)
         }
         composable(
-            route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}&mealType={mealType}",
+            route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}&mealType={mealType}&selectedDay={selectedDay}",
             arguments = listOf(
                 navArgument("parent") { nullable = true; defaultValue = null },
                 navArgument("foodType") { defaultValue = 1 },
                 navArgument("mealType") { defaultValue = 1 } // truyền kèm mealType
+                ,
+                navArgument("selectedDay") { type = androidx.navigation.NavType.LongType; defaultValue = 0L }
             )
         ) { backStackEntry ->
             val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
             val foodType = backStackEntry.arguments?.getInt("foodType") ?: 1
             val mealType = backStackEntry.arguments?.getInt("mealType") ?: 1
+            val selectedDay = backStackEntry.arguments?.getLong("selectedDay") ?: 0L
 
             ViewMore(
                 navController = navController,
@@ -121,7 +128,8 @@ fun NavGraphBuilder.diaryNavGraph(
                 totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
                 accountViewModel = accountViewModel,
                 parent = parent,
-                mealType = mealType
+                mealType = mealType,
+                selectedDay = selectedDay
             )
         }
 

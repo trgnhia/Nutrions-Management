@@ -12,7 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.utils.calculateNutritionByWeight
+import com.example.health.data.utils.toStartOfDay
 import com.example.health.screens.main.ParenCompose
+import java.util.Date
 
 @Composable
 fun FoodDetailDialog(
@@ -25,7 +27,8 @@ fun FoodDetailDialog(
         fat: Float,
         carb: Float,
         protein: Float
-    ) -> Unit = { _, _, _, _, _ -> }
+    ) -> Unit = { _, _, _, _, _ -> },
+    selectedDay: Date
 ) {
     var weightInput by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -88,7 +91,7 @@ fun FoodDetailDialog(
                 InfoRow(label = "Fat", value = "${food.Fat}g")
                 InfoRow(label = "Protein", value = "${food.Protein}g")
 
-                if (parent == ParenCompose.FROMDIARY) {
+                if (parent == ParenCompose.FROMDIARY && selectedDay == Date().toStartOfDay() ) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = "Enter your consumed quantity (g):",

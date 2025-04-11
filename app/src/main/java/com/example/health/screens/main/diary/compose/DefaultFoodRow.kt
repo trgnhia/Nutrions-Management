@@ -45,7 +45,8 @@ fun DefaultFoodRow(
     today : Date,
     eatenMealViewModel: EatenMealViewModel,
     eatenDishViewModel: EatenDishViewModel,
-    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel
+    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
+    selecDay : Date
 ) {
     val displayItems = foods.take(5)
     var selectedFood by remember { mutableStateOf<DefaultFood?>(null) }
@@ -95,10 +96,10 @@ fun DefaultFoodRow(
                         quantityType = food.QuantityType,
                         quantity = weight,
                         urlImage = food.UrlImage,
-
                     )
                     onSaveFood()
-                }
+                },
+                selectedDay = selecDay
             )
         }
     }

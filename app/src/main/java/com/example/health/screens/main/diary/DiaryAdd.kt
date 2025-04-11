@@ -38,7 +38,8 @@ fun DiaryAdd(
     baseInfoViewModel: BaseInfoViewModel,
     totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
     customFoodViewModel: CustomFoodViewModel,
-    accountViewModel: AccountViewModel
+    accountViewModel: AccountViewModel,
+    selectedDay: Long
 ) {
     val searchText = remember { mutableStateOf("") }
     val searchResult = remember { mutableStateListOf<DefaultFood>() }
@@ -46,6 +47,7 @@ fun DiaryAdd(
     val account = accountViewModel.account.collectAsState().value
     val uid = account?.Uid
     val today: Date = Date().toStartOfDay()
+    val selectDay = Date(selectedDay).toStartOfDay()
 
     val customFoods by customFoodViewModel.getAllByUser(uid!!).collectAsState(initial = emptyList())
     val meatFlow = remember { defaultFoodViewModel.getRandomFoodsByType(5, 1) }
@@ -59,7 +61,6 @@ fun DiaryAdd(
     val snackFoods by snackFlow.collectAsState(initial = emptyList())
 
     val canEdit = parent == ParenCompose.FROMDIARY
-
     // State to handle selected tab
     val selectedTab = remember { mutableStateOf("Discover") }
 
@@ -124,7 +125,7 @@ fun DiaryAdd(
                         title = "Meat / Fish",
                         foods = meatFoods,
                         onViewMoreClick = {
-                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=1&mealType=$mealType")
+                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=1&mealType=$mealType&selectedDay=${selectedDay}")
                         },
                         onItemClick = {}, // Không cần vì Dialog mở trong DefaultFoodRow rồi
                         onSaveFood = {
@@ -136,7 +137,8 @@ fun DiaryAdd(
                         today =today ,
                         eatenMealViewModel = eatenMealViewModel,
                         eatenDishViewModel = eatenDishViewModel,
-                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                        selecDay = selectDay
                     )
                 }
 
@@ -146,7 +148,7 @@ fun DiaryAdd(
                         title = "Vegetable / Fruit",
                         foods = vegetableFoods,
                         onViewMoreClick = {
-                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=2&mealType=$mealType")
+                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=2&mealType=$mealType&selectedDay=${selectedDay}")
                         },
                         onItemClick = {},
                         onSaveFood = {},
@@ -156,7 +158,8 @@ fun DiaryAdd(
                         today =today ,
                         eatenMealViewModel = eatenMealViewModel,
                         eatenDishViewModel = eatenDishViewModel,
-                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                        selecDay = selectDay
                     )
                 }
 
@@ -166,7 +169,7 @@ fun DiaryAdd(
                         title = "Starch",
                         foods = starchFoods,
                         onViewMoreClick = {
-                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=3&mealType=$mealType")
+                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=3&mealType=$mealType&selectedDay=${selectedDay}")
                         },
                         onItemClick = {},
                         onSaveFood = {},
@@ -176,7 +179,8 @@ fun DiaryAdd(
                         today = today ,
                         eatenMealViewModel = eatenMealViewModel,
                         eatenDishViewModel = eatenDishViewModel,
-                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                        selecDay = selectDay
                     )
                 }
 // Snack
@@ -185,7 +189,7 @@ fun DiaryAdd(
                         title = "Snack / Light meal",
                         foods = snackFoods,
                         onViewMoreClick = {
-                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=4&mealType=$mealType")
+                            navController.navigate("${DiaryRoutes.ViewMore.route}?parent=$parent&foodtype=4&mealType=$mealType&selectedDay=${selectedDay}")
                         },
                         onItemClick = {},
                         onSaveFood = {},
@@ -195,39 +199,15 @@ fun DiaryAdd(
                         today =today ,
                         eatenMealViewModel = eatenMealViewModel,
                         eatenDishViewModel = eatenDishViewModel,
-                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                        selecDay = selectDay
                     )
                 }
             } else {
-//                val sampleMeals = listOf(
-//                    MealInfo(
-//                        date = "07/04/2025",
-//                        meals = listOf(
-//                            MealDetail("Breakfast", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
-//                            MealDetail("Lunch", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
-//                            MealDetail("Dinner", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480)
-//                        )
-//                    ),
-//                    MealInfo(
-//                        date = "08/04/2025",
-//                        meals = listOf(
-//                            MealDetail("Breakfast", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
-//                            MealDetail("Lunch", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480),
-//                            MealDetail("Dinner", R.drawable.default_dish, "1% Fresh Cheese, Roasted Almonds (30g), Mixed Berries Smoothie...", 480)
-//                        )
-//                    )
-//                )
-//
-//                LazyColumn(modifier = Modifier.padding(horizontal = 12.dp)) {
-//                    items(sampleMeals) { plan ->
-//                        MealPlanCard(plan)
-//                        Spacer(modifier = Modifier.height(16.dp))
-//                    }
-//                }
             }
         }
         // Only show the Meal Summary Button if we are in the "Discover" tab
-        if (canEdit && selectedTab.value == "Discover") {
+        if (canEdit && selectedTab.value == "Discover" && selectedDay == today.time) {
             MealSummaryButton { showDialog.value = true }
         }
         // Dialog for today's meals
@@ -235,7 +215,8 @@ fun DiaryAdd(
             TodayMealDialog(
                 foods = searchResult, // temporary sample
                 onDismiss = { showDialog.value = false },
-                onSaveClick = { showDialog.value = false }
+                onSaveClick = { showDialog.value = false },
+                selectDay = selectDay
             )
         }
     }

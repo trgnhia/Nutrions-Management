@@ -13,7 +13,7 @@ import java.util.Date
 @Parcelize
 @IgnoreExtraProperties
 @Entity(
-    tableName = "Notify",
+    tableName = "notify",
     foreignKeys = [ForeignKey(
         entity = Account::class,
         parentColumns = ["uid"],

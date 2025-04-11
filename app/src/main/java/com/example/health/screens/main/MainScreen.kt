@@ -136,6 +136,7 @@ fun MainScreen(
                 customFoodViewModel = customFoodViewModel,
                 calorBurn = calorBurn
 
+                dietDishViewModel = dietDishViewModel
             )
             workoutNavGraph(
                 navController = bottomNavController,
@@ -171,6 +172,8 @@ fun MainScreen(
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
                 macroViewModel = macroViewModel,
+                accountViewModel = accountViewModel
+                notifyViewModel = notifyViewModel,
                 accountViewModel = accountViewModel
             )
         }

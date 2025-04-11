@@ -35,6 +35,17 @@ fun DiaryMainScreen(
     accountViewModel: AccountViewModel,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
+    defaultFoodViewModel: DefaultFoodViewModel,
+    defaultExerciseViewModel: DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel: DefaultDietMealInPlanViewModel,
+    macroViewModel: MacroViewModel,
+    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel: ExerciseLogViewModel,
+    eatenMealViewModel: EatenMealViewModel,
+    eatenDishViewModel: EatenDishViewModel,
+    burnOutCaloPerDayViewModel: BurnOutCaloPerDayViewModel,
+    customFoodViewModel: CustomFoodViewModel,
+    dietDishViewModel: DietDishViewModel
     defaultFoodViewModel : DefaultFoodViewModel,
     defaultExerciseViewModel : DefaultExerciseViewModel,
     defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
@@ -62,26 +73,34 @@ fun DiaryMainScreen(
         return
     }
 
-    val uid = account.Uid
-    val baseInfo = baseInfoViewModel.baseInfo.collectAsState()
-    val isDiet = baseInfo.value?.IsDiet
+    val baseInfo by baseInfoViewModel.baseInfo.collectAsState()
+    val dietCode = baseInfo?.IsDiet ?: 0
+    val startDate = baseInfo?.DietStartDate ?: 0L
 
-    val healthMetric = healthMetricViewModel.lastMetric.collectAsState()
-    val macro = macroViewModel.macro.collectAsState()
+    val dayIndex = if (startDate > 0) {
+        ((selectedDay.value.time - startDate) / (1000 * 60 * 60 * 24)).toInt() + 1
+    } else 1
 
-    val totalNutrionsPerDay = totalNutrionsPerDayViewModel.getByDateAndUid(
-        selectedDay.value, uid
-    ).collectAsState()
-
-    val burnOutCaloPerDay = produceState<BurnOutCaloPerDay?>(
-        initialValue = null, selectedDay.value
-    ) {
-        value = burnOutCaloPerDayViewModel.getByDate(selectedDay.value)
+    LaunchedEffect(selectedDay.value, dietCode) {
+        if (dietCode != 0) {
+            val mealIds = listOf("b", "l", "s", "d").map { meal -> "$dietCode${meal}$dayIndex" }
+            dietDishViewModel.loadDishesForMealIds(mealIds)
+        }
     }
 
+    val dishes by dietDishViewModel.dishes.collectAsState()
     val foodList = eatenDishViewModel.getByDateAndType(
         selectedDay.value, selectedMeal.value.type
     ).collectAsState(initial = emptyList())
+
+    val currentMealKey = when (selectedMeal.value) {
+        MealType.MORNING -> "b"
+        MealType.LUNCH -> "l"
+        MealType.DINNER -> "d"
+        MealType.SNACK -> "s"
+    }
+
+    val mealDishesFromPlan = dishes.filter { it.MealPlanId.contains(currentMealKey) }
 
     Column(
         modifier = Modifier
@@ -97,6 +116,7 @@ fun DiaryMainScreen(
             burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
             calorBurn = calorBurn
         )
+
         MealTabs(
             meals = MealType.entries.map { it.label },
             selectedMeal = selectedMeal.value.label,
@@ -112,13 +132,17 @@ fun DiaryMainScreen(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-        if(isDiet == 0){
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize().padding(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            if (dietCode == 0) {
+                // Trường hợp không theo chế độ ăn → món ăn do người dùng thêm
                 items(foodList.value.size + 1) { index ->
                     if (index < foodList.value.size) {
                         FoodCard(index + 1, foodList.value[index], onClick = {
@@ -130,11 +154,14 @@ fun DiaryMainScreen(
                         })
                     }
                 }
-
+            } else {
+                // Trường hợp đang theo chế độ ăn → chỉ hiển thị các món ăn từ kế hoạch
+                items(mealDishesFromPlan.size) { index ->
+                    val dish = mealDishesFromPlan[index]
+                    DietDishCardInDiary(dish = dish)
+                }
             }
         }
-        else{
-            Text("Is in diet")
-        }
+
     }
 }

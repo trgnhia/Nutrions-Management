@@ -120,9 +120,11 @@ fun HeaderSection(
                 IconButton(
                     onClick = {
                         val newLocalDate = selectedLocalDate.plusDays(1)
-                        if (!newLocalDate.isAfter(today)) {
-                            onDateChange(Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-                        }
+                        onDateChange(Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+
+//                        if (!newLocalDate.isAfter(today)) {
+//                            onDateChange(Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+//                        }
                     },
                     enabled = selectedLocalDate < today
                 ) {
@@ -163,9 +165,11 @@ fun HeaderSection(
             LaunchedEffect(pickerState.selectedDateMillis) {
                 pickerState.selectedDateMillis?.let {
                     val newDate = Date(it)
-                    if (!newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(today)) {
-                        onDateChange(newDate)
-                    }
+//                    if (!newDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(today)) {
+//                        onDateChange(newDate)
+//                    }
+                    onDateChange(newDate)
+
                 }
             }
         }

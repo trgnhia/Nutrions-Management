@@ -1,7 +1,9 @@
 package com.example.health.data.local.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.health.alarm.AlarmScheduler
 import com.example.health.data.local.entities.Notify
 import com.example.health.data.local.repostories.NotifyRepository
 import com.example.health.data.utils.DateUtils
@@ -9,10 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import network.chaintech.kmp_date_time_picker.utils.now
 import java.sql.Date
-import java.time.LocalTime
-import java.time.ZoneId
 
 class NotifyViewModel(
     private val repository: NotifyRepository
@@ -24,6 +23,19 @@ class NotifyViewModel(
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
+    }
+
+    fun updateNotifyTime(uid: String, mealId: String, newTime: Date, context: Context) {
+        viewModelScope.launch {
+            val notify = Notify(
+                id = mealId,
+                Uid = uid,
+                Message = "It's time for ${mealId.replaceFirstChar { it.uppercase() }}!",
+                NotifyTime = newTime
+            )
+            repository.update(notify)
+            AlarmScheduler.scheduleAlarm(context, notify)
+        }
     }
 
     fun initDefaultNotifications(uid: String) {
@@ -39,9 +51,9 @@ class NotifyViewModel(
             )
         }
 
-
         viewModelScope.launch {
             repository.insertAll(defaultNotifies)
         }
     }
 }
+

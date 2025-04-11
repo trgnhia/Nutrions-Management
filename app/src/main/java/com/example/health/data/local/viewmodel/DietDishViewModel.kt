@@ -28,6 +28,18 @@ class DietDishViewModel(
         }
     }
 
+    fun loadDishesForMealIds(mealIds: List<String>) {
+        viewModelScope.launch {
+            val allDishes = mutableListOf<DietDish>()
+            mealIds.forEach { mealId ->
+                val dishes = repository.getByMealPlanId(mealId)
+                allDishes.addAll(dishes)
+            }
+            _dishes.value = allDishes
+        }
+    }
+
+
     fun syncIfNeeded(context: Context) = viewModelScope.launch {
         if (_dishes.value.isEmpty()) {
             Log.d("DietDishViewModel", "Room empty → syncing from Firestore...")

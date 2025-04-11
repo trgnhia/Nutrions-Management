@@ -115,6 +115,9 @@ fun AppNavigation(
                 customExerciseViewModel = customExerciseViewModel,
                 notifyViewModel = notifyViewModel,
                 dietDishViewModel = dietDishViewModel
+                customExerciseViewModel = customExerciseViewModel,
+                dietDishViewModel = dietDishViewModel,
+                notifyViewModel = notifyViewModel
             )
         }
     }

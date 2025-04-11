@@ -28,6 +28,10 @@ class AccountViewModel(
         repository.updateStatus(uid, status)
     }
 
+    fun getCurrentUid(): String {
+        return account.value?.Uid ?: ""
+    }
+
     fun fetchFromRemote(uid: String) = viewModelScope.launch {
         repository.fetchFromRemote(uid)
     }

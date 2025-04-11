@@ -47,6 +47,7 @@ fun NavGraphBuilder.diaryNavGraph(
     customFoodViewModel : CustomFoodViewModel,
     calorBurn: MutableState<Float>
 
+    dietDishViewModel: DietDishViewModel
 
 ) {
     navigation(
@@ -70,6 +71,7 @@ fun NavGraphBuilder.diaryNavGraph(
                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                customFoodViewModel = customFoodViewModel,
                calorBurn = calorBurn
+               dietDishViewModel = dietDishViewModel
            )
         }
         composable(

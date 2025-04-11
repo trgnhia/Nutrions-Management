@@ -92,7 +92,6 @@ fun HealthMetricScreen(
         }
     }
 
-
     // UI Loading
     Box(
         modifier = Modifier.fillMaxSize()
@@ -112,11 +111,7 @@ fun HealthMetricScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ActLoader()
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "We are setting up your personalized plan, please wait...",
-                style = MaterialTheme.typography.bodyLarge
-            )
+
         }
     }
 }

@@ -27,7 +27,7 @@ import com.example.health.data.local.entities.*
         CustomExercise::class
 
     ],
-    version = 19,
+    version = 20,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

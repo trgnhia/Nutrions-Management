@@ -24,10 +24,9 @@ fun NavGraphBuilder.profileNavGraph(
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
     macroViewModel : MacroViewModel,
-    accountViewModel: AccountViewModel
-    ) {
     notifyViewModel: NotifyViewModel,
     accountViewModel: AccountViewModel
+
 ) {
     navigation(
         route = GraphRoute.Profile.route,

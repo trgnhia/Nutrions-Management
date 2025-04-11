@@ -20,6 +20,7 @@ import com.example.health.data.local.viewmodel.*
 import com.example.health.navigation.routes.DiaryRoutes
 import com.example.health.screens.main.ParenCompose
 import com.example.health.screens.main.diary.compose.AddFoodCard
+import com.example.health.screens.main.diary.compose.DietDishCardInDiary
 import com.example.health.screens.main.diary.compose.FoodCard
 import com.example.health.screens.main.diary.compose.HeaderSection
 import com.example.health.screens.main.diary.compose.MealTabs
@@ -35,17 +36,7 @@ fun DiaryMainScreen(
     accountViewModel: AccountViewModel,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
-    defaultFoodViewModel: DefaultFoodViewModel,
-    defaultExerciseViewModel: DefaultExerciseViewModel,
-    defaultDietMealInPlanViewModel: DefaultDietMealInPlanViewModel,
-    macroViewModel: MacroViewModel,
-    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
-    exerciseLogViewModel: ExerciseLogViewModel,
-    eatenMealViewModel: EatenMealViewModel,
-    eatenDishViewModel: EatenDishViewModel,
-    burnOutCaloPerDayViewModel: BurnOutCaloPerDayViewModel,
-    customFoodViewModel: CustomFoodViewModel,
-    dietDishViewModel: DietDishViewModel
+    dietDishViewModel: DietDishViewModel,
     defaultFoodViewModel : DefaultFoodViewModel,
     defaultExerciseViewModel : DefaultExerciseViewModel,
     defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,

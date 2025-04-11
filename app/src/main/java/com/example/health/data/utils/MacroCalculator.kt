@@ -1,5 +1,7 @@
 package com.example.health.data.utils
 
+import java.util.Locale
+
 data class MacroResult(
     val carbInGrams: Float,
     val proteinInGrams: Float,
@@ -45,9 +47,10 @@ object MacroCalculator {
     }
 
     private fun roundToOneDecimal(value: Float): Float {
-        return String.format("%.1f", value).toFloat()
+        return String.format(Locale.US, "%.1f", value).toFloat()
     }
 }
+
 
 /* CÁCH SỬ DUNG hehe
 val result = MacroCalculator.calculateMacros(

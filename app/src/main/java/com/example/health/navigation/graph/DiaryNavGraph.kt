@@ -1,8 +1,11 @@
 package com.example.health.navigation.graph
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
@@ -22,7 +25,10 @@ import com.example.health.navigation.routes.GraphRoute
 import com.example.health.screens.main.diary.DiaryAdd
 import com.example.health.screens.main.diary.DiaryMainScreen
 import com.example.health.screens.main.diary.DiaryInfo
+import com.example.health.screens.main.diary.compose.MealType
+import com.example.health.screens.main.diary.compose.ViewMore
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.diaryNavGraph(
     navController: NavController,
     accountViewModel: AccountViewModel,
@@ -62,11 +68,52 @@ fun NavGraphBuilder.diaryNavGraph(
                customFoodViewModel = customFoodViewModel,
            )
         }
-        composable(DiaryRoutes.Add.route){
-            DiaryAdd(navController)
+        composable(
+            route = "${DiaryRoutes.Add}?parent={parent}&mealType={mealType}",
+            arguments = listOf(
+                navArgument("parent") { nullable = true; defaultValue = null },
+                navArgument("mealType") {  defaultValue = 1 } // default = MORNING
+            )
+        ) { backStackEntry ->
+            val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
+            val mealType = backStackEntry.arguments?.getInt("mealType") ?: 1
+            DiaryAdd(
+                navController = navController,
+                parent = parent,
+                mealType =mealType,
+                defaultFoodViewModel = defaultFoodViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                baseInfoViewModel = baseInfoViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+                accountViewModel = accountViewModel
+            )
         }
         composable(DiaryRoutes.Info.route){
             DiaryInfo(navController)
         }
+        composable(
+            route = "${DiaryRoutes.ViewMore.route}?parent={parent}&foodtype={foodType}",
+            arguments = listOf(
+                navArgument("parent") { nullable = true; defaultValue = null },
+                navArgument("foodType") { defaultValue = 1 } // hoặc required = true
+            )
+        ) { backStackEntry ->
+            val parent = backStackEntry.arguments?.getString("parent") ?: "unknown"
+            val foodType = backStackEntry.arguments?.getInt("foodType") ?: 1
+            ViewMore(
+                navController = navController,
+                foodType = foodType,
+                defaultFoodViewModel = defaultFoodViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                baseInfoViewModel = baseInfoViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                accountViewModel = accountViewModel,
+                parent = parent
+            )
+        }
+
     }
 }

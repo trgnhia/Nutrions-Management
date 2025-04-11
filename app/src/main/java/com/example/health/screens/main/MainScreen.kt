@@ -1,5 +1,7 @@
 package com.example.health.screens.main
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -16,6 +18,7 @@ import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
@@ -40,6 +43,7 @@ import com.example.health.navigation.routes.StatisticalRoutes
 import com.example.health.navigation.routes.WorkoutRoutes
 import com.google.firebase.firestore.FirebaseFirestore
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
     rootNavController: NavController,
@@ -57,6 +61,9 @@ fun MainScreen(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
+    //notifyViewModel : NotifyViewModel,
+    //dietDishViewModel : DietDishViewModel
 ) {
     val bottomNavController = rememberNavController()
     val bottomItems = listOf(
@@ -131,12 +138,26 @@ fun MainScreen(
                 defaultExerciseViewModel = defaultExerciseViewModel,
                 exerciseLogViewModel = exerciseLogViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+
             )
+
             planNavGraph(
                 navController = bottomNavController,
                 baseInfoViewModel = baseInfoViewModel,
                 defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
-                dietDishViewModel = dietDishViewModel
+                dietDishViewModel = dietDishViewModel,
+                accountViewModel = accountViewModel,
+                healthMetricViewModel = healthMetricViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+                defaultFoodViewModel = defaultFoodViewModel,
+                defaultExerciseViewModel = defaultExerciseViewModel,
             )
             statisticalNavGraph(bottomNavController)
             profileNavGraph(

@@ -1,5 +1,7 @@
 package com.example.health.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -8,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
@@ -21,6 +24,7 @@ import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.screens.main.MainScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavigation(
     navController: NavHostController,
@@ -38,6 +42,9 @@ fun MainNavigation(
     eatenDishViewModel : EatenDishViewModel,
     burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
     customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
+    //notifyViewModel : NotifyViewModel,
+    //dietDishViewModel : DietDishViewModel
 ) {
     // đây là nav tổng quát nhất ( gọi toàn bộ ứng dụng luôn ( sẽ được gọi trong main))
     NavHost(navController = navController, startDestination = "main") {
@@ -59,6 +66,9 @@ fun MainNavigation(
                 eatenDishViewModel = eatenDishViewModel,
                 burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
                 customFoodViewModel  = customFoodViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+                //notifyViewModel = notifyViewModel,
+                //dietDishViewModel = dietDishViewModel
                 )
         }
     }

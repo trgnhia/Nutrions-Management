@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
     implementation(libs.play.services.fido)
+    implementation(libs.androidx.navigation.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -103,6 +104,8 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose:1.6.4")
     implementation("com.patrykandpatrick.vico:views:1.6.4")
     implementation("androidx.compose.material3:material3:1.1.2")
+    implementation( "androidx.compose.foundation:foundation:1.7.8" )// hoặc mới hơn
+
 
 
 

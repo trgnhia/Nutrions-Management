@@ -1,5 +1,7 @@
 package com.example.health.screens.main.profile
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -31,7 +33,6 @@ import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import kotlinx.datetime.LocalTime
 import network.chaintech.kmp_date_time_picker.utils.MAX
 import network.chaintech.kmp_date_time_picker.utils.MIN
-
 
 @Composable
 fun FlippableSwitch(
@@ -66,6 +67,7 @@ fun FlippableSwitch(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Reminder(navController: NavController) {

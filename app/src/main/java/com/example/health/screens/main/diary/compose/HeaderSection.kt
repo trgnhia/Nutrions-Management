@@ -1,6 +1,7 @@
 package com.example.health.screens.main.diary.compose
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -36,34 +37,34 @@ fun HeaderSection(
     macroViewModel: MacroViewModel,
     totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
     burnOutCaloPerDayViewModel: BurnOutCaloPerDayViewModel,
-    fallbackTdee: Float = 2000f,
-    fallbackCarb: Float = 200f,
-    fallbackPro: Float = 100f,
-    fallbackFat: Float = 70f,
 ) {
     val openDatePicker = remember { mutableStateOf(false) }
-    val healthMetric = healthMetricViewModel.lastMetric.collectAsState()
-    val macro = macroViewModel.macro.collectAsState()
-    val totalNutrionsPerDay = healthMetric.value?.Uid?.let {
-        totalNutrionsPerDayViewModel.getByDateAndUid(selectedDate, it).collectAsState(initial = null)
-    }
-    val burnOutCaloPerDay = produceState<BurnOutCaloPerDay?>(initialValue = null, selectedDate) {
+
+    val healthMetric by healthMetricViewModel.lastMetric.collectAsState()
+    val macro by macroViewModel.macro.collectAsState()
+    val uid = healthMetric?.Uid
+
+    val totalNutrions = remember(uid, selectedDate) {
+        uid?.let {
+            totalNutrionsPerDayViewModel.getByDateAndUid(selectedDate, it)
+        }
+    }?.collectAsState(initial = null)
+
+    val burnOut = produceState<BurnOutCaloPerDay?>(initialValue = null, selectedDate) {
         value = burnOutCaloPerDayViewModel.getByDate(selectedDate)
     }
 
-    val tdee = healthMetric.value?.TDEE ?: fallbackTdee // tdee có sẵn r , giá tri mac dinh o day ko quan trong
-    val calor = totalNutrionsPerDay?.value?.TotalCalo ?: 500f
-    val macCarb = macro.value?.Carb ?: fallbackCarb
-    val macPro = macro.value?.Protein ?: fallbackPro
-    val macFat = macro.value?.Fat ?: fallbackFat
-
+    // Gán giá trị mặc định nếu chưa có dữ liệu
+    val tdee = healthMetric?.TDEE ?: 0f
+    val calor = totalNutrions?.value?.TotalCalo ?: 0f
+    val macCarb = macro?.Carb ?: 0f
+    val macPro = macro?.Protein ?: 0f
+    val macFat = macro?.Fat ?: 0f
+    val carb = totalNutrions?.value?.TotalCarb ?: 0f
+    val pro = totalNutrions?.value?.TotalPro ?: 0f
+    val fat = totalNutrions?.value?.TotalFat ?: 0f
+    val burnCalo = burnOut.value?.TotalCalo ?: 0f
     val need = tdee - calor
-
-    val carb = totalNutrionsPerDay?.value?.TotalCarb ?: 25f
-    val pro = totalNutrionsPerDay?.value?.TotalPro ?: 50f
-    val fat = totalNutrionsPerDay?.value?.TotalFat ?: 15f
-
-    val burnCalo = burnOutCaloPerDay.value?.TotalCalo ?: 350f
 
     val selectedLocalDate = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
     val today = LocalDate.now()
@@ -75,6 +76,7 @@ fun HeaderSection(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // 🔸 Ngày và điều hướng
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,22 +84,13 @@ fun HeaderSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if (selectedLocalDate == today) {
-                Text(
-                    text = "TODAY",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 15.dp)
-                )
-            } else {
-                Text(
-                    text = "",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Text(
+                text = if (selectedLocalDate == today) "TODAY" else "",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 15.dp)
+            )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = {
@@ -138,10 +131,12 @@ fun HeaderSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CalorieSummarySection(calor.toInt(),need.toInt(), tdee.toInt(), burnCalo.toInt())
+        // 🔸 Calorie summary
+        CalorieSummarySection(calor.toInt(), need.toInt(), tdee.toInt(), burnCalo.toInt())
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // 🔸 Macronutrient progress
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly

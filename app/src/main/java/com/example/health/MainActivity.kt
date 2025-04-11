@@ -6,15 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.health.alarm.scheduleDaily7AMAlarm
 import com.example.health.data.local.appdatabase.AppDatabase
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
 import com.example.health.data.local.repostories.BurnOutCaloPerDayRepository
+import com.example.health.data.local.repostories.CustomExerciseRepository
 import com.example.health.data.local.repostories.CustomFoodRepository
 import com.example.health.data.local.repostories.DefaultDietMealInPlanRepository
 import com.example.health.data.local.repostories.DefaultExerciseRepository
 import com.example.health.data.local.repostories.DefaultFoodRepository
-import com.example.health.data.local.repostories.DietDishRepository
 import com.example.health.data.local.repostories.EatenDishRepository
 import com.example.health.data.local.repostories.EatenMealRepository
 import com.example.health.data.local.repostories.ExerciseLogRepository
@@ -26,6 +27,7 @@ import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
 import com.example.health.data.local.viewmodel.CustomFoodViewModel
 import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
@@ -42,6 +44,7 @@ import com.example.health.data.local.viewmodelfactory.AccountViewModelFactory
 import com.example.health.data.remote.auth.AuthViewModelFactory
 import com.example.health.data.local.viewmodelfactory.BaseInfoViewModelFactory
 import com.example.health.data.local.viewmodelfactory.BurnOutCaloPerDayViewModelFactory
+import com.example.health.data.local.viewmodelfactory.CustomExerciseViewModelFactory
 import com.example.health.data.local.viewmodelfactory.CustomFoodViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultDietMealInPlanViewModelFactory
 import com.example.health.data.local.viewmodelfactory.DefaultExerciseViewModelFactory
@@ -62,7 +65,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PendingSyncScheduler.schedule(this)
+        PendingSyncScheduler.schedule(applicationContext)
         enableEdgeToEdge()
         val db = AppDatabase.getDatabase(applicationContext)
         val firestore = FirebaseFirestore.getInstance()
@@ -125,6 +128,7 @@ class MainActivity : ComponentActivity() {
         val customFoodRepository = CustomFoodRepository(db.customFoodDao(), db.pendingActionDao(), firestore)
         val notifyRepository = NotifyRepository(db.notifyDao(), firestore, db.pendingActionDao())
         val dietDishRepository = DietDishRepository(db.dietDishDao(), firestore)
+        val customExerciseRepository = CustomExerciseRepository(db.customExerciseDao(), db.pendingActionDao(), firestore)
 
         // ✅ ViewModel
         val authViewModel = ViewModelProvider(this, AuthViewModelFactory(applicationContext, accountRepository))[AuthViewModel::class.java]
@@ -164,6 +168,7 @@ class MainActivity : ComponentActivity() {
                     customFoodViewModel = customFoodViewModel,
                     notifyViewModel = notifyViewModel,
                     dietDishViewModel = dietDishViewModel
+                    customExerciseViewModel = customExerciseViewModel
                 )
             }
         }

@@ -20,9 +20,23 @@ interface TotalNutrionsPerDayDao {
     @Delete
     suspend fun delete(total: TotalNutrionsPerDay)
 
-    // ✅ Lấy bản ghi theo ngày và UID (Flow để theo dõi thay đổi)
-    @Query("SELECT * FROM total_nutrions_per_day WHERE date = :date AND uid = :uid LIMIT 1")
+    @Query(
+        """
+    SELECT 
+        :uid AS uid,
+        :date AS date,
+        SUM(totalCalo) AS totalCalo,
+        SUM(totalPro) AS totalPro,
+        SUM(totalCarb) AS totalCarb,
+        SUM(totalFat) AS totalFat,
+        0 AS dietType,
+        '' AS id
+    FROM total_nutrions_per_day 
+    WHERE date = :date AND uid = :uid
+    """
+    )
     fun getByDateAndUid(date: Date, uid: String): Flow<TotalNutrionsPerDay?>
+
 
     // ✅ Lấy toàn bộ bản ghi theo người dùng (tất cả các ngày)
     @Query("SELECT * FROM total_nutrions_per_day WHERE uid = :uid ORDER BY date DESC")

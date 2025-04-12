@@ -49,13 +49,14 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun HeaderWithBackButton(
     title: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    backgroundColor: Color = Color(0xFF545E94)
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)) // 👈 Bo góc dưới
-            .background(color = Color(0xFF508351)) // Xanh đậm
+            .background(color = Color(0xFF4E5679)) // Xanh đậm
             .padding(vertical = 20.dp, horizontal = 12.dp)
     ) {
         // 👉 Back icon (nằm trái)

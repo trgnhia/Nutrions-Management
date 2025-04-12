@@ -52,7 +52,7 @@ fun HighProteinPlanScreen(
             HeaderWithBackButton(
                 title = "High protein meal plan",
                 onBackClick = { navController.popBackStack() },
-                backgroundColor = Color(0xFFB7774B) // Xanh nước biển
+                backgroundColor = Color(0xFFB7774B)
             )
         }
 

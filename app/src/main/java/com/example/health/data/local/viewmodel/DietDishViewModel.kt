@@ -27,7 +27,6 @@ class DietDishViewModel(
             Log.d("VeganDetailScreen", "Dishes size = ${list.size}")
         }
     }
-
     fun loadDishesForMealIds(mealIds: List<String>) {
         viewModelScope.launch {
             val allDishes = mutableListOf<DietDish>()
@@ -37,6 +36,10 @@ class DietDishViewModel(
             }
             _dishes.value = allDishes
         }
+    }
+
+    suspend fun getDishById(id: String): DietDish? {
+        return repository.getById(id)
     }
 
 

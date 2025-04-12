@@ -1,4 +1,5 @@
 package com.example.health.screens.main.diary.compose
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,11 +15,15 @@ import coil.compose.AsyncImage
 import com.example.health.data.local.entities.DietDish
 
 @Composable
-fun DietDishCardInDiary(dish: DietDish) {
+fun DietDishCardInDiary(
+    dish: DietDish,
+    onClick: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF4F6FA))
     ) {
@@ -50,3 +55,4 @@ fun DietDishCardInDiary(dish: DietDish) {
         }
     }
 }
+

@@ -69,8 +69,6 @@ import com.example.health.ui.theme.HealthTheme
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : ComponentActivity() {
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PendingSyncScheduler.schedule(applicationContext)
@@ -78,48 +76,6 @@ class MainActivity : ComponentActivity() {
         val db = AppDatabase.getDatabase(applicationContext)
         val firestore = FirebaseFirestore.getInstance()
 
-//        val accountRepository = AccountRepository(db.accountDao(), db.pendingActionDao(), firestore)
-//        val baseInfoRepository = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
-//        val healthMetricRepository = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
-//
-//        val authViewModel = ViewModelProvider(
-//            this,
-//            AuthViewModelFactory(applicationContext, accountRepository)
-//        )[AuthViewModel::class.java]
-//
-//        val accountViewModel = ViewModelProvider(
-//            this,
-//            AccountViewModelFactory(accountRepository)
-//        )[AccountViewModel::class.java]
-//
-//        val baseInfoViewModel = ViewModelProvider(
-//            this,
-//            BaseInfoViewModelFactory(baseInfoRepository)
-//        )[BaseInfoViewModel::class.java]
-//
-//        val healthMetricViewModel = ViewModelProvider(
-//            this,
-//            HealthMetricViewModelFactory(healthMetricRepository)
-//        )[HealthMetricViewModel::class.java]
-//        val defaultFoodRepository = DefaultFoodRepository(db.defaultFoodDao(), firestore)
-//        val defaultExerciseRepository = DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
-//
-//
-//        val defaultFoodViewModel = ViewModelProvider(
-//            this,
-//            DefaultFoodViewModelFactory(defaultFoodRepository)
-//        )[DefaultFoodViewModel::class.java]
-//
-//        val defaultExerciseViewModel = ViewModelProvider(
-//            this,
-//            DefaultExerciseViewModelFactory(defaultExerciseRepository)
-//        )[DefaultExerciseViewModel::class.java]
-//
-//        val macroRepository = MacroRepository(db.macroDao(), db.pendingActionDao(),firestore)
-//        val macroViewModel = ViewModelProvider(
-//            this,
-//            MacroViewModelFactory(macroRepository)
-//        )[com.example.health.data.local.viewmodel.MacroViewModel::class.java]
 
         val accountRepository = AccountRepository(db.accountDao(), db.pendingActionDao(), firestore)
         val baseInfoRepository = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
@@ -154,12 +110,11 @@ class MainActivity : ComponentActivity() {
         val burnOutViewModel = ViewModelProvider(this, BurnOutCaloPerDayViewModelFactory(burnOutRepository))[BurnOutCaloPerDayViewModel::class.java]
         val customFoodViewModel = ViewModelProvider(this, CustomFoodViewModelFactory(customFoodRepository))[CustomFoodViewModel::class.java]
         val customExerciseViewModel = ViewModelProvider(this, CustomExerciseViewModelFactory(customExerciseRepository))[CustomExerciseViewModel::class.java]
-        //val notifyViewModel = ViewModelProvider(this, NotifyViewModelFactory(notifyRepository))[NotifyViewModel::class.java]
-        //val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
-        scheduleDaily7AMAlarm()
-        val notifyViewModel = ViewModelProvider(this, NotifyViewModelFactory(notifyRepository))[NotifyViewModel::class.java]
-        val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
+        val notifyViewModel = ViewModelProvider(this,NotifyViewModelFactory(notifyRepository) // ✅ không còn truyền uid
+        )[NotifyViewModel::class.java]
 
+        val dietDishViewModel = ViewModelProvider(this, DietDishViewModelFactory(dietDishRepository))[DietDishViewModel::class.java]
+        scheduleDaily7AMAlarm()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             HealthTheme {
@@ -179,10 +134,6 @@ class MainActivity : ComponentActivity() {
                     burnOutCaloPerDayViewModel = burnOutViewModel,
                     customFoodViewModel = customFoodViewModel,
                     customExerciseViewModel = customExerciseViewModel,
-
-//                    notifyViewModel = notifyViewModel,
-//                    dietDishViewModel = dietDishViewModel
-
                     notifyViewModel = notifyViewModel,
                     dietDishViewModel = dietDishViewModel
                 )
@@ -202,4 +153,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

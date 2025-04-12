@@ -30,6 +30,10 @@ class DefaultFoodViewModel(
             repository.insert(updated)
         }
     }
+    suspend fun getById(id: String): DefaultFood? {
+        return repository.getById(id)
+    }
+
     fun syncIfNeeded(context: Context) = viewModelScope.launch {
         if (defaultFoods.value.isEmpty()) {
             Log.d("DefaultFoodViewModel", "Room empty → loading from Firestore...")

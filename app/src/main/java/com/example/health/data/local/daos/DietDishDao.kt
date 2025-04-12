@@ -19,5 +19,7 @@ interface DietDishDao {
     @Query("SELECT * FROM diet_dish WHERE mealPlanId = :mealPlanId")
     suspend fun getByMealPlanId(mealPlanId: String): List<DietDish>
 
+    @Query("SELECT * FROM diet_dish WHERE id = :id")
+    suspend fun getById(id: String): DietDish?
 
 }

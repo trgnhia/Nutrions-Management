@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
@@ -27,6 +28,8 @@ import com.example.health.navigation.routes.GraphRoute
 import com.example.health.screens.main.diary.DiaryAdd
 import com.example.health.screens.main.diary.DiaryMainScreen
 import com.example.health.screens.main.diary.DiaryInfo
+import com.example.health.screens.main.diary.compose.DetailDefaultScreen
+import com.example.health.screens.main.diary.compose.DetailDietScreen
 import com.example.health.screens.main.diary.compose.MealType
 import com.example.health.screens.main.diary.compose.ViewMore
 
@@ -100,6 +103,24 @@ fun NavGraphBuilder.diaryNavGraph(
                 selectedDay = selectedDay
             )
         }
+
+        composable(
+            route = DiaryRoutes.DetailDiet.route,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: ""
+            DetailDietScreen(dishId = id,dietDishViewModel) // hoặc id = id
+        }
+
+        composable(
+            route = DiaryRoutes.DetailDefault.route,
+            arguments = listOf(navArgument("foodId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val foodId = backStackEntry.arguments?.getString("foodId") ?: ""
+            DetailDefaultScreen(foodId = foodId, viewModel = defaultFoodViewModel)
+        }
+
+
         composable(DiaryRoutes.Info.route){
             DiaryInfo(navController)
         }

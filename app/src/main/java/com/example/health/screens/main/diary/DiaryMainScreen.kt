@@ -140,12 +140,28 @@ fun DiaryMainScreen(
                 }
             } else {
                 // 👉 Đang theo chế độ ăn → hiển thị các món theo kế hoạch
+//                items(mealDishesFromPlan.size) { index ->
+//                    val dish = mealDishesFromPlan[index]
+//                    DietDishCardInDiary(dish = dish, onClick = {
+//                        navController.navigate("diary/detail_diet/${dish.Id}")
+//                    })
+//                }
                 items(mealDishesFromPlan.size) { index ->
                     val dish = mealDishesFromPlan[index]
                     DietDishCardInDiary(dish = dish, onClick = {
-                        navController.navigate("diary/detail_diet/${dish.Id}")
+                        val uid = account.Uid
+                        val mealType = selectedMeal.value.type
+                        val today = selectedDay.value
+                        val route = DiaryRoutes.DetailDiet.createRoute(
+                            id = dish.Id,
+                            uid = uid,
+                            mealType = mealType,
+                            date = today.time
+                        )
+                        navController.navigate(route)
                     })
                 }
+
             }
         }
 

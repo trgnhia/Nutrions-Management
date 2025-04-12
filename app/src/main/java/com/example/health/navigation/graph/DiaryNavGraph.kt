@@ -32,6 +32,7 @@ import com.example.health.screens.main.diary.compose.DetailDefaultScreen
 import com.example.health.screens.main.diary.compose.DetailDietScreen
 import com.example.health.screens.main.diary.compose.MealType
 import com.example.health.screens.main.diary.compose.ViewMore
+import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.diaryNavGraph(
@@ -104,13 +105,42 @@ fun NavGraphBuilder.diaryNavGraph(
             )
         }
 
+//        composable(
+//            route = DiaryRoutes.DetailDiet.route,
+//            arguments = listOf(navArgument("id") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val id = backStackEntry.arguments?.getString("id") ?: ""
+//            DetailDietScreen(dishId = id,dietDishViewModel, ) // hoặc id = id
+//        }
+
         composable(
-            route = DiaryRoutes.DetailDiet.route,
-            arguments = listOf(navArgument("id") { type = NavType.StringType })
+                route = "diary/detail_diet/{id}?uid={uid}&mealType={mealType}&date={date}",
+                arguments = listOf(
+                    navArgument("id") { type = NavType.StringType },
+                    navArgument("uid") { type = NavType.StringType },
+                    navArgument("mealType") { type = NavType.IntType },
+                    navArgument("date") { type = NavType.LongType }
+
+            )
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id") ?: ""
-            DetailDietScreen(dishId = id,dietDishViewModel) // hoặc id = id
+            val uid = backStackEntry.arguments?.getString("uid") ?: ""
+            val mealType = backStackEntry.arguments?.getInt("mealType") ?: 1
+            val dateMillis = backStackEntry.arguments?.getLong("date") ?: System.currentTimeMillis()
+            val today = Date(dateMillis)
+
+            DetailDietScreen(
+                dishId = id,
+                uid = uid,
+                today = today,
+                mealType = mealType,
+                viewModel = dietDishViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel
+            )
         }
+
 
         composable(
             route = DiaryRoutes.DetailDefault.route,

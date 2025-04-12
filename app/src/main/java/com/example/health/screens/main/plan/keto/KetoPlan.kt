@@ -31,7 +31,7 @@ import com.example.health.ui.theme.MealType
 @Composable
 fun KetoPlanScreen(
     navController: NavController,
-    viewModel: DefaultDietMealInPlanViewModel
+    viewModel: DefaultDietMealInPlanViewModel,
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
@@ -50,7 +50,8 @@ fun KetoPlanScreen(
         item {
             HeaderWithBackButton(
                 title = "Keto diet meal plan",
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                backgroundColor = Color(0xFF4E5477)
             )
         }
 
@@ -129,7 +130,7 @@ fun MealItem(meal: DefaultDietMealInPlan, onClick: () -> Unit) {
         modifier = Modifier
             .width(140.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFFE0F1D5))
+            .background(Color(0xFFC9CBE7))
             .clickable { onClick() }
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally

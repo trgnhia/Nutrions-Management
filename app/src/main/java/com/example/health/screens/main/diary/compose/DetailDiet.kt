@@ -1,6 +1,9 @@
 package com.example.health.screens.main.diary.compose
 
 import NutritionTagFixedWidth
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,12 +11,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,28 +28,35 @@ import coil.compose.AsyncImage
 import com.example.health.R
 import com.example.health.data.local.entities.DietDish
 import com.example.health.data.local.viewmodel.DietDishViewModel
+import com.example.health.data.local.viewmodel.EatenDishViewModel
+import com.example.health.data.local.viewmodel.EatenMealViewModel
+import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.utils.calculateNutritionByWeight
+import com.example.health.screens.main.diary.AddFood
 import kotlinx.coroutines.launch
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextFieldDefaults
+import java.util.*
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailDietScreen(
     dishId: String,
-    viewModel: DietDishViewModel
+    uid: String,
+    today: Date,
+    mealType: Int,
+    viewModel: DietDishViewModel,
+    eatenDishViewModel: EatenDishViewModel,
+    eatenMealViewModel: EatenMealViewModel,
+    totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel
 ) {
-    // Ở đầu Composable
-    var quantityText by remember { mutableStateOf("100") }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     var dish by remember { mutableStateOf<DietDish?>(null) }
 
-    // 💪 State cho quantity
-    var quantity by remember { mutableStateOf(100) }
+    var quantityText by remember { mutableStateOf("") }
 
     LaunchedEffect(dishId) {
         scope.launch {
             dish = viewModel.getDishById(dishId)
-            quantity = dish?.Quantity ?: 100
         }
     }
 
@@ -55,8 +67,10 @@ fun DetailDietScreen(
         return
     }
 
+    val initialQuantity = dish!!.Quantity
+
     Box(modifier = Modifier.fillMaxSize()) {
-        // --- Background cong ---
+        // Background
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,7 +84,6 @@ fun DetailDietScreen(
             )
         }
 
-        // --- Main content ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,7 +110,7 @@ fun DetailDietScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Trung bình, một phần ${dish!!.Name.lowercase()} chứa khoảng ${dish!!.Calo.toInt()} kcal.",
+                text = "On average, one serving of ${dish!!.Name.lowercase()} (${dish!!.Quantity}${dish!!.QuantityType}) contains about ${dish!!.Calo.toInt()} kcal.",
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 32.dp)
@@ -105,7 +118,7 @@ fun DetailDietScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 👉 "Nutritions" + selector
+            // Nutritions
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -132,20 +145,19 @@ fun DetailDietScreen(
                         contentPadding = PaddingValues(0.dp),
                         modifier = Modifier.size(36.dp)
                     ) {
-                        Text("-", color = Color.White, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                        Text("-", color = Color.White)
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    // 👉 TextField cho nhập số
                     OutlinedTextField(
                         value = quantityText,
                         onValueChange = { input ->
-                            // Chỉ cho phép nhập số và không để trống
                             if (input.all { it.isDigit() }) {
                                 quantityText = input
                             }
                         },
+                        placeholder = { Text("") },
                         modifier = Modifier
                             .width(70.dp)
                             .height(55.dp),
@@ -169,7 +181,7 @@ fun DetailDietScreen(
                         contentPadding = PaddingValues(0.dp),
                         modifier = Modifier.size(36.dp)
                     ) {
-                        Text("+", color = Color.White, fontSize = MaterialTheme.typography.titleLarge.fontSize)
+                        Text("+", color = Color.White)
                     }
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -177,8 +189,6 @@ fun DetailDietScreen(
                     Text("gram", style = MaterialTheme.typography.bodyMedium)
                 }
             }
-
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -201,19 +211,56 @@ fun DetailDietScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            val isValidInput = quantityText.isNotBlank() && quantityText.all { it.isDigit() }
+            val isChanged = isValidInput
+
             Button(
-                onClick = { /* TODO: Save */ },
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDE8025)),
+                onClick = {
+                    val inputQuantity = quantityText.toFloatOrNull()
+                    if (inputQuantity != null) {
+                        val result = calculateNutritionByWeight(
+                            defaultWeight = dish!!.Quantity.toFloat(),
+                            actualWeight = inputQuantity,
+                            calories = dish!!.Calo,
+                            fat = dish!!.Fat,
+                            carb = dish!!.Carb,
+                            protein = dish!!.Protein
+                        )
+
+                        AddFood(
+                            uid = uid,
+                            eatenDishViewModel = eatenDishViewModel,
+                            eatenMealViewModel = eatenMealViewModel,
+                            totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                            today = today,
+                            foodID = dish!!.FoodId,
+                            dishName = dish!!.Name,
+                            calo = result.calories,
+                            fat = result.fat,
+                            carb = result.carb,
+                            protein = result.protein,
+                            type = mealType,
+                            quantityType = dish!!.QuantityType,
+                            quantity = result.actualWeight,
+                            urlImage = dish!!.UrlImage
+                        )
+
+                        Toast.makeText(context, "The dish has been added to the diary.", Toast.LENGTH_LONG).show()
+                    }
+                },
+                enabled = isChanged,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isChanged) Color(0xFFDE8025) else Color.Gray
+                ),
                 modifier = Modifier
                     .padding(horizontal = 48.dp)
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(48.dp),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text("SAVE", color = Color.White)
             }
+
         }
     }
 }
-
-

@@ -116,17 +116,11 @@ fun HeaderSection(
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(horizontal = 4.dp)
                 )
-
                 IconButton(
                     onClick = {
                         val newLocalDate = selectedLocalDate.plusDays(1)
                         onDateChange(Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-
-//                        if (!newLocalDate.isAfter(today)) {
-//                            onDateChange(Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-//                        }
-                    },
-                    enabled = selectedLocalDate < today
+                    }
                 ) {
                     Icon(Icons.Default.KeyboardArrowRight, contentDescription = null, tint = Color.White)
                 }

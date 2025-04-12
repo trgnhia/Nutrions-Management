@@ -19,7 +19,6 @@ class AutoDailyInitWorker(private val context: Context) {
         val db = AppDatabase.getDatabase(context)
         val account = db.accountDao().getAccountOnce()
         val uid = account?.Uid ?: return@withContext
-
         val today: Date = Date().toStartOfDay() // ✅ chuẩn hóa date
 
         // TotalNutrionsPerDay

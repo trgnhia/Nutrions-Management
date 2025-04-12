@@ -33,4 +33,14 @@ class EatenMealViewModel(
     suspend fun getMealByDateAndType(date: Date, type: Int): EatenMeal? {
         return repository.getMealByDateAndType(date, type)
     }
+
+    // ✅ Đồng bộ từ Firestore về Room
+    fun fetchFromRemote(uid: String) = viewModelScope.launch {
+        repository.fetchFromRemote(uid)
+    }
+
+    // ✅ Gọi fetch nếu Room chưa có dữ liệu (tùy chọn mở rộng nếu bạn thêm count vào DAO)
+    fun syncIfNeeded(uid: String) = viewModelScope.launch {
+        repository.fetchFromRemote(uid) // hoặc thêm kiểm tra count trước nếu cần
+    }
 }

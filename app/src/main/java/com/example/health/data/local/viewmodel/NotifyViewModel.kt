@@ -54,6 +54,16 @@ class NotifyViewModel(
         viewModelScope.launch {
             repository.insertAll(defaultNotifies)
         }
+        // ✅ Fetch dữ liệu từ Firestore về Room
+        fun fetchFromRemote(uid: String) = viewModelScope.launch {
+            repository.fetchFromRemote(uid)
+        }
+
+        // ✅ Chỉ fetch nếu cần (ví dụ app vừa mở, Room trống)
+        fun syncIfNeeded(uid: String) = viewModelScope.launch {
+            // Có thể thêm logic kiểm tra count trong repository nếu cần
+            repository.fetchFromRemote(uid)
+        }
     }
 }
 

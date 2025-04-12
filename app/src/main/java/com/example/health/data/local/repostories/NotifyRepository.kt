@@ -150,4 +150,34 @@ class NotifyRepository(
         }
         notifyDao.deleteAllByUid(uid)
     }
+    suspend fun fetchFromRemote(uid: String) {
+        try {
+            Log.e("fetchFromRemote: ", "fetchFromRemote: notify ", )
+            val snapshot = firestore.collection("accounts")
+                .document(uid)
+                .collection("notify")
+                .get()
+                .await()
+
+            val notifies = snapshot.documents.mapNotNull { doc ->
+                try {
+                    doc.toObject(Notify::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+
+            notifies.forEach { notify ->
+                Log.e("fetch info ", "fetchFromRemote: notify " + notify.id, )
+                notifyDao.insert(notify)
+            }
+
+            Log.d("NotifyRepository", "Fetched ${notifies.size} notifies from Firestore for uid=$uid")
+
+        } catch (e: Exception) {
+            Log.e("NotifyRepository", "Failed to fetch notifies from Firestore", e)
+        }
+    }
+
 }

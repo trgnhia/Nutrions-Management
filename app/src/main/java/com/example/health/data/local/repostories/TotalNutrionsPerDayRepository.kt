@@ -1,5 +1,6 @@
 package com.example.health.data.local.repostories
 
+import android.util.Log
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.daos.TotalNutrionsPerDayDao
 import com.example.health.data.local.daos.NutritionAggregate
@@ -115,4 +116,33 @@ class TotalNutrionsPerDayRepository(
     suspend fun getByDateAndUidOnce(date: Date, uid: String): TotalNutrionsPerDay? {
         return dao.getByDateAndUidOnce(date, uid)
     }
+    suspend fun fetchFromRemote(uid: String) {
+        try {
+            Log.e("fetchFromRemote: ", "fetchFromRemote: total nutrition per day ", )
+            val snapshot = firestore.collection("accounts")
+                .document(uid)
+                .collection("total_nutrions_per_day")
+                .get()
+                .await()
+
+            val totals = snapshot.documents.mapNotNull { doc ->
+                try {
+                    Log.e("fetch info ", "fetchFromRemote: total nutrition per day " + doc.id, )
+                    doc.toObject(TotalNutrionsPerDay::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+
+            totals.forEach { total ->
+                dao.insert(total)
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("fetchFromRemote: ", "fetchFromRemote: total nutrition per day " + e.message, )
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.health.data.local.repostories
 
+import android.util.Log
 import com.example.health.data.local.daos.BurnOutCaloPerDayDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.BurnOutCaloPerDay
@@ -99,4 +100,33 @@ class BurnOutCaloPerDayRepository(
             update(entry)
         }
     }
+    suspend fun fetchFromRemote(uid: String) {
+        try {
+            Log.e("fetchFromRemote: ", "fetchFromRemote: brn out ", )
+            val snapshot = firestore.collection("accounts")
+                .document(uid)
+                .collection("burn_out_calo_per_day")
+                .get()
+                .await()
+
+            val list = snapshot.documents.mapNotNull { doc ->
+                try {
+                    doc.toObject(BurnOutCaloPerDay::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+
+            list.forEach { entry ->
+                Log.e("fetch info ", "fetchFromRemote: burnout " + entry.DateTime, )
+                dao.insert(entry)
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("fetchFromRemote: ", "fetchFromRemote: burnout " + e.message, )
+        }
+    }
+
 }

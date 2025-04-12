@@ -1,5 +1,6 @@
 package com.example.health.data.local.repostories
 
+import android.util.Log
 import com.example.health.data.local.daos.EatenDishDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.EatenDish
@@ -82,4 +83,33 @@ class EatenDishRepository(
             pendingDao.insert(action)
         }
     }
+    suspend fun fetchFromRemote(uid: String) {
+        try {
+            Log.e("fetchFromRemote: ", "fetchFromRemote: eaten dish ", )
+            val snapshot = firestore.collection("accounts")
+                .document(uid)
+                .collection("eaten_dish")
+                .get()
+                .await()
+
+            val list = snapshot.documents.mapNotNull { doc ->
+                try {
+                    doc.toObject(EatenDish::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+
+            list.forEach { dish ->
+                Log.e("fetch info ", "fetchFromRemote: eaten dish " + dish.id, )
+                dao.insert(dish)
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("fetchFromRemote: ", "fetchFromRemote: eaten dish " + e.message, )
+        }
+    }
+
 }

@@ -31,4 +31,14 @@ class BurnOutCaloPerDayViewModel(
     fun generateLog(uid: String, date: Date) = viewModelScope.launch {
         repository.generateBurnOutLog(uid, date)
     }
+    // ✅ Fetch toàn bộ bản ghi từ Firestore về Room
+    fun fetchFromRemote(uid: String) = viewModelScope.launch {
+        repository.fetchFromRemote(uid)
+    }
+
+    // ✅ Chỉ fetch nếu Room đang trống (bạn có thể tự thêm kiểm tra count trong Repository nếu cần)
+    fun syncIfNeeded(uid: String) = viewModelScope.launch {
+        // Giả sử trong Repository có logic kiểm tra Room trống trước khi fetch
+        repository.fetchFromRemote(uid)
+    }
 }

@@ -33,4 +33,14 @@ class ExerciseLogViewModel(
     fun delete(log: ExerciseLog) = viewModelScope.launch {
         repository.delete(log)
     }
+    // ✅ Đồng bộ toàn bộ log từ Firestore về Room
+    fun fetchFromRemote(uid: String) = viewModelScope.launch {
+        repository.fetchFromRemote(uid)
+    }
+
+    // ✅ Chỉ fetch nếu cần (Room đang trống)
+    fun syncIfNeeded(uid: String) = viewModelScope.launch {
+        // Có thể thêm kiểm tra repository.getCount(uid) nếu muốn tối ưu
+        repository.fetchFromRemote(uid)
+    }
 }

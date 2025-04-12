@@ -52,7 +52,18 @@ fun AppNavigation(
                 baseInfoViewModel = baseInfoViewModel,
                 healthMetricViewModel = healthMetricViewModel,
                 defaultFoodViewModel = defaultFoodViewModel,
-                defaultExerciseViewModel = defaultExerciseViewModel
+                defaultExerciseViewModel = defaultExerciseViewModel,
+                defaultDietMealInPlanViewModel = defaultDietMealInPlanViewModel,
+                macroViewModel = macroViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                exerciseLogViewModel = exerciseLogViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                burnOutCaloPerDayViewModel = burnOutCaloPerDayViewModel,
+                customFoodViewModel = customFoodViewModel,
+                customExerciseViewModel = customExerciseViewModel,
+                notifyViewModel = notifyViewModel,
+                dietDishViewModel = dietDishViewModel
             )
         }
 

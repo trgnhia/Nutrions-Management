@@ -8,6 +8,12 @@ import com.example.health.data.utils.downloadImageAndSave
 import com.example.health.data.utils.toSafeFileName
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.local.entities.DefaultExercise
+import com.example.health.data.local.repostories.BurnOutCaloPerDayRepository
+import com.example.health.data.local.repostories.EatenDishRepository
+import com.example.health.data.local.repostories.EatenMealRepository
+import com.example.health.data.local.repostories.ExerciseLogRepository
+import com.example.health.data.local.repostories.NotifyRepository
+import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
 
 object DefaultDataSyncHelper {
 
@@ -28,4 +34,32 @@ object DefaultDataSyncHelper {
             repo.insert(updated)
         }
     }
+    suspend fun syncEatenMeal(repo: EatenMealRepository, uid: String) {
+        repo.fetchFromRemote(uid)
+    }
+
+    suspend fun syncNotify(repo: NotifyRepository, uid: String) {
+        repo.fetchFromRemote(uid)
+    }
+
+    suspend fun syncTotalNutrition(repo: TotalNutrionsPerDayRepository, uid: String) {
+        repo.fetchFromRemote(uid)
+    }
+    // ✅ NEW: Đồng bộ BurnOutCaloPerDay từ Firestore về Room
+    suspend fun syncBurnOutCalo(uid: String, repo: BurnOutCaloPerDayRepository) {
+        repo.fetchFromRemote(uid)
+    }
+
+    // ✅ NEW: Đồng bộ EatenDish từ Firestore về Room
+    suspend fun syncEatenDish(uid: String, repo: EatenDishRepository) {
+        repo.fetchFromRemote(uid)
+    }
+
+    // ✅ NEW: Đồng bộ ExerciseLog từ Firestore về Room
+    suspend fun syncExerciseLog(uid: String, repo: ExerciseLogRepository) {
+        repo.fetchFromRemote(uid)
+    }
+
+
+
 }

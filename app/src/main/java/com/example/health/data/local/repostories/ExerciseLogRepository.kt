@@ -1,6 +1,7 @@
 package com.example.health.data.local.repostories
 
 
+import android.util.Log
 import com.example.health.data.local.daos.ExerciseLogDao
 import com.example.health.data.local.daos.PendingActionDao
 import com.example.health.data.local.entities.ExerciseLog
@@ -87,4 +88,33 @@ class ExerciseLogRepository(
             )
         }
     }
+    suspend fun fetchFromRemote(uid: String) {
+        try {
+            Log.e("fetchFromRemote: ", "fetchFromRemote: exercise log ", )
+            val snapshot = firestore.collection("accounts")
+                .document(uid)
+                .collection("exercise_log")
+                .get()
+                .await()
+
+            val logs = snapshot.documents.mapNotNull { doc ->
+                try {
+                    doc.toObject(ExerciseLog::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+
+            logs.forEach { log ->
+                Log.e("fetch info ", "fetchFromRemote: exercise log " + log.id, )
+                dao.insert(log)
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("fetchFromRemote: ", "fetchFromRemote: exercise log " + e.message, )
+        }
+    }
+
 }

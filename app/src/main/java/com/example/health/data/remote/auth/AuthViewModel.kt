@@ -11,7 +11,15 @@ import com.example.health.data.local.entities.Account
 import com.example.health.data.local.helper.DefaultDataSyncHelper
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
+import com.example.health.data.local.repostories.BurnOutCaloPerDayRepository
+import com.example.health.data.local.repostories.DefaultExerciseRepository
+import com.example.health.data.local.repostories.DefaultFoodRepository
+import com.example.health.data.local.repostories.EatenDishRepository
+import com.example.health.data.local.repostories.EatenMealRepository
+import com.example.health.data.local.repostories.ExerciseLogRepository
 import com.example.health.data.local.repostories.HealthMetricRepository
+import com.example.health.data.local.repostories.NotifyRepository
+import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
@@ -120,25 +128,39 @@ class AuthViewModel(
             delay(500)
 
             val db = AppDatabase.getDatabase(context)
+
+            // 🔧 Khởi tạo tất cả repository cần dùng
             val baseInfoRepo = BaseInfoRepository(db.baseInfoDao(), db.pendingActionDao(), firestore)
             val healthRepo = HealthMetricRepository(db.healMetricDao(), db.pendingActionDao(), firestore)
-            val defaultFoodRepo = com.example.health.data.local.repostories.DefaultFoodRepository(db.defaultFoodDao(), firestore)
-            val defaultExerciseRepo = com.example.health.data.local.repostories.DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
+            val defaultFoodRepo = DefaultFoodRepository(db.defaultFoodDao(), firestore)
+            val defaultExerciseRepo = DefaultExerciseRepository(db.defaultExerciseDao(), firestore)
+            val notifyRepo = NotifyRepository(db.notifyDao(), firestore, db.pendingActionDao())
+            val eatenMealRepo = EatenMealRepository(db.eatenMealDao(), db.pendingActionDao(), firestore)
+            val eatenDishRepo = EatenDishRepository(db.eatenDishDao(), db.pendingActionDao(), firestore)
+            val burnOutRepo = BurnOutCaloPerDayRepository(db.burnOutCaloPerDayDao(), db.pendingActionDao(), firestore)
+            val exerciseLogRepo = ExerciseLogRepository(db.exerciseLogDao(), db.pendingActionDao(), firestore)
+            val totalNutritionRepo = TotalNutrionsPerDayRepository(db.totalNutrionsPerDayDao(), db.pendingActionDao(), firestore)
 
-            // ⏱️ Đồng bộ song song trong coroutineScope
+            // ⏱️ Đồng bộ song song bằng coroutineScope
             kotlinx.coroutines.coroutineScope {
                 launch { baseInfoRepo.fetchFromRemote(uid) }
                 launch { healthRepo.fetchAllFromRemote(uid) }
-
-                // 🔁 Chạy song song 2 hàm dưới
                 launch { DefaultDataSyncHelper.syncDefaultExercise(context, defaultExerciseRepo) }
                 launch { DefaultDataSyncHelper.syncDefaultFood(context, defaultFoodRepo) }
+                launch { DefaultDataSyncHelper.syncNotify(notifyRepo, uid) }
+                launch { DefaultDataSyncHelper.syncEatenMeal(eatenMealRepo, uid) }
+                launch { DefaultDataSyncHelper.syncEatenDish(uid, eatenDishRepo) }
+                launch { DefaultDataSyncHelper.syncBurnOutCalo(uid, burnOutRepo) }
+                launch { DefaultDataSyncHelper.syncExerciseLog(uid, exerciseLogRepo) }
+                launch { DefaultDataSyncHelper.syncTotalNutrition(totalNutritionRepo, uid) }
             }
 
         } catch (e: Exception) {
-            e.printStackTrace() // bạn nên log để debug dễ hơn
+            e.printStackTrace()
+            Log.e("DataSync", "Lỗi khi đồng bộ dữ liệu Firestore: ${e.message}")
         }
     }
+
 
 
     fun updateStatus(uid: String, status: String) {

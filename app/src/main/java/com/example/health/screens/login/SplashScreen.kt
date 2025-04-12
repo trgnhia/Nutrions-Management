@@ -15,9 +15,20 @@ import com.example.health.data.remote.auth.AuthViewModel
 import com.example.health.data.remote.auth.AuthState
 import com.example.health.data.local.viewmodel.AccountViewModel
 import com.example.health.data.local.viewmodel.BaseInfoViewModel
+import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
+import com.example.health.data.local.viewmodel.CustomExerciseViewModel
+import com.example.health.data.local.viewmodel.CustomFoodViewModel
+import com.example.health.data.local.viewmodel.DefaultDietMealInPlanViewModel
 import com.example.health.data.local.viewmodel.DefaultExerciseViewModel
 import com.example.health.data.local.viewmodel.DefaultFoodViewModel
+import com.example.health.data.local.viewmodel.DietDishViewModel
+import com.example.health.data.local.viewmodel.EatenDishViewModel
+import com.example.health.data.local.viewmodel.EatenMealViewModel
+import com.example.health.data.local.viewmodel.ExerciseLogViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
+import com.example.health.data.local.viewmodel.MacroViewModel
+import com.example.health.data.local.viewmodel.NotifyViewModel
+import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.screens.loader.ModernLoader
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -29,8 +40,19 @@ fun SplashScreen(
     accountViewModel: AccountViewModel,
     baseInfoViewModel: BaseInfoViewModel,
     healthMetricViewModel: HealthMetricViewModel,
-    defaultFoodViewModel: DefaultFoodViewModel,
-    defaultExerciseViewModel: DefaultExerciseViewModel
+    defaultFoodViewModel : DefaultFoodViewModel,
+    defaultExerciseViewModel : DefaultExerciseViewModel,
+    defaultDietMealInPlanViewModel : DefaultDietMealInPlanViewModel,
+    macroViewModel : MacroViewModel,
+    totalNutrionsPerDayViewModel : TotalNutrionsPerDayViewModel,
+    exerciseLogViewModel : ExerciseLogViewModel,
+    eatenMealViewModel : EatenMealViewModel,
+    eatenDishViewModel : EatenDishViewModel,
+    burnOutCaloPerDayViewModel : BurnOutCaloPerDayViewModel,
+    customFoodViewModel : CustomFoodViewModel,
+    customExerciseViewModel : CustomExerciseViewModel,
+    notifyViewModel : NotifyViewModel,
+    dietDishViewModel : DietDishViewModel
 ) {
     val authState by authViewModel.authState.collectAsState()
     val isProcessing = remember { mutableStateOf(true) }
@@ -50,8 +72,18 @@ fun SplashScreen(
                             launch { healthMetricViewModel.syncIfNeeded(uid) }
                             launch { defaultFoodViewModel.syncIfNeeded(context) }
                             launch { defaultExerciseViewModel.syncIfNeeded(context) }
+                            launch { defaultDietMealInPlanViewModel.syncIfNeeded(context) }
+                            launch { macroViewModel.syncIfNeeded(uid) }
+                            launch { totalNutrionsPerDayViewModel.syncIfNeeded(uid) }
+                            launch { exerciseLogViewModel.syncIfNeeded(uid) }
+                            launch { eatenMealViewModel.syncIfNeeded(uid) }
+                            launch { eatenDishViewModel.syncIfNeeded(uid) }
+                            launch { burnOutCaloPerDayViewModel.syncIfNeeded(uid) }
+//                            launch { customFoodViewModel.syncIfNeeded(uid) }
+//                            launch { customExerciseViewModel.syncIfNeeded(uid) }
+//                            launch { notifyViewModel.syncIfNeeded(uid) }
+//                            launch { dietDishViewModel.syncIfNeeded(uid) }
                         }
-
                         isProcessing.value = false
                         navController.navigate("home") {
                             popUpTo("splash") { inclusive = true }

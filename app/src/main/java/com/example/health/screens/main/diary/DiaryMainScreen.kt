@@ -47,7 +47,8 @@ fun DiaryMainScreen(
     eatenDishViewModel: EatenDishViewModel,
     burnOutCaloPerDayViewModel: BurnOutCaloPerDayViewModel,
     customFoodViewModel: CustomFoodViewModel,
-    dietDishViewModel: DietDishViewModel
+    dietDishViewModel: DietDishViewModel,
+    calorBurn: MutableState<Float>
 ) {
     val selectedDay = remember {
         mutableStateOf(Date().toStartOfDay())

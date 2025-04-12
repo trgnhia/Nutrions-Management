@@ -151,28 +151,6 @@ fun DiaryMainScreen(
                     }
                 }
             }
-//            if (dietCode == 0) {
-//                // Trường hợp không theo chế độ ăn → món ăn do người dùng thêm
-//                items(foodList.value.size + 1) { index ->
-//                    if (index < foodList.value.size) {
-//                        FoodCard(
-//                            index + 1,
-//                            foodList.value[index],
-//                            selectedDay = selectedDay.value,
-//                            onClick = {
-//                                navController.navigate(DiaryRoutes.Info.route)
-//                            })
-//                    } else {
-//                        if (selectedDay.value.equals(Date().toStartOfDay())) {
-//                            AddFoodCard(onClick = {
-//                                navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}&selectedDay=${selectedDay.value.time}")
-//                            })
-//                            Log.e("Check day", "DiaryMainScreen: selectday: " + selectedDay.value)
-//                            Log.e("Check day", "DiaryMainScreen: today: " + Date().toStartOfDay())
-//                        }
-//                    }
-//                }
-//            } else {
                 items(mealDishesFromPlan.size) { index ->
                     val dish = mealDishesFromPlan[index]
                     DietDishCardInDiary(dish = dish, onClick = {

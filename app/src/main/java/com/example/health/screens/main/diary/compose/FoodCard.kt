@@ -29,14 +29,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.health.R
 import com.example.health.data.local.entities.EatenDish
-import java.util.Date
 
 @Composable
 fun FoodCard(
     index: Int,
     food: EatenDish,
-    onClick: () -> Unit,
-    selectedDay: Date
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier

@@ -154,7 +154,6 @@ class AuthViewModel(
                 launch { DefaultDataSyncHelper.syncExerciseLog(uid, exerciseLogRepo) }
                 launch { DefaultDataSyncHelper.syncTotalNutrition(totalNutritionRepo, uid) }
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("DataSync", "Lỗi khi đồng bộ dữ liệu Firestore: ${e.message}")

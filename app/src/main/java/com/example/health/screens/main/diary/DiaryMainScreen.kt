@@ -142,10 +142,12 @@ fun DiaryMainScreen(
                             navController.navigate("diary/detail_default/${food.FoodId}")
                         })
                     } else {
-                        if(selectedDay.value.equals(Date().toStartOfDay()))
-                        AddFoodCard(onClick = {
-                            navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
-                        })
+                        if(selectedDay.value.equals(Date().toStartOfDay())){
+                            AddFoodCard(onClick = {
+                                navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}")
+                            })
+                        }
+
                     }
                 }
             }

@@ -63,6 +63,7 @@ fun DiaryAdd(
     val canEdit = parent == ParenCompose.FROMDIARY
     // State to handle selected tab
     val selectedTab = remember { mutableStateOf("Discover") }
+    var showAddDialog by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -113,11 +114,29 @@ fun DiaryAdd(
             // Content that changes based on selectedTab
             if (selectedTab.value == "Discover") {
                 // Discover Tab: Show Custom Food Row and Default Food Rows
-                CustomFoodRow(
-                    customFoods = customFoods,
-                    onAddClick = { /* Show popup */ },
-                    onItemClick = { /* Detail */ }
-                )
+                uid?.let {
+                    CustomFoodRow(
+                        customFoods = customFoods,
+                        onItemClick = { /* Handle click on food item */ },
+                        onAddFood = { food ->
+                            customFoodViewModel.insert(food) // gọi ViewModel để thêm vào Firebase
+                        },
+                        uid = it
+                    )
+                }
+
+                if (showAddDialog) {
+                    uid?.let {
+                        AddCustomFoodDialog(
+                            onDismiss = { showAddDialog = false },
+                            onAdd = { food ->
+                                customFoodViewModel.insert(food)
+                                showAddDialog = false
+                            },
+                            uid = it
+                        )
+                    }
+                }
 
                 // Meat
                 if (uid != null) {

@@ -1,6 +1,5 @@
 package com.example.health.screens.main.workout
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.health.data.local.entities.DefaultExercise
-import com.example.health.data.utils.calculateActualCaloBurn
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

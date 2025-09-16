@@ -8,6 +8,7 @@ import com.example.health.data.local.entities.*
 
 @Database(
     entities = [
+        // thay đổi bảng ở ây
         Account::class,
         BaseInfo::class,
         HealthMetric::class,

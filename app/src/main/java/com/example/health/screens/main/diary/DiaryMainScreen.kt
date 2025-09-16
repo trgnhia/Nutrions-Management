@@ -145,8 +145,6 @@ fun DiaryMainScreen(
                             AddFoodCard(onClick = {
                                 navController.navigate("${DiaryRoutes.Add}?parent=${ParenCompose.FROMDIARY}&mealType=${selectedMeal.value.type}&selectedDay=${selectedDay.value.time}")
                             })
-                            Log.e("Check day", "DiaryMainScreen: selectday: " + selectedDay.value, )
-                            Log.e("Check day", "DiaryMainScreen: today: " + Date().toStartOfDay(), )
                         }
                     }
                 }

@@ -2,9 +2,13 @@ package com.example.health.data.local.appdatabase
 
 import android.content.Context
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.health.data.local.converters.Converters
 import com.example.health.data.local.daos.*
 import com.example.health.data.local.entities.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Database(
     entities = [
@@ -28,7 +32,7 @@ import com.example.health.data.local.entities.*
         CustomExercise::class
 
     ],
-    version = 21,
+    version = 25,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -64,8 +68,17 @@ abstract class AppDatabase : RoomDatabase() {
                     "health_app_database"
                 )
                     .fallbackToDestructiveMigration()
+//                    .addCallback(DatabaseCallback(context)).addCallback(object : RoomDatabase.Callback() {
+//                        override fun onCreate(db: SupportSQLiteDatabase) {
+//                            super.onCreate(db)
+//                            CoroutineScope(Dispatchers.IO).launch {
+//                                val database = AppDatabase.getDatabase(context)
+//                                AssetDataImporter.importAll(context, database)
+//                            }
+//                        }
+//                    })
+                    //.createFromAsset("defaultDatabase/data/defaultdata.db")
                     .build()
-
                 INSTANCE = instance
                 instance
             }

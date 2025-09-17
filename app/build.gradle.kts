@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.AaptOptions
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,6 +12,7 @@ plugins {
 android {
     namespace = "com.example.health"
     compileSdk = 35
+
 
     defaultConfig {
         applicationId = "com.example.health"
@@ -40,6 +43,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {

@@ -32,10 +32,11 @@ fun DefaultFoodCard(
     val context = LocalContext.current
     val imageRequest = remember(food.UrlImage) {
         ImageRequest.Builder(context)
-            .data(File(food.UrlImage)) // ✅ truyền File thay vì String
+            .data("file:///android_asset/${food.UrlImage}") // ✅ load trực tiếp từ assets
             .crossfade(true)
             .build()
     }
+
 
     Card(
         modifier = Modifier

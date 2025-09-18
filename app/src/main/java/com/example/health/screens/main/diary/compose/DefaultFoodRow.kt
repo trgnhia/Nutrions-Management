@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
@@ -50,6 +51,7 @@ fun DefaultFoodRow(
 ) {
     val displayItems = foods.take(5)
     var selectedFood by remember { mutableStateOf<DefaultFood?>(null) }
+    val context = LocalContext.current
 
 
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
@@ -96,6 +98,7 @@ fun DefaultFoodRow(
                         quantityType = food.QuantityType,
                         quantity = weight,
                         urlImage = food.UrlImage,
+                        context = context
                     )
                     onSaveFood()
                 },

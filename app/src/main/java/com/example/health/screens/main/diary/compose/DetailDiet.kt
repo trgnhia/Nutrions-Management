@@ -242,7 +242,8 @@ fun DetailDietScreen(
                             type = mealType,
                             quantityType = dish!!.QuantityType,
                             quantity = result.actualWeight,
-                            urlImage = dish!!.UrlImage
+                            urlImage = dish!!.UrlImage,
+                            context = context
                         )
 
                         Toast.makeText(context, "The dish has been added to the diary.", Toast.LENGTH_LONG).show()

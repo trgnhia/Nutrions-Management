@@ -60,6 +60,7 @@ fun ViewMore(
     val uid = account?.Uid ?: return
     val today: Date = Date().toStartOfDay()
     val selectDay = Date(selectedDay).toStartOfDay()
+    val context = LocalContext.current
 
     val foodList = remember { defaultFoodViewModel.getRandomFoodsByType(20, foodType) }
     val foods by foodList.collectAsState(initial = emptyList())
@@ -184,7 +185,8 @@ fun ViewMore(
                         type = mealType,
                         quantityType = food.QuantityType,
                         quantity = weight,
-                        urlImage = localImagePath
+                        urlImage = localImagePath,
+                        context = context
                     )
                     selectedFood.value = null
                 },

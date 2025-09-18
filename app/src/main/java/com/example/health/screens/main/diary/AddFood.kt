@@ -1,7 +1,9 @@
 package com.example.health.screens.main.diary
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.local.entities.EatenDish
@@ -13,11 +15,13 @@ import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.utils.toStartOfDay
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Date
 import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun AddFood(
+    context: Context,
     uid: String,
     eatenDishViewModel: EatenDishViewModel,
     eatenMealViewModel: EatenMealViewModel,
@@ -55,6 +59,7 @@ fun AddFood(
         }
 
         // 3. Thêm món ăn vào bảng EatenDish
+
         val newDish = EatenDish(
             id = UUID.randomUUID().toString(),
             FoodId = foodID,
@@ -66,7 +71,7 @@ fun AddFood(
             Protein = protein,
             QuantityType = quantityType,
             Quantity = quantity,
-            UrlImage = urlImage
+            UrlImage = copyToEatenDishImage(context = context, urlImage, UUID.randomUUID().toString())
         )
         eatenDishViewModel.insert(newDish,uid)
 
@@ -109,4 +114,18 @@ fun AddFood(
 // Luôn cập nhật sau cùng
         totalNutrionsPerDayViewModel.update(updatedTotal)
     }
+}
+fun copyToEatenDishImage(context: Context, sourcePath: String, dishId: String): String {
+    val sourceFile = File(sourcePath)
+    if (!sourceFile.exists()) return sourcePath // fallback: giữ nguyên
+
+    val dir = File(context.filesDir, "eatenDishImages")
+    if (!dir.exists()) dir.mkdirs()
+
+    val extension = sourceFile.extension.ifBlank { "jpg" }
+    val outFile = File(dir, "${dishId}.${extension}")
+
+    sourceFile.copyTo(outFile, overwrite = true)
+
+    return outFile.absolutePath
 }

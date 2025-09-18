@@ -70,9 +70,9 @@ fun SplashScreen(
                             launch { accountViewModel.syncIfNeeded(uid) }
                             launch { baseInfoViewModel.syncIfNeeded(uid) }
                             launch { healthMetricViewModel.syncIfNeeded(uid) }
-                            launch { defaultFoodViewModel.syncIfNeeded(context) }
-                            launch { defaultExerciseViewModel.syncIfNeeded(context) }
-                            launch { defaultDietMealInPlanViewModel.syncIfNeeded(context) }
+//                            launch { defaultFoodViewModel.syncIfNeeded(context) }
+//                            launch { defaultExerciseViewModel.syncIfNeeded(context) }
+//                            launch { defaultDietMealInPlanViewModel.syncIfNeeded(context) }
                             launch { macroViewModel.syncIfNeeded(uid) }
                             launch { totalNutrionsPerDayViewModel.syncIfNeeded(uid) }
                             launch { exerciseLogViewModel.syncIfNeeded(uid) }

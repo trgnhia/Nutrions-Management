@@ -145,8 +145,8 @@ class AuthViewModel(
             kotlinx.coroutines.coroutineScope {
                 launch { baseInfoRepo.fetchFromRemote(uid) }
                 launch { healthRepo.fetchAllFromRemote(uid) }
-                launch { DefaultDataSyncHelper.syncDefaultExercise(context, defaultExerciseRepo) }
-                launch { DefaultDataSyncHelper.syncDefaultFood(context, defaultFoodRepo) }
+//                launch { DefaultDataSyncHelper.syncDefaultExercise(context, defaultExerciseRepo) }
+//                launch { DefaultDataSyncHelper.syncDefaultFood(context, defaultFoodRepo) }
                 launch { DefaultDataSyncHelper.syncNotify(notifyRepo, uid) }
                 launch { DefaultDataSyncHelper.syncEatenMeal(eatenMealRepo, uid) }
                 launch { DefaultDataSyncHelper.syncEatenDish(uid, eatenDishRepo) }

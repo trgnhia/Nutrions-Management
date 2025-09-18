@@ -17,23 +17,23 @@ import com.example.health.data.local.repostories.TotalNutrionsPerDayRepository
 
 object DefaultDataSyncHelper {
 
-    suspend fun syncDefaultFood(context: Context, repo: DefaultFoodRepository) {
-        repo.fetchRemoteAndInsertEach { food ->
-            val fileName = "${food.Name.toSafeFileName()}.jpg"
-            val file = downloadImageAndSave(context, food.UrlImage, fileName)
-            val updated = food.copy(UrlImage = file?.absolutePath ?: food.UrlImage)
-            repo.insert(updated)
-        }
-    }
-
-    suspend fun syncDefaultExercise(context: Context, repo: DefaultExerciseRepository) {
-        repo.fetchRemoteAndInsertEach { ex ->
-            val fileName = "${ex.Name.toSafeFileName()}.jpg"
-            val file = downloadImageAndSave(context, ex.UrlImage, fileName)
-            val updated = ex.copy(UrlImage = file?.absolutePath ?: ex.UrlImage)
-            repo.insert(updated)
-        }
-    }
+//    suspend fun syncDefaultFood(context: Context, repo: DefaultFoodRepository) {
+//        repo.fetchRemoteAndInsertEach { food ->
+//            val fileName = "${food.Name.toSafeFileName()}.jpg"
+//            val file = downloadImageAndSave(context, food.UrlImage, fileName)
+//            val updated = food.copy(UrlImage = file?.absolutePath ?: food.UrlImage)
+//            repo.insert(updated)
+//        }
+//    }
+//
+//    suspend fun syncDefaultExercise(context: Context, repo: DefaultExerciseRepository) {
+//        repo.fetchRemoteAndInsertEach { ex ->
+//            val fileName = "${ex.Name.toSafeFileName()}.jpg"
+//            val file = downloadImageAndSave(context, ex.UrlImage, fileName)
+//            val updated = ex.copy(UrlImage = file?.absolutePath ?: ex.UrlImage)
+//            repo.insert(updated)
+//        }
+//    }
     suspend fun syncEatenMeal(repo: EatenMealRepository, uid: String) {
         repo.fetchFromRemote(uid)
     }

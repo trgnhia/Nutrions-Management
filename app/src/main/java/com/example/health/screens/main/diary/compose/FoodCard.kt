@@ -69,8 +69,7 @@ fun FoodCard(
                 painter = rememberAsyncImagePainter(
                     model = food.UrlImage,
                     placeholder = painterResource(id = R.drawable.default_dish),
-                    error = painterResource(R.drawable.default_dish)
-                    ,
+                    error = painterResource(id = R.drawable.default_dish),
                     onError = {
                         Log.e("ImageLoad", "Load failed: ${it.result.throwable}")
                     },
@@ -83,6 +82,7 @@ fun FoodCard(
                     .size(80.dp)
                     .clip(CircleShape)
             )
+
 
             Spacer(modifier = Modifier.height(8.dp))
 

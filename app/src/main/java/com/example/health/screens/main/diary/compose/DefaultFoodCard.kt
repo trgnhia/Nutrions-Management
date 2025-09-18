@@ -31,11 +31,14 @@ fun DefaultFoodCard(
     }
     val context = LocalContext.current
     val imageRequest = remember(food.UrlImage) {
+        val file = File(food.UrlImage) // UrlImage đã là đường dẫn full trong internal storage
         ImageRequest.Builder(context)
-            .data("file:///android_asset/${food.UrlImage}") // ✅ load trực tiếp từ assets
+            .data(file) // nạp trực tiếp File local
             .crossfade(true)
+            .error(R.drawable.default_dish) // fallback nếu ảnh lỗi
             .build()
     }
+
 
 
     Card(

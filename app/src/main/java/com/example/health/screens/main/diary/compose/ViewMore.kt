@@ -1,5 +1,6 @@
 package com.example.health.screens.main.diary.compose
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -32,10 +33,12 @@ import coil.request.ImageRequest
 import com.example.health.R
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.local.viewmodel.*
+import com.example.health.data.utils.toSafeFileName
 import com.example.health.data.utils.toStartOfDay
 import com.example.health.screens.main.ParenCompose
 import com.example.health.screens.main.diary.AddFood
 import java.io.File
+import java.io.FileOutputStream
 import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -160,6 +163,7 @@ fun ViewMore(
         }
 
         selectedFood.value?.let { food ->
+            val localImagePath = prepareImagePath(context = LocalContext.current, food.UrlImage , food.Name)
             FoodDetailDialog(
                 food = food,
                 parent = parent,
@@ -180,7 +184,7 @@ fun ViewMore(
                         type = mealType,
                         quantityType = food.QuantityType,
                         quantity = weight,
-                        urlImage = food.UrlImage
+                        urlImage = localImagePath
                     )
                     selectedFood.value = null
                 },
@@ -199,11 +203,14 @@ fun FoodGridCard(
 ) {
     val context = LocalContext.current
     val imageRequest = remember(food.UrlImage) {
+        val file = File(food.UrlImage) // UrlImage đã là đường dẫn full trong internal storage
         ImageRequest.Builder(context)
-            .data("file:///android_asset/${food.UrlImage}") // ✅ load trực tiếp từ assets
+            .data(file) // nạp trực tiếp File local
             .crossfade(true)
+            .error(R.drawable.default_dish) // fallback nếu ảnh lỗi
             .build()
     }
+
 
 
     Card(
@@ -258,3 +265,37 @@ fun FoodGridCard(
         }
     }
 }
+fun prepareImagePath(context: Context, assetPath: String, dishName: String): String {
+    return if (assetPath.startsWith("defaultDatabase")) {
+        // Tạo tên file an toàn từ tên món ăn
+        val safeFileName = "${dishName.toSafeFileName()}.jpg"
+        copyAssetToInternal(context, assetPath, safeFileName)
+    } else {
+        // Đã là local path rồi thì giữ nguyên
+        assetPath
+    }
+}
+
+fun copyAssetToInternal(context: Context, assetPath: String, newFileName: String): String {
+    val dir = File(context.filesDir, "images")
+    if (!dir.exists()) dir.mkdirs()
+
+    val outFile = File(dir, newFileName)
+
+    // Nếu file đã tồn tại rồi thì dùng luôn, không copy lại
+    if (!outFile.exists()) {
+        try {
+            context.assets.open(assetPath).use { input ->
+                outFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    return outFile.absolutePath
+}
+
+

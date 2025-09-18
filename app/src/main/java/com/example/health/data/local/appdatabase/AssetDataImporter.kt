@@ -14,12 +14,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import java.io.File
 
 object AssetDataImporter {
 
     suspend fun importAll(context: Context, db: AppDatabase) {
         val dbPath = copyAssetDbToCache(context, "defaultDatabase/data/defaultdata.db")
         val assetDb = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY)
+        copyAssetImagesFolder(context)
 
         val foods = loadFoods(assetDb)
         val exercises = loadExercises(assetDb)
@@ -47,6 +49,38 @@ object AssetDataImporter {
         }
         return outFile.absolutePath
     }
+    private suspend fun copyAssetImagesFolder(context: Context) = withContext(Dispatchers.IO) {
+        copyAssetDir(context, "defaultDatabase/images", File(context.filesDir, "images"))
+    }
+
+
+    private fun copyAssetDir(context: Context, assetDir: String, outDir: File) {
+        try {
+            val assets = context.assets.list(assetDir) ?: return
+            if (!outDir.exists()) outDir.mkdirs()
+
+            for (file in assets) {
+                val assetPath = "$assetDir/$file"
+                val outFile = File(outDir, file)
+
+                val children = context.assets.list(assetPath)
+                if (children.isNullOrEmpty()) {
+                    // Đây là file -> copy
+                    context.assets.open(assetPath).use { input ->
+                        outFile.outputStream().use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+                } else {
+                    // Đây là folder -> đệ quy
+                    copyAssetDir(context, assetPath, outFile)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
 
     private fun loadFoods(assetDb: SQLiteDatabase): List<DefaultFood> {

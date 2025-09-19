@@ -22,6 +22,7 @@ import com.example.health.data.local.viewmodel.BurnOutCaloPerDayViewModel
 import com.example.health.data.local.viewmodel.HealthMetricViewModel
 import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.data.utils.toStartOfDay
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -48,12 +49,12 @@ fun HeaderSection(
 
     val totalNutrions = remember(uid, selectedDate) {
         uid?.let {
-            totalNutrionsPerDayViewModel.getByDateAndUid(selectedDate, it)
+            totalNutrionsPerDayViewModel.getByDateAndUid(selectedDate.toStartOfDay(), it)
         }
     }?.collectAsState(initial = null)
 
     val burnOut = produceState<BurnOutCaloPerDay?>(initialValue = null, selectedDate) {
-        value = burnOutCaloPerDayViewModel.getByDate(selectedDate)
+        value = burnOutCaloPerDayViewModel.getByDate(selectedDate.toStartOfDay())
     }
 
     // Gán giá trị mặc định nếu chưa có dữ liệu

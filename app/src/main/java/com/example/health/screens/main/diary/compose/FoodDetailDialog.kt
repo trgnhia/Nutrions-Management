@@ -38,9 +38,9 @@ fun FoodDetailDialog(
             if (parent == ParenCompose.FROMDIARY) {
                 TextButton(
                     onClick = {
-                        val weight = weightInput.toFloatOrNull() ?: 0f
+                        val weight = weightInput.toFloatOrNull() ?: food.Quantity.toFloat()
                         val result = calculateNutritionByWeight(
-                            defaultWeight = food.Quantity.toFloat(),
+                            defaultWeight = food.Quantity.toFloat() ,
                             actualWeight = weight,
                             calories = food.Calo,
                             fat = food.Fat,

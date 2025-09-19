@@ -1,7 +1,9 @@
 package com.example.health.screens.main.diary.compose
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +38,7 @@ import com.example.health.data.local.viewmodel.*
 import com.example.health.data.utils.toSafeFileName
 import com.example.health.data.utils.toStartOfDay
 import com.example.health.screens.main.ParenCompose
+import com.example.health.screens.main.convertimages.prepareImagePath
 import com.example.health.screens.main.diary.AddFood
 import java.io.File
 import java.io.FileOutputStream
@@ -170,6 +173,7 @@ fun ViewMore(
                 parent = parent,
                 onDismiss = { selectedFood.value = null },
                 onSave = { weight, calo, fat, carb, protein ->
+                    Log.e(TAG, "DefaultFoodRow: $weight , $calo , $fat , $carb , $protein " , )
                     AddFood(
                         uid = uid,
                         eatenDishViewModel = eatenDishViewModel,
@@ -267,37 +271,6 @@ fun FoodGridCard(
         }
     }
 }
-fun prepareImagePath(context: Context, assetPath: String, dishName: String): String {
-    return if (assetPath.startsWith("defaultDatabase")) {
-        // Tạo tên file an toàn từ tên món ăn
-        val safeFileName = "${dishName.toSafeFileName()}.jpg"
-        copyAssetToInternal(context, assetPath, safeFileName)
-    } else {
-        // Đã là local path rồi thì giữ nguyên
-        assetPath
-    }
-}
 
-fun copyAssetToInternal(context: Context, assetPath: String, newFileName: String): String {
-    val dir = File(context.filesDir, "images")
-    if (!dir.exists()) dir.mkdirs()
-
-    val outFile = File(dir, newFileName)
-
-    // Nếu file đã tồn tại rồi thì dùng luôn, không copy lại
-    if (!outFile.exists()) {
-        try {
-            context.assets.open(assetPath).use { input ->
-                outFile.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    return outFile.absolutePath
-}
 
 

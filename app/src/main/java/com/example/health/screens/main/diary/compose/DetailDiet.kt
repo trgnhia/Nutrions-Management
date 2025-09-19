@@ -37,7 +37,6 @@ import com.example.health.screens.main.diary.AddFood
 import kotlinx.coroutines.launch
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailDietScreen(
     dishId: String,

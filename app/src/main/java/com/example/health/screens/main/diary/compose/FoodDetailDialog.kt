@@ -91,7 +91,7 @@ fun FoodDetailDialog(
                 InfoRow(label = "Fat", value = "${food.Fat}g")
                 InfoRow(label = "Protein", value = "${food.Protein}g")
 
-                if (parent == ParenCompose.FROMDIARY && selectedDay == Date().toStartOfDay() ) {
+                if (parent == ParenCompose.FROMDIARY /*&& selectedDay == Date().toStartOfDay()*/ ) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = "Enter your consumed quantity (g):",

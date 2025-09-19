@@ -23,7 +23,6 @@ import com.example.health.screens.main.diary.compose.ViewMore
 import com.example.health.screens.main.plan.Food
 import com.example.health.screens.main.plan.Plan
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.foodNavGraph(
     navController: NavController,
     defaultFoodViewModel: DefaultFoodViewModel,

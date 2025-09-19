@@ -15,5 +15,6 @@ sealed class DiaryRoutes(val route: String ){
         }
     }
 
+
 }
 

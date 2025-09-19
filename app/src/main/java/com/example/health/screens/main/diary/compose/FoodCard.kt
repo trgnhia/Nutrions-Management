@@ -29,14 +29,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.health.R
 import com.example.health.data.local.entities.EatenDish
-import java.util.Date
 
 @Composable
 fun FoodCard(
     index: Int,
     food: EatenDish,
-    onClick: () -> Unit,
-    selectedDay: Date
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -69,7 +67,8 @@ fun FoodCard(
                 painter = rememberAsyncImagePainter(
                     model = food.UrlImage,
                     placeholder = painterResource(id = R.drawable.default_dish),
-                    error = painterResource(id = R.drawable.default_dish),
+                    error = painterResource(R.drawable.default_dish)
+                    ,
                     onError = {
                         Log.e("ImageLoad", "Load failed: ${it.result.throwable}")
                     },
@@ -82,7 +81,6 @@ fun FoodCard(
                     .size(80.dp)
                     .clip(CircleShape)
             )
-
 
             Spacer(modifier = Modifier.height(8.dp))
 

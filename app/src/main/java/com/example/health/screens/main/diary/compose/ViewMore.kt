@@ -254,7 +254,7 @@ fun FoodGridCard(
                 softWrap = false,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-            if (canEdit && selectDay.toStartOfDay() == Date().toStartOfDay()) {
+            if (canEdit /*&& selectDay.toStartOfDay() == Date().toStartOfDay()*/) {
                 Spacer(modifier = Modifier.height(6.dp))
                 Box(
                     modifier = Modifier

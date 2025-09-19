@@ -1,6 +1,9 @@
 package com.example.health.screens.main.diary.compose
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,10 +35,13 @@ import coil.request.ImageRequest
 import com.example.health.R
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.local.viewmodel.*
+import com.example.health.data.utils.toSafeFileName
 import com.example.health.data.utils.toStartOfDay
 import com.example.health.screens.main.ParenCompose
+import com.example.health.screens.main.convertimages.prepareImagePath
 import com.example.health.screens.main.diary.AddFood
 import java.io.File
+import java.io.FileOutputStream
 import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -57,6 +63,7 @@ fun ViewMore(
     val uid = account?.Uid ?: return
     val today: Date = Date().toStartOfDay()
     val selectDay = Date(selectedDay).toStartOfDay()
+    val context = LocalContext.current
 
     val foodList = remember { defaultFoodViewModel.getRandomFoodsByType(20, foodType) }
     val foods by foodList.collectAsState(initial = emptyList())
@@ -160,11 +167,13 @@ fun ViewMore(
         }
 
         selectedFood.value?.let { food ->
+            val localImagePath = prepareImagePath(context = LocalContext.current, food.UrlImage , food.Name)
             FoodDetailDialog(
                 food = food,
                 parent = parent,
                 onDismiss = { selectedFood.value = null },
                 onSave = { weight, calo, fat, carb, protein ->
+                    Log.e(TAG, "DefaultFoodRow: $weight , $calo , $fat , $carb , $protein " , )
                     AddFood(
                         uid = uid,
                         eatenDishViewModel = eatenDishViewModel,
@@ -180,7 +189,8 @@ fun ViewMore(
                         type = mealType,
                         quantityType = food.QuantityType,
                         quantity = weight,
-                        urlImage = food.UrlImage
+                        urlImage = localImagePath,
+                        context = context
                     )
                     selectedFood.value = null
                 },
@@ -199,11 +209,15 @@ fun FoodGridCard(
 ) {
     val context = LocalContext.current
     val imageRequest = remember(food.UrlImage) {
+        val file = File(food.UrlImage) // UrlImage đã là đường dẫn full trong internal storage
         ImageRequest.Builder(context)
-            .data(File(food.UrlImage))
+            .data(file) // nạp trực tiếp File local
             .crossfade(true)
+            .error(R.drawable.default_dish) // fallback nếu ảnh lỗi
             .build()
     }
+
+
 
     Card(
         modifier = Modifier
@@ -257,3 +271,6 @@ fun FoodGridCard(
         }
     }
 }
+
+
+

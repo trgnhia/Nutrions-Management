@@ -13,6 +13,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.health.alarm.scheduleDaily7AMAlarm
 import com.example.health.data.local.appdatabase.AppDatabase
+import com.example.health.data.local.appdatabase.DataInitializer
 import com.example.health.data.local.repostories.AccountRepository
 import com.example.health.data.local.repostories.BaseInfoRepository
 import com.example.health.data.local.repostories.BurnOutCaloPerDayRepository
@@ -67,6 +68,9 @@ import com.example.health.data.remote.sync.PendingSyncScheduler
 import com.example.health.navigation.AppNavigation
 import com.example.health.ui.theme.HealthTheme
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +78,9 @@ class MainActivity : ComponentActivity() {
         PendingSyncScheduler.schedule(applicationContext)
         enableEdgeToEdge()
         val db = AppDatabase.getDatabase(applicationContext)
+        CoroutineScope(Dispatchers.IO).launch {
+            DataInitializer.initialize(this@MainActivity, db)
+        }
         val firestore = FirebaseFirestore.getInstance()
 
 

@@ -30,6 +30,8 @@ import com.example.health.data.local.viewmodel.MacroViewModel
 import com.example.health.data.local.viewmodel.NotifyViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.screens.loader.ModernLoader
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -67,22 +69,25 @@ fun SplashScreen(
                 if (uid != null) {
                     try {
                         coroutineScope {
-                            launch { accountViewModel.syncIfNeeded(uid) }
-                            launch { baseInfoViewModel.syncIfNeeded(uid) }
-                            launch { healthMetricViewModel.syncIfNeeded(uid) }
-                            launch { defaultFoodViewModel.syncIfNeeded(context) }
-                            launch { defaultExerciseViewModel.syncIfNeeded(context) }
-                            launch { defaultDietMealInPlanViewModel.syncIfNeeded(context) }
-                            launch { macroViewModel.syncIfNeeded(uid) }
-                            launch { totalNutrionsPerDayViewModel.syncIfNeeded(uid) }
-                            launch { exerciseLogViewModel.syncIfNeeded(uid) }
-                            launch { eatenMealViewModel.syncIfNeeded(uid) }
-                            launch { eatenDishViewModel.syncIfNeeded(uid) }
-                            launch { burnOutCaloPerDayViewModel.syncIfNeeded(uid) }
-//                            launch { customFoodViewModel.syncIfNeeded(uid) }
-//                            launch { customExerciseViewModel.syncIfNeeded(uid) }
-//                            launch { notifyViewModel.syncIfNeeded(uid) }
-//                            launch { dietDishViewModel.syncIfNeeded(uid) }
+                            val jobs = listOf(
+                                async { accountViewModel.syncIfNeeded(uid) },
+                                async { baseInfoViewModel.syncIfNeeded(uid) },
+                                async { healthMetricViewModel.syncIfNeeded(uid) },
+                                // async { defaultFoodViewModel.syncIfNeeded(context) },
+                                // async { defaultExerciseViewModel.syncIfNeeded(context) },
+                                // async { defaultDietMealInPlanViewModel.syncIfNeeded(context) },
+                                async { macroViewModel.syncIfNeeded(uid) },
+                                async { totalNutrionsPerDayViewModel.syncIfNeeded(uid) },
+                                async { exerciseLogViewModel.syncIfNeeded(uid) },
+                                async { eatenMealViewModel.syncIfNeeded(uid) },
+                                async { eatenDishViewModel.syncIfNeeded(uid) },
+                                async { burnOutCaloPerDayViewModel.syncIfNeeded(uid) },
+                                // async { customFoodViewModel.syncIfNeeded(uid) },
+                                // async { customExerciseViewModel.syncIfNeeded(uid) },
+                                // async { notifyViewModel.syncIfNeeded(uid) },
+                                // async { dietDishViewModel.syncIfNeeded(uid) }
+                            )
+                            jobs.awaitAll() // ⏳ đợi tất cả coroutine hoàn thành
                         }
                         isProcessing.value = false
                         navController.navigate("home") {

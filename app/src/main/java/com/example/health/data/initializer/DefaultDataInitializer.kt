@@ -10,7 +10,7 @@ suspend fun fetchAllDefaultData(
     defaultFoodViewModel: DefaultFoodViewModel,
     defaultExerciseViewModel: DefaultExerciseViewModel
 ) {
-    Log.e("FetchAllDefaultData", "insertAll: load data ", )
-    defaultFoodViewModel.loadDefaultFoods(context)
-    defaultExerciseViewModel.loadDefaultExercises(context)
+//    Log.e("FetchAllDefaultData", "insertAll: load data ", )
+//    defaultFoodViewModel.loadDefaultFoods(context)
+//    defaultExerciseViewModel.loadDefaultExercises(context)
 }

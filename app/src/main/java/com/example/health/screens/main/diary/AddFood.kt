@@ -1,7 +1,11 @@
 package com.example.health.screens.main.diary
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import com.example.health.data.local.entities.DefaultFood
 import com.example.health.data.local.entities.EatenDish
@@ -12,12 +16,14 @@ import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.utils.toStartOfDay
+import com.example.health.screens.main.convertimages.copyToEatenDishImage
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Date
 import java.util.UUID
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun AddFood(
+    context: Context,
     uid: String,
     eatenDishViewModel: EatenDishViewModel,
     eatenMealViewModel: EatenMealViewModel,
@@ -55,6 +61,7 @@ fun AddFood(
         }
 
         // 3. Thêm món ăn vào bảng EatenDish
+
         val newDish = EatenDish(
             id = UUID.randomUUID().toString(),
             FoodId = foodID,
@@ -66,8 +73,9 @@ fun AddFood(
             Protein = protein,
             QuantityType = quantityType,
             Quantity = quantity,
-            UrlImage = urlImage
+            UrlImage = copyToEatenDishImage(context = context, urlImage, UUID.randomUUID().toString())
         )
+        Log.e(TAG, "DefaultFoodRow:  , $calo , $fat , $carb , $protein " , )
         eatenDishViewModel.insert(newDish,uid)
 
         // 4. Cập nhật lại dinh dưỡng cho meal
@@ -110,3 +118,4 @@ fun AddFood(
         totalNutrionsPerDayViewModel.update(updatedTotal)
     }
 }
+

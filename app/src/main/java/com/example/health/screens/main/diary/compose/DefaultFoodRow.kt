@@ -1,6 +1,8 @@
 package com.example.health.screens.main.diary.compose
 
+import android.content.ContentValues.TAG
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,9 +26,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
+import com.example.health.screens.main.convertimages.prepareImagePath
 import com.example.health.screens.main.diary.AddFood
 import java.util.Date
 
@@ -50,6 +54,7 @@ fun DefaultFoodRow(
 ) {
     val displayItems = foods.take(5)
     var selectedFood by remember { mutableStateOf<DefaultFood?>(null) }
+    val context = LocalContext.current
 
 
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
@@ -75,11 +80,14 @@ fun DefaultFoodRow(
         }
 
         selectedFood?.let { food ->
+            val localImagePath = prepareImagePath(context = LocalContext.current, food.UrlImage , food.Name)
             FoodDetailDialog(
                 food = food,
                 parent = parent,
                 onDismiss = { selectedFood = null },
                 onSave = { weight, calo, fat, carb, protein ->
+                    Log.e(TAG, "DefaultFoodRow: $weight , $calo , $fat , $carb , $protein " , )
+
                     AddFood(
                         uid = uid,
                         eatenDishViewModel = eatenDishViewModel,
@@ -95,7 +103,8 @@ fun DefaultFoodRow(
                         type = mealType,
                         quantityType = food.QuantityType,
                         quantity = weight,
-                        urlImage = food.UrlImage,
+                        urlImage = localImagePath,
+                        context = context
                     )
                     onSaveFood()
                 },

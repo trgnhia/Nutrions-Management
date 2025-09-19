@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import java.time.ZoneId
 import java.util.Date
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun Date.toStartOfDay(): Date {
     return Date.from(
         this.toInstant()

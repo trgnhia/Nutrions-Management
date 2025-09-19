@@ -5,25 +5,26 @@ import androidx.work.*
 import java.util.concurrent.TimeUnit
 
 object PendingSyncScheduler {
-    private var hasScheduled = false
-
     fun schedule(context: Context) {
-        if (hasScheduled) return
+        val workManager = WorkManager.getInstance(context)
 
-        hasScheduled = true
+        workManager.getWorkInfosForUniqueWorkLiveData("PendingSync")
+            .observeForever { works ->
+                if (works.isNullOrEmpty()) {
+                    val request = PeriodicWorkRequestBuilder<PendingSyncWorker>(15, TimeUnit.MINUTES)
+                        .setConstraints(
+                            Constraints.Builder()
+                                .setRequiredNetworkType(NetworkType.CONNECTED)
+                                .build()
+                        )
+                        .build()
 
-        val request = PeriodicWorkRequestBuilder<PendingSyncWorker>(15, TimeUnit.MINUTES)
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-            )
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "PendingSync",
-            ExistingPeriodicWorkPolicy.KEEP,
-            request
-        )
+                    workManager.enqueueUniquePeriodicWork(
+                        "PendingSync",
+                        ExistingPeriodicWorkPolicy.KEEP,
+                        request
+                    )
+                }
+            }
     }
 }

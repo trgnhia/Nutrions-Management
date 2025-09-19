@@ -32,6 +32,7 @@ import com.example.health.data.local.viewmodel.EatenDishViewModel
 import com.example.health.data.local.viewmodel.EatenMealViewModel
 import com.example.health.data.local.viewmodel.TotalNutrionsPerDayViewModel
 import com.example.health.data.utils.calculateNutritionByWeight
+import com.example.health.screens.main.convertimages.prepareImagePath
 import com.example.health.screens.main.diary.AddFood
 import kotlinx.coroutines.launch
 import java.util.*
@@ -214,39 +215,40 @@ fun DetailDietScreen(
             val isValidInput = quantityText.isNotBlank() && quantityText.all { it.isDigit() }
             val isChanged = isValidInput
 
+
             Button(
                 onClick = {
-                    val inputQuantity = quantityText.toFloatOrNull()
-                    if (inputQuantity != null) {
-                        val result = calculateNutritionByWeight(
-                            defaultWeight = dish!!.Quantity.toFloat(),
-                            actualWeight = inputQuantity,
-                            calories = dish!!.Calo,
-                            fat = dish!!.Fat,
-                            carb = dish!!.Carb,
-                            protein = dish!!.Protein
-                        )
+                    val inputQuantity = quantityText.toFloatOrNull() ?: dish!!.Quantity.toFloat()
+                    val result = calculateNutritionByWeight(
+                        defaultWeight = dish!!.Quantity.toFloat(),
+                        actualWeight = inputQuantity,
+                        calories = dish!!.Calo,
+                        fat = dish!!.Fat,
+                        carb = dish!!.Carb,
+                        protein = dish!!.Protein
+                    )
+                    val localImagePath = prepareImagePath(context, dish!!.UrlImage , dish!!.Name)
 
-                        AddFood(
-                            uid = uid,
-                            eatenDishViewModel = eatenDishViewModel,
-                            eatenMealViewModel = eatenMealViewModel,
-                            totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
-                            today = today,
-                            foodID = dish!!.FoodId,
-                            dishName = dish!!.Name,
-                            calo = result.calories,
-                            fat = result.fat,
-                            carb = result.carb,
-                            protein = result.protein,
-                            type = mealType,
-                            quantityType = dish!!.QuantityType,
-                            quantity = result.actualWeight,
-                            urlImage = dish!!.UrlImage
-                        )
+                    AddFood(
+                        uid = uid,
+                        eatenDishViewModel = eatenDishViewModel,
+                        eatenMealViewModel = eatenMealViewModel,
+                        totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                        today = today,
+                        foodID = dish!!.FoodId,
+                        dishName = dish!!.Name,
+                        calo = result.calories,
+                        fat = result.fat,
+                        carb = result.carb,
+                        protein = result.protein,
+                        type = mealType,
+                        quantityType = dish!!.QuantityType,
+                        quantity = result.actualWeight,
+                        urlImage = localImagePath,
+                        context = context
+                    )
 
-                        Toast.makeText(context, "The dish has been added to the diary.", Toast.LENGTH_LONG).show()
-                    }
+                    Toast.makeText(context, "The dish has been added to the diary.", Toast.LENGTH_LONG).show()
                 },
                 enabled = isChanged,
                 colors = ButtonDefaults.buttonColors(

@@ -23,6 +23,7 @@ class EatenDishRepository(
 
     fun getByDate(date: Date): Flow<List<EatenDish>> =
         dao.getByDate(date)
+    suspend fun getById(id: String): Flow<EatenDish?> = dao.getById(id)
 
     suspend fun insert(dish: EatenDish , uid: String) {
         dao.insert(dish)

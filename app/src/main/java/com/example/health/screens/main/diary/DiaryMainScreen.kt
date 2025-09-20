@@ -1,5 +1,6 @@
 package com.example.health.screens.main.diary
 
+import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -84,6 +85,8 @@ fun DiaryMainScreen(
         selectedDay.value, selectedMeal.value.type
     ).collectAsState(initial = emptyList())
 
+
+
     val currentMealKey = when (selectedMeal.value) {
         MealType.MORNING -> "b"
         MealType.LUNCH -> "l"
@@ -136,10 +139,13 @@ fun DiaryMainScreen(
             if (dietCode == 0) {
                 // 👉 Không theo chế độ ăn → hiển thị món ăn người dùng thêm + nút Add
                 items(foodList.value.size + 1) { index ->
+                    Log.e(TAG, "food list: ${foodList.value}", )
                     if (index < foodList.value.size) {
                         val food = foodList.value[index]
+                        Log.e(TAG, "DiaryMainScreen: $food", )
                         FoodCard(index + 1, food, onClick = {
-                            navController.navigate("diary/detail_default/${food.FoodId}")
+                            Log.e(TAG, "DiaryMainScreen: $food", )
+                            navController.navigate("diary/detail_default/${food.id}")
                         })
                     } else {
                         if(selectedDay.value.equals(Date().toStartOfDay())){

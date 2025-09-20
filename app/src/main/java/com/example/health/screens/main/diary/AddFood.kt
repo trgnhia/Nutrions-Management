@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Date
 import java.util.UUID
+import kotlin.math.log
 
 fun AddFood(
     context: Context,
@@ -58,6 +59,7 @@ fun AddFood(
             )
             eatenMealViewModel.insert(newMeal)
             meal = newMeal
+
         }
 
         // 3. Thêm món ăn vào bảng EatenDish
@@ -77,6 +79,7 @@ fun AddFood(
         )
         Log.e(TAG, "DefaultFoodRow:  , $calo , $fat , $carb , $protein " , )
         eatenDishViewModel.insert(newDish,uid)
+        Log.e(TAG, "AddFood: $newDish", )
 
         // 4. Cập nhật lại dinh dưỡng cho meal
         val updatedMeal = meal.copy(

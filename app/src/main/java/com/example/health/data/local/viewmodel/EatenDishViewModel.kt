@@ -21,6 +21,7 @@ class EatenDishViewModel(
     fun insert(dish: EatenDish,uid: String) = viewModelScope.launch {
         repository.insert(dish,uid)
     }
+    suspend fun getById(id: String): Flow<EatenDish?> = repository.getById(id)
 
     fun update(dish: EatenDish,uid: String) = viewModelScope.launch {
         repository.update(dish,uid)

@@ -14,6 +14,8 @@ interface EatenDishDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(eatenDish: EatenDish)
 
+
+
     // ✅ Sửa món ăn
     @Update
     suspend fun update(eatenDish: EatenDish)
@@ -24,11 +26,12 @@ interface EatenDishDao {
 
     // ✅ Lọc theo ngày & loại bữa
     @Query("""
-        SELECT * FROM eaten_dish 
-        INNER JOIN eaten_meal ON eaten_dish.idEatenMeal = eaten_meal.id
-        WHERE eaten_meal.date = :date AND eaten_meal.type = :type
-    """)
+    SELECT eaten_dish.* FROM eaten_dish 
+    INNER JOIN eaten_meal ON eaten_dish.idEatenMeal = eaten_meal.id
+    WHERE eaten_meal.date = :date AND eaten_meal.type = :type
+""")
     fun getByDateAndType(date: Date, type: Int): Flow<List<EatenDish>>
+
 
     // ✅ Lấy tất cả món ăn trong một ngày (bỏ qua type)
     @Query("""
@@ -37,4 +40,7 @@ interface EatenDishDao {
     WHERE eaten_meal.date = :date
 """)
     fun getByDate(date: Date): Flow<List<EatenDish>>
+
+    @Query("SELECT * FROM eaten_dish WHERE id = :id")
+    fun getById(id: String): Flow<EatenDish?>
 }

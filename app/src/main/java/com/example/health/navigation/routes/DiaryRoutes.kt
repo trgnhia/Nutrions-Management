@@ -6,7 +6,7 @@ sealed class DiaryRoutes(val route: String ){
     object Info : DiaryRoutes("diary/info")
     object ViewMore : DiaryRoutes("diary/view_more")
    // object DetailDiet : DiaryRoutes("diary/detail_diet/{id}")
-    object DetailDefault : DiaryRoutes("diary/detail_default/{foodId}") {
+    object DetailDefault : DiaryRoutes("diary/detail_default/{foodId}/{selectedDay}") {
         fun createRoute(foodId: String): String = "diary/detail_default/$foodId"
     }
     object DetailDiet : DiaryRoutes("diary/detail_diet/{id}?uid={uid}&mealType={mealType}&date={date}") {
@@ -14,7 +14,6 @@ sealed class DiaryRoutes(val route: String ){
             return "diary/detail_diet/$id?uid=$uid&mealType=$mealType&date=$date"
         }
     }
-
 
 }
 

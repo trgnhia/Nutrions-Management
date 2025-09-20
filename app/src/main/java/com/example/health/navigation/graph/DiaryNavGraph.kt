@@ -82,8 +82,7 @@ fun NavGraphBuilder.diaryNavGraph(
             route = "${DiaryRoutes.Add}?parent={parent}&mealType={mealType}&selectedDay={selectedDay}",
             arguments = listOf(
                 navArgument("parent") { nullable = true; defaultValue = null },
-                navArgument("mealType") {  defaultValue = 1 } // default = MORNING
-                ,
+                navArgument("mealType") {  defaultValue = 1 }, // default = MORNING
                 navArgument("selectedDay") { type = androidx.navigation.NavType.LongType; defaultValue = 0L }
             )
         ) { backStackEntry ->
@@ -144,16 +143,20 @@ fun NavGraphBuilder.diaryNavGraph(
 
         composable(
             route = DiaryRoutes.DetailDefault.route,
-            arguments = listOf(navArgument("foodId") { type = NavType.StringType })
+            arguments = listOf(navArgument("foodId") { type = NavType.StringType },
+                navArgument("selectedDay") { type = NavType.LongType })
         ) { backStackEntry ->
             val foodId = backStackEntry.arguments?.getString("foodId") ?: ""
+            val selectedDayMillis = backStackEntry.arguments?.getLong("selectedDay") ?: 0L
+            val selectedDate = Date(selectedDayMillis) // 🔑 chuyển Long -> Date
             DetailDefaultScreen(
                 foodId = foodId,
                 viewModel = eatenDishViewModel,
                 eatenDishViewModel = eatenDishViewModel,
                 eatenMealViewModel = eatenMealViewModel,
                 totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
-                defaultFoodViewModel = defaultFoodViewModel
+                defaultFoodViewModel = defaultFoodViewModel,
+                selectedDate = selectedDate
                 )
         } // sai cai nay . can phai truyen vao 1 eaten dish
 

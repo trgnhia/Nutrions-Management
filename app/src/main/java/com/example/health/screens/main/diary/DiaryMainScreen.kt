@@ -158,7 +158,7 @@ fun DiaryMainScreen(
                         //Log.e(TAG, "DiaryMainScreen: $food", )
                         FoodCard(index + 1, food, onClick = {
                             //Log.e(TAG, "DiaryMainScreen: $food", )
-                            navController.navigate("diary/detail_default/${food.id}")
+                            navController.navigate("diary/detail_default/${food.id}/${selectedDay.value.time}")
                         })
                     } else {
                         if(selectedDay.value.equals(Date().toStartOfDay())){

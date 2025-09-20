@@ -36,14 +36,19 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.health.R
 import com.example.health.data.local.entities.EatenDish
+import com.example.health.data.utils.toStartOfDay
+import java.util.Date
 
 @Composable
 fun DetailFoodLayout(
     eatenDish: EatenDish,
+    selectedDate: Date,
+
     onUpdateQuantity: (Float) -> Unit // callback để update về ViewModel
 ) {
     var quantityInput by remember { mutableStateOf(eatenDish.Quantity.toString()) }
-
+    val today = remember { Date().toStartOfDay() }
+    val isToday = selectedDate.toStartOfDay() == today
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             Box(
@@ -94,9 +99,10 @@ fun DetailFoodLayout(
             ) {
                 androidx.compose.material3.OutlinedTextField(
                     value = quantityInput,
-                    onValueChange = { quantityInput = it },
+                    onValueChange = { if (isToday) quantityInput = it },
                     label = { Text("Quantity") },
                     singleLine = true,
+                    enabled = isToday,
                     modifier = Modifier.width(120.dp)
                 )
                 Text(text = eatenDish.QuantityType)
@@ -105,19 +111,20 @@ fun DetailFoodLayout(
             Spacer(modifier = Modifier.height(8.dp))
 
             // Button update
-            androidx.compose.material3.Button(
-                onClick = {
-                    val newQuantity = quantityInput.toFloatOrNull()
+            if(isToday){
+                androidx.compose.material3.Button(
+                    onClick = {
+                        val newQuantity = quantityInput.toFloatOrNull()
 
-                    if (newQuantity != null && newQuantity > 0) {
-                        onUpdateQuantity(newQuantity)
+                        if (newQuantity != null && newQuantity > 0) {
+                            onUpdateQuantity(newQuantity)
+                        }
                     }
-
-
+                ) {
+                    Text("Update")
                 }
-            ) {
-                Text("Update")
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 

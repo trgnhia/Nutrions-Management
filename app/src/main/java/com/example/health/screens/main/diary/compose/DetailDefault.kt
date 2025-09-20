@@ -29,6 +29,7 @@ import com.example.health.data.utils.calculateNutritionByWeight
 import com.example.health.data.utils.toStartOfDay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Date
 import java.util.UUID
 
 @Composable
@@ -38,7 +39,8 @@ fun DetailDefaultScreen(
     eatenDishViewModel: EatenDishViewModel ,
     eatenMealViewModel: EatenMealViewModel ,
     totalNutrionsPerDayViewModel: TotalNutrionsPerDayViewModel,
-    defaultFoodViewModel: DefaultFoodViewModel
+    defaultFoodViewModel: DefaultFoodViewModel,
+    selectedDate: Date
 
 ) {
     val context = LocalContext.current
@@ -62,7 +64,8 @@ fun DetailDefaultScreen(
     // Gợi ý dùng lại layout code từ DetailDietScreen
     DetailFoodLayout(
         eatenDish = food!!,
-        onUpdateQuantity = { it ->
+        selectedDate = selectedDate ,
+        onUpdateQuantity  = { it ->
             scope.launch {
                 updateEatenDish(
                     scope = scope,

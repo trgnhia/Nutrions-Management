@@ -54,7 +54,20 @@ fun DiaryMainScreen(
     val selectedDay = remember {
         mutableStateOf(Date().toStartOfDay())
     }
-    val selectedMeal = remember { mutableStateOf(MealType.MORNING) }
+
+    val currentHour = remember { java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY) }
+
+    val selectedMeal = remember {
+        mutableStateOf(
+            when (currentHour) {
+                in 5..9 -> MealType.MORNING   // sáng (5h - 9h)
+                in 10..14 -> MealType.LUNCH   // trưa (10h - 14h)
+                in 15..18 -> MealType.SNACK // chiều (15h - 18h)
+                in 19..24 -> MealType.DINNER  // tối (19h - 22h)
+                else -> MealType.SNACK        // đêm / khuya
+            }
+        )
+    }
 
     val accountState = accountViewModel.account.collectAsState()
     val account = accountState.value

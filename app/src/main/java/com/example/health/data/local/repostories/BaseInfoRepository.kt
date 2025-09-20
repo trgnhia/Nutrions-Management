@@ -82,7 +82,7 @@ class BaseInfoRepository(
     suspend fun updateIsDiet(uid: String, dietCode: Int) {
         // ✅ Cập nhật trong Room
         baseInfoDao.updateIsDiet(uid, dietCode)
-        Log.d("BaseInfoRepo", "updateIsDiet Room: $uid → $dietCode")
+        //Log.d("BaseInfoRepo", "updateIsDiet Room: $uid → $dietCode")
 
         try {
             // ✅ Chỉ đồng bộ 1 trường cụ thể lên Firestore
@@ -93,7 +93,7 @@ class BaseInfoRepository(
                 .update("isDiet", dietCode)
                 .await()
 
-            Log.d("BaseInfoRepo", "updateIsDiet Firestore success")
+            //Log.d("BaseInfoRepo", "updateIsDiet Firestore success")
         } catch (e: Exception) {
             // Nếu lỗi Firestore → Tạo bản ghi chờ
             val fallback = mapOf("isDiet" to dietCode)
@@ -105,7 +105,7 @@ class BaseInfoRepository(
             )
             pendingActionDao.insert(action)
 
-            Log.e("BaseInfoRepo", "updateIsDiet Firestore failed, pending saved", e)
+            //Log.e("BaseInfoRepo", "updateIsDiet Firestore failed, pending saved", e)
         }
     }
 

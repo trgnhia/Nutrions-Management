@@ -157,7 +157,7 @@ class AuthViewModel(
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("DataSync", "Lỗi khi đồng bộ dữ liệu Firestore: ${e.message}")
+            //Log.e("DataSync", "Lỗi khi đồng bộ dữ liệu Firestore: ${e.message}")
         }
     }
 
@@ -186,7 +186,7 @@ class AuthViewModel(
             try {
                 db.clearAllTables()
             } catch (e: Exception) {
-                Log.e("SIGN_OUT", "Crash khi clearAllTables: ${e.message}")
+                //Log.e("SIGN_OUT", "Crash khi clearAllTables: ${e.message}")
             }
 
             _authState.value = AuthState.Unauthenticated

@@ -41,7 +41,7 @@ class MacroRepository(
 
     suspend fun update(macro: Macro) {
         macroDao.update(macro)
-        Log.e("MacroDao", "Updating macro: $macro")
+       // Log.e("MacroDao", "Updating macro: $macro")
         try {
             firestore.collection("accounts")
                 .document(macro.Uid)

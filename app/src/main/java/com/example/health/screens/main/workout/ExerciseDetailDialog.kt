@@ -120,7 +120,7 @@ fun ExerciseDetailDialog(
 
                 Button(
                    onClick = {
-                        Log.e("ADD CALORIES", "AddCaloriesDialog: CLick add calories", )
+                        //Log.e("ADD CALORIES", "AddCaloriesDialog: CLick add calories", )
                         val unit = time
                         val result = exercise.let {
                             calculateActualCaloBurn(

@@ -118,7 +118,7 @@ class TotalNutrionsPerDayRepository(
     }
     suspend fun fetchFromRemote(uid: String) {
         try {
-            Log.e("fetchFromRemote: ", "fetchFromRemote: total nutrition per day ", )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: total nutrition per day ", )
             val snapshot = firestore.collection("accounts")
                 .document(uid)
                 .collection("total_nutrions_per_day")
@@ -127,7 +127,7 @@ class TotalNutrionsPerDayRepository(
 
             val totals = snapshot.documents.mapNotNull { doc ->
                 try {
-                    Log.e("fetch info ", "fetchFromRemote: total nutrition per day " + doc.id, )
+                    //Log.e("fetch info ", "fetchFromRemote: total nutrition per day " + doc.id, )
                     doc.toObject(TotalNutrionsPerDay::class.java)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -141,7 +141,7 @@ class TotalNutrionsPerDayRepository(
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("fetchFromRemote: ", "fetchFromRemote: total nutrition per day " + e.message, )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: total nutrition per day " + e.message, )
         }
     }
 

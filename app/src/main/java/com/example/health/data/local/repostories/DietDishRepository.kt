@@ -30,7 +30,7 @@ class DietDishRepository(
         for (doc in snapshot.documents) {
             val item = doc.toObject(DietDish::class.java)
             if (item != null) {
-                Log.e("", "fetchRemoteAndInsertEach: hehe", )
+                //Log.e("", "fetchRemoteAndInsertEach: hehe", )
                 val dish = item.copy(Id = doc.id)
                 onEachFetched(dish)
             }

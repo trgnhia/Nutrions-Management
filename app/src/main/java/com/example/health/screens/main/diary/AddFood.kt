@@ -77,9 +77,9 @@ fun AddFood(
             Quantity = quantity,
             UrlImage = copyToEatenDishImage(context = context, urlImage, UUID.randomUUID().toString())
         )
-        Log.e(TAG, "DefaultFoodRow:  , $calo , $fat , $carb , $protein " , )
+        //Log.e(TAG, "DefaultFoodRow:  , $calo , $fat , $carb , $protein " , )
         eatenDishViewModel.insert(newDish,uid)
-        Log.e(TAG, "AddFood: $newDish", )
+        //Log.e(TAG, "AddFood: $newDish", )
 
         // 4. Cập nhật lại dinh dưỡng cho meal
         val updatedMeal = meal.copy(

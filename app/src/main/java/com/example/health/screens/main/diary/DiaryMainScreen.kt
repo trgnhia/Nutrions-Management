@@ -139,12 +139,12 @@ fun DiaryMainScreen(
             if (dietCode == 0) {
                 // 👉 Không theo chế độ ăn → hiển thị món ăn người dùng thêm + nút Add
                 items(foodList.value.size + 1) { index ->
-                    Log.e(TAG, "food list: ${foodList.value}", )
+                    //Log.e(TAG, "food list: ${foodList.value}", )
                     if (index < foodList.value.size) {
                         val food = foodList.value[index]
-                        Log.e(TAG, "DiaryMainScreen: $food", )
+                        //Log.e(TAG, "DiaryMainScreen: $food", )
                         FoodCard(index + 1, food, onClick = {
-                            Log.e(TAG, "DiaryMainScreen: $food", )
+                            //Log.e(TAG, "DiaryMainScreen: $food", )
                             navController.navigate("diary/detail_default/${food.id}")
                         })
                     } else {

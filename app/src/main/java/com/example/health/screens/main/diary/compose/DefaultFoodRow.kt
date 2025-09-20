@@ -86,7 +86,7 @@ fun DefaultFoodRow(
                 parent = parent,
                 onDismiss = { selectedFood = null },
                 onSave = { weight, calo, fat, carb, protein ->
-                    Log.e(TAG, "DefaultFoodRow: $weight , $calo , $fat , $carb , $protein " , )
+                    //Log.e(TAG, "DefaultFoodRow: $weight , $calo , $fat , $carb , $protein " , )
 
                     AddFood(
                         uid = uid,

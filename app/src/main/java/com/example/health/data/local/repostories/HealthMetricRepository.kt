@@ -78,12 +78,12 @@ class HealthMetricRepository(
             val remoteList = snapshot.documents.mapNotNull { it.toObject(HealthMetric::class.java) }
             // Sync về local
             remoteList.forEach { healthMetricDao.insertHealthMetric(it) }
-            Log.e("HealthFetch", "Error fetching account: ")
+           // Log.e("HealthFetch", "Error fetching account: ")
             return remoteList
         }
         catch (e: Exception) {
             // Log chi tiết lỗi
-            Log.e("FirestoreError", "Error fetching account: ${e.message}")
+           // Log.e("FirestoreError", "Error fetching account: ${e.message}")
             e.printStackTrace() // In thông tin lỗi đầy đủ vào log
             return emptyList()
         }

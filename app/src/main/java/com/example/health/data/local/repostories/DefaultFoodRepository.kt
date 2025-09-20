@@ -32,7 +32,7 @@ class DefaultFoodRepository(
                 val withId = item.copy(Id = doc.id)
                 onEach(withId)
             } else {
-                Log.e("FIRESTORE", "❌ Convert thất bại: ${doc.id}")
+                //Log.e("FIRESTORE", "❌ Convert thất bại: ${doc.id}")
             }
         }
     }

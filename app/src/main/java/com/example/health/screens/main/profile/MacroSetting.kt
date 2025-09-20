@@ -51,7 +51,7 @@ fun MacroSetting(navController: NavController , macroViewModel: MacroViewModel) 
     var carbs by remember { mutableStateOf(result?.carbPercent?.toInt() ?: 0) }
     var protein by remember { mutableStateOf(result?.proteinPercent?.toInt() ?: 0) }
     var fat by remember { mutableStateOf(result?.fatPercent?.toInt() ?: 0) }
-    Log.e("Check percent: ", "MacroSetting: "+ carbs+" "+protein+" "+fat+" ", )
+    //Log.e("Check percent: ", "MacroSetting: "+ carbs+" "+protein+" "+fat+" ", )
     val total = carbs + protein + fat
     val context = LocalContext.current
     Scaffold(
@@ -170,7 +170,7 @@ fun MacroPickerColumn(
 ) {
     val percentages = (0..100 step 1).toList()
     val initialIndex = percentages.indexOf(initialValue).coerceAtLeast(0)
-    Log.e("check percen", "MacroPickerColumn: " + initialIndex, )
+    //Log.e("check percen", "MacroPickerColumn: " + initialIndex, )
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = (initialIndex - 2).coerceAtLeast(0))
     var isFirstLoad by remember { mutableStateOf(true) }
 

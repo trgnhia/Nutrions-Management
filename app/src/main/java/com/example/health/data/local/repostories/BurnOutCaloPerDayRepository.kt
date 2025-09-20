@@ -102,7 +102,7 @@ class BurnOutCaloPerDayRepository(
     }
     suspend fun fetchFromRemote(uid: String) {
         try {
-            Log.e("fetchFromRemote: ", "fetchFromRemote: brn out ", )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: brn out ", )
             val snapshot = firestore.collection("accounts")
                 .document(uid)
                 .collection("burn_out_calo_per_day")
@@ -119,13 +119,13 @@ class BurnOutCaloPerDayRepository(
             }
 
             list.forEach { entry ->
-                Log.e("fetch info ", "fetchFromRemote: burnout " + entry.DateTime, )
+                //Log.e("fetch info ", "fetchFromRemote: burnout " + entry.DateTime, )
                 dao.insert(entry)
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("fetchFromRemote: ", "fetchFromRemote: burnout " + e.message, )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: burnout " + e.message, )
         }
     }
 

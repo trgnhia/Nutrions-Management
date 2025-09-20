@@ -111,7 +111,7 @@ class NotifyRepository(
 
     suspend fun update(notify: Notify) {
         val sdf = SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault())
-        Log.e("NotifyRepository", "NotifyTime = ${sdf.format(notify.NotifyTime)}")
+       // Log.e("NotifyRepository", "NotifyTime = ${sdf.format(notify.NotifyTime)}")
         notifyDao.insert(notify) // REPLACE in Room
         try {
             firestore.collection("accounts")
@@ -152,7 +152,7 @@ class NotifyRepository(
     }
     suspend fun fetchFromRemote(uid: String) {
         try {
-            Log.e("fetchFromRemote: ", "fetchFromRemote: notify ", )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: notify ", )
             val snapshot = firestore.collection("accounts")
                 .document(uid)
                 .collection("notify")
@@ -169,14 +169,14 @@ class NotifyRepository(
             }
 
             notifies.forEach { notify ->
-                Log.e("fetch info ", "fetchFromRemote: notify " + notify.id, )
+                //Log.e("fetch info ", "fetchFromRemote: notify " + notify.id, )
                 notifyDao.insert(notify)
             }
 
             Log.d("NotifyRepository", "Fetched ${notifies.size} notifies from Firestore for uid=$uid")
 
         } catch (e: Exception) {
-            Log.e("NotifyRepository", "Failed to fetch notifies from Firestore", e)
+            //Log.e("NotifyRepository", "Failed to fetch notifies from Firestore", e)
         }
     }
 

@@ -90,7 +90,7 @@ class ExerciseLogRepository(
     }
     suspend fun fetchFromRemote(uid: String) {
         try {
-            Log.e("fetchFromRemote: ", "fetchFromRemote: exercise log ", )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: exercise log ", )
             val snapshot = firestore.collection("accounts")
                 .document(uid)
                 .collection("exercise_log")
@@ -107,13 +107,13 @@ class ExerciseLogRepository(
             }
 
             logs.forEach { log ->
-                Log.e("fetch info ", "fetchFromRemote: exercise log " + log.id, )
+                //Log.e("fetch info ", "fetchFromRemote: exercise log " + log.id, )
                 dao.insert(log)
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("fetchFromRemote: ", "fetchFromRemote: exercise log " + e.message, )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: exercise log " + e.message, )
         }
     }
 

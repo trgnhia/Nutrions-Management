@@ -86,7 +86,7 @@ class EatenDishRepository(
     }
     suspend fun fetchFromRemote(uid: String) {
         try {
-            Log.e("fetchFromRemote: ", "fetchFromRemote: eaten dish ", )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: eaten dish ", )
             val snapshot = firestore.collection("accounts")
                 .document(uid)
                 .collection("eaten_dish")
@@ -103,13 +103,13 @@ class EatenDishRepository(
             }
 
             list.forEach { dish ->
-                Log.e("fetch info ", "fetchFromRemote: eaten dish " + dish.id, )
+                //Log.e("fetch info ", "fetchFromRemote: eaten dish " + dish.id, )
                 dao.insert(dish)
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("fetchFromRemote: ", "fetchFromRemote: eaten dish " + e.message, )
+            //Log.e("fetchFromRemote: ", "fetchFromRemote: eaten dish " + e.message, )
         }
     }
 

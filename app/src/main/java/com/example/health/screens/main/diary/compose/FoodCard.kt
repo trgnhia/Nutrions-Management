@@ -72,7 +72,7 @@ fun FoodCard(
                     error = painterResource(R.drawable.default_dish)
                     ,
                     onError = {
-                        Log.e("ImageLoad", "Load failed: ${it.result.throwable}")
+                        //Log.e("ImageLoad", "Load failed: ${it.result.throwable}")
                     },
                     onSuccess = {
                         Log.d("ImageLoad", "Image loaded successfully")

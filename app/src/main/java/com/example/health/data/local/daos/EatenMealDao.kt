@@ -51,6 +51,9 @@ interface EatenMealDao {
         uid: String,
         date: Date
     ): DailyNutritionSummary?
+
+    @Query("SELECT * FROM eaten_meal WHERE id = :id")
+    suspend fun getByID(id: String): EatenMeal?
 }
 
 

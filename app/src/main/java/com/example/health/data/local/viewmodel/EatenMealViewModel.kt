@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.health.data.local.entities.EatenMeal
 import com.example.health.data.local.repostories.EatenMealRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -17,6 +18,10 @@ class EatenMealViewModel(
     val allMeals = repository.getAllMeals()
 
     fun getMealsByDate(date: Date) = repository.getMealsByDate(date)
+
+    suspend fun getByID(id: String): EatenMeal? {
+        return repository.getByID(id)
+    }
 
     fun insert(meal: EatenMeal) = viewModelScope.launch {
         repository.insert(meal)

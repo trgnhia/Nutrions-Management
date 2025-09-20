@@ -147,7 +147,14 @@ fun NavGraphBuilder.diaryNavGraph(
             arguments = listOf(navArgument("foodId") { type = NavType.StringType })
         ) { backStackEntry ->
             val foodId = backStackEntry.arguments?.getString("foodId") ?: ""
-            DetailDefaultScreen(foodId = foodId, viewModel = eatenDishViewModel)
+            DetailDefaultScreen(
+                foodId = foodId,
+                viewModel = eatenDishViewModel,
+                eatenDishViewModel = eatenDishViewModel,
+                eatenMealViewModel = eatenMealViewModel,
+                totalNutrionsPerDayViewModel = totalNutrionsPerDayViewModel,
+                defaultFoodViewModel = defaultFoodViewModel
+                )
         } // sai cai nay . can phai truyen vao 1 eaten dish
 
 

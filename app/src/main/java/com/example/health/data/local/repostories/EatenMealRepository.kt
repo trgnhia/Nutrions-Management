@@ -21,6 +21,8 @@ class EatenMealRepository(
 
     fun getMealsByDate(date: Date): Flow<List<EatenMeal>> = dao.getMealsByDate(date)
 
+    suspend fun getByID(id: String): EatenMeal? = dao.getByID(id)
+
     suspend fun getMealByDateAndType(date: Date, type: Int): EatenMeal? =
         dao.getMealByDateAndType(date, type)
 
